@@ -1,0 +1,17 @@
+:root {
+  --site-background: #f5f1ea;
+  --site-surface: #fffdf9;
+  --site-foreground: #26231f;
+  --site-muted: #6f675d;
+  --site-border: #ded6cb;
+  --site-font-sans: Arial, Helvetica, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--site-background);
+  --color-surface: var(--site-surface);
+  --color-foreground: var(--site-foreground);
+  --color-muted: var(--site-muted);
+  --color-border: var(--site-border);
+  --font-sans: var(--site-font-sans);
+}
