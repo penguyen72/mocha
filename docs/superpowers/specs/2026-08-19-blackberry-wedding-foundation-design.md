@@ -66,7 +66,13 @@ Added alongside the existing `--site-background`, `--site-surface`, `--site-fore
 --site-primary-foreground: var(--site-surface);    /* neutral default: same as surface */
 --site-font-serif: Georgia, "Times New Roman", serif;
 --site-font-script: cursive;
+--site-inverted-background: #1a1a1a;                /* neutral default dark section bg */
+--site-inverted-foreground: #ffffff;
 ```
+
+`SiteFooter` needs a dark section background distinct from the ink/foreground tone used for
+body text (the source's footer is pure black, not the ink-brown used for copy) — hence the
+separate `inverted-background`/`inverted-foreground` pair, rather than reusing `foreground`.
 
 And in the existing `@theme inline` block, add:
 
@@ -75,6 +81,8 @@ And in the existing `@theme inline` block, add:
 --color-primary-foreground: var(--site-primary-foreground);
 --font-serif: var(--site-font-serif);
 --font-script: var(--site-font-script);
+--color-inverted-background: var(--site-inverted-background);
+--color-inverted-foreground: var(--site-inverted-foreground);
 ```
 
 ### Blackberry overrides — `apps/blackberry/src/app/globals.css`
@@ -92,6 +100,8 @@ Shared-slot overrides (real values, applied after the `@mocha/ui/styles.css` imp
 --site-font-sans: 'Jost', sans-serif;
 --site-font-serif: 'Cormorant Garamond', serif;
 --site-font-script: 'Pinyon Script', cursive;
+--site-inverted-background: #000000;
+--site-inverted-foreground: #ffffff;
 ```
 
 Blackberry-local palette (not part of the shared contract; used directly by Blackberry's
@@ -122,9 +132,11 @@ hardcoding hex strings ad hoc):
   `packages/ui/src/components/ui/`.
 - Add only `Button` this session. Every button in the source design shares one treatment — pill
   shaped, uppercase, letter-spaced — so the default `Button` variant is restyled to match that
-  directly, rather than adding a new variant name. `ghost`/`outline`/`link`/`destructive` stay
-  available, reskinned to the token palette, for future need. Sessions 3–5 add `Tabs`,
-  `Accordion`, and `Form` themselves when they need them.
+  directly, rather than adding a new variant name. `ghost`/`outline`/`link` stay available,
+  reskinned to the token palette, for future need — `destructive` is left out entirely for now
+  (see the token note below: it needs its own token this session doesn't add), and can be added
+  in whichever future session first needs it. Sessions 3–5 add `Tabs`, `Accordion`, and `Form`
+  themselves when they need them.
 - shadcn's CLI normally scaffolds its own full default token set (`--secondary`, `--accent`,
   `--destructive`, `--input`, `--ring`, `--radius`, etc.) using unprefixed names, which doesn't
   match this repo's existing `--site-*` → `@theme inline` → `--color-*` convention. Don't adopt
