@@ -107,7 +107,9 @@ For each project:
 4. Set Node.js to 24.x.
 5. Deploy and verify the preview URL.
 6. Add the corresponding custom subdomain under Project Settings → Domains.
-7. Configure any future environment variables separately for each project.
+7. At your domain registrar or DNS provider, apply the DNS record Vercel provides for that subdomain.
+8. Wait for Vercel to report **Valid Configuration**, then smoke-check the production custom hostname.
+9. Configure any future environment variables separately for each project.
 
 No root proxy or `vercel.json` is required for separate subdomains.
 
