@@ -5,6 +5,13 @@
   --site-muted: #6f675d;
   --site-border: #ded6cb;
   --site-font-sans: Arial, Helvetica, sans-serif;
+
+  --site-primary: var(--site-foreground);
+  --site-primary-foreground: var(--site-surface);
+  --site-font-serif: Georgia, "Times New Roman", serif;
+  --site-font-script: cursive;
+  --site-inverted-background: #1a1a1a;
+  --site-inverted-foreground: #ffffff;
 }
 
 @theme inline {
@@ -14,4 +21,21 @@
   --color-muted: var(--site-muted);
   --color-border: var(--site-border);
   --font-sans: var(--site-font-sans);
+
+  --color-primary: var(--site-primary);
+  --color-primary-foreground: var(--site-primary-foreground);
+  --font-serif: var(--site-font-serif);
+  --font-script: var(--site-font-script);
+  --color-inverted-background: var(--site-inverted-background);
+  --color-inverted-foreground: var(--site-inverted-foreground);
+}
+
+@keyframes floatUp {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -10px);
+  }
 }
