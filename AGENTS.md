@@ -31,7 +31,8 @@ Direct user instructions override this workflow.
 - Keep Canton-specific copy and composition in `apps/canton`.
 - Keep Blackberry-specific copy and composition in `apps/blackberry`.
 - Add to `@mocha/ui` only when both applications intentionally share the visual API.
-- Do not introduce runtime microfrontend machinery, storage, authentication, analytics, a CMS, or a component suite without an approved design.
+- Do not introduce runtime microfrontend machinery, storage, authentication, analytics, or a CMS without an approved design.
+- shadcn/ui is approved and lives in `packages/ui` (see `docs/superpowers/specs/2026-08-19-blackberry-wedding-foundation-design.md`), hand-authored to this repo's `--site-*` token convention rather than shadcn's own default scaffold. Add components there with `pnpm dlx shadcn@latest add <component>` only when an approved design actually needs them — don't pre-install unused components.
 - Preserve framework guidance in any app-local `AGENTS.md`; within an app, compatible app-local instructions are more specific than this file.
 
 ## Verification
