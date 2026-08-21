@@ -2,6 +2,30 @@
 @import "@mocha/ui/styles.css";
 @source "../../../../packages/ui/src";
 
+:root {
+  --site-background: #fbf6f1;
+  --site-surface: #fbf6f1;
+  --site-foreground: #4a3b35;
+  --site-muted: #7a675e;
+  --site-border: #e7d6c9;
+  --site-primary: #d6866b;
+  --site-primary-foreground: #ffffff;
+  --site-font-sans: "Jost", sans-serif;
+  --site-font-serif: "Cormorant Garamond", serif;
+  --site-font-script: "Pinyon Script", cursive;
+  --site-inverted-background: #000000;
+  --site-inverted-foreground: #ffffff;
+
+  /* Blackberry's local editorial palette — not part of the shared @mocha/ui token contract. */
+  --bb-clay: #b2795e;
+  --bb-terracotta: #d6866b;
+  --bb-peach: #f2c7b4;
+  --bb-blush: #f4e9e0;
+  --bb-mauve: #c3a6a8;
+  --bb-line: #e7d6c9;
+  --bb-ink-black: #000000;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -14,4 +38,5 @@ html {
 body {
   margin: 0;
   font-family: var(--site-font-sans);
+  font-weight: 300;
 }
