@@ -3,13 +3,14 @@ import type { ReactNode } from "react";
 
 import { Button } from "./ui/button";
 import { Reveal } from "./reveal";
+import type { SiteLink } from "./site-nav";
 
 export type HeroProps = {
   eyebrow: ReactNode;
   heading: ReactNode;
   dateLabel: ReactNode;
-  locationLabel: string;
-  cta: { label: string; href: string };
+  locationLabel: ReactNode;
+  cta: SiteLink;
   backgroundImage: { src: StaticImageData; alt: string };
   scrollCueLabel?: string;
 };
@@ -45,7 +46,7 @@ export function Hero({
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(color-mix(in srgb, var(--color-foreground) 55%, transparent) 0%, color-mix(in srgb, var(--color-foreground) 34%, transparent) 32%, color-mix(in srgb, var(--color-foreground) 40%, transparent) 66%, color-mix(in srgb, var(--color-foreground) 68%, transparent) 100%)",
+            "linear-gradient(color-mix(in srgb, var(--site-foreground) 55%, transparent) 0%, color-mix(in srgb, var(--site-foreground) 34%, transparent) 32%, color-mix(in srgb, var(--site-foreground) 40%, transparent) 66%, color-mix(in srgb, var(--site-foreground) 68%, transparent) 100%)",
         }}
       />
 

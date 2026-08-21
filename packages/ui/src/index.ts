@@ -6,7 +6,7 @@ export type { RevealProps } from "./components/reveal";
 export { Hero } from "./components/hero";
 export type { HeroProps } from "./components/hero";
 export { SiteNav } from "./components/site-nav";
-export type { SiteNavProps, SiteNavLink } from "./components/site-nav";
+export type { SiteNavProps, SiteNavLink, SiteLink } from "./components/site-nav";
 export { CountdownStrip } from "./components/countdown-strip";
 export type { CountdownStripProps, CountdownStripLabels } from "./components/countdown-strip";
 export { SiteFooter } from "./components/site-footer";
