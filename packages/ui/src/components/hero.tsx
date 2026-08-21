@@ -45,7 +45,7 @@ export function Hero({
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(rgba(74,59,53,.55) 0%, rgba(74,59,53,.34) 32%, rgba(74,59,53,.4) 66%, rgba(74,59,53,.68) 100%)",
+            "linear-gradient(color-mix(in srgb, var(--color-foreground) 55%, transparent) 0%, color-mix(in srgb, var(--color-foreground) 34%, transparent) 32%, color-mix(in srgb, var(--color-foreground) 40%, transparent) 66%, color-mix(in srgb, var(--color-foreground) 68%, transparent) 100%)",
         }}
       />
 
