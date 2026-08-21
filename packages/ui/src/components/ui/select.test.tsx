@@ -11,7 +11,7 @@ describe("Select", () => {
     render(
       <Select onValueChange={onValueChange}>
         <SelectTrigger>
-          <SelectValue placeholder="Select guest count" />
+          <SelectValue placeholder="Select an option" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="1">1</SelectItem>
