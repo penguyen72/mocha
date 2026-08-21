@@ -26,31 +26,33 @@ export default function Home() {
         cta={RSVP_CTA}
       />
 
-      <Hero
-        eyebrow="together with their families"
-        heading={
-          <>
-            Liane
-            <span className="block font-script text-5xl font-normal sm:text-6xl">&amp;</span>
-            Peyton
-          </>
-        }
-        dateLabel="Oct 1–3, 2027"
-        locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
-        cta={{ label: "RSVP Now", href: "#rsvp" }}
-        backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
-      />
+      <main>
+        <Hero
+          eyebrow="together with their families"
+          heading={
+            <>
+              Liane
+              <span className="block font-script text-5xl font-normal sm:text-6xl">&amp;</span>
+              Peyton
+            </>
+          }
+          dateLabel="Oct 1–3, 2027"
+          locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
+          cta={{ label: "RSVP Now", href: "#rsvp" }}
+          backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
+        />
 
-      <CountdownStrip
-        tagline="We can't wait to celebrate with you"
-        targetDate="2027-10-02T16:00:00-04:00"
-      />
+        <CountdownStrip
+          tagline="We can't wait to celebrate with you"
+          targetDate="2027-10-02T16:00:00-04:00"
+        />
 
-      {/*
-        Sessions 2–5 add their sections here, in this order:
-        Schedule of Events, Wedding Party, Travel & Directions, Accommodations (Stay),
-        Explore, Details, FAQ, RSVP.
-      */}
+        {/*
+          Sessions 2–5 add their sections here, in this order:
+          Schedule of Events, Wedding Party, Travel & Directions, Accommodations (Stay),
+          Explore, Details, FAQ, RSVP.
+        */}
+      </main>
 
       <SiteFooter
         heading={

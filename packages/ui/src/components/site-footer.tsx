@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 
 export type SiteFooterProps = {
   heading: ReactNode;
-  subline: string;
-  tagline: string;
+  subline: ReactNode;
+  tagline: ReactNode;
 };
 
 export function SiteFooter({ heading, subline, tagline }: SiteFooterProps) {

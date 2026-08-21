@@ -4,8 +4,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
 
 import { Button } from "./ui/button";
+import { cn } from "../lib/utils";
 
-export type SiteNavLink = { label: string; href: string };
+export type SiteLink = { label: string; href: string };
+export type SiteNavLink = SiteLink;
 
 export type SiteNavProps = {
   brand: ReactNode;
@@ -50,12 +52,12 @@ export function SiteNav({
 
   return (
     <nav
-      className={
-        "fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-colors duration-300 sm:px-12 " +
-        (scrolled
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-colors duration-300 sm:px-12",
+        scrolled
           ? "bg-background/94 text-foreground shadow-md backdrop-blur-md"
-          : "bg-transparent text-primary-foreground")
-      }
+          : "bg-transparent text-white",
+      )}
     >
       <a href="#home" className="font-serif text-2xl tracking-widest">
         {brand}
