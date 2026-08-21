@@ -34,14 +34,23 @@ Continuing the split Session 1 established:
 - **Generic, content-agnostic interaction primitives** live in `packages/ui`, prop-driven, no
   Blackberry copy inside their source. This session adds shadcn's `Tabs` and `Accordion`
   (restyled to the site's palette) plus a new `TabSwitch` wrapper.
-- **Blackberry-specific section components**, each colocating its own content data, live in
-  `apps/blackberry/src/components/sections/` — a new directory (nothing has needed
-  non-page components in the app yet). This departs from Session 1's Hero/Footer pattern
+- **Blackberry-specific section components**, each colocating its own content data, live flat
+  under `apps/blackberry/src/components/` — no per-component subfolder, mirroring `packages/ui`'s
+  own flat `src/components/*.tsx` layout. This departs from Session 1's Hero/Footer pattern
   (fully generic components in `packages/ui`, content passed from `page.tsx`) because
   Explore/Details/FAQ's card layouts and copy are intrinsically specific to this wedding, not
   reusable structural chrome — forcing them through a generic prop contract Canton would never
   use is premature abstraction, and conflicts with `AGENTS.md`'s "keep Blackberry-specific copy
   and composition in `apps/blackberry`" boundary.
+- Content lives in a **sibling `*-content.ts` file** next to each flat `*.tsx` component
+  (`explore-content.ts` + `explore.tsx`, `details-content.ts` + `details.tsx`,
+  `faq-content.ts` + `faq.tsx`) rather than inlined in the component file. **Revised from this
+  spec's original inline-colocation design** after cross-session coordination with Session 2
+  (`schedule-content.ts`/`schedule.tsx`, `party-content.ts`/`party.tsx`, committed first) and
+  Session 3 (which aligned to Session 2's convention) — matching their established layout keeps
+  the four content sessions consistent instead of each inventing a different file shape for the
+  same page, and still satisfies the original instruction (colocated per-component, not one
+  shared `content.ts`).
 - Default to Server Components. The only client boundaries are tab-switch state (`TabSwitch`,
   wrapping shadcn `Tabs`) and accordion-open state (shadcn `Accordion`) — both already
   necessarily client components via Radix.
@@ -96,42 +105,44 @@ export type TabSwitchProps = {
 A note is left at the top of `tab-switch.tsx` (and in this spec) flagging it as available for
 Session 3's Stay tab switch, so that session doesn't build a second one.
 
-## Components — `apps/blackberry/src/components/sections/`
+## Components — `apps/blackberry/src/components/`
 
-Each is a Server Component. Content data is a colocated `const` in the same file — no shared
-`content.ts`.
+Each section is a Server Component named to match its file (`Explore`, `Details`, `Faq` — no
+`Section` suffix, matching Session 2/3's `Schedule`/`Party`/`Travel`/`Stay` naming). Content is a
+sibling `*-content.ts` file of typed consts, imported by the component.
 
-### `explore-section.tsx`
+### `explore-content.ts` / `explore.tsx`
 
 ```ts
 type ExploreActivity = { name: string; description: string };
 type ExploreTab = { id: string; label: string; activities: ExploreActivity[] };
 ```
 
-- Section `id="explore"`, eyebrow "Make a Trip of It", H2 "Things to Do", intro copy (exact text
-  in the reference doc §8).
+- `EXPLORE_EYEBROW` "Make a Trip of It", `EXPLORE_HEADING` "Things to Do", `EXPLORE_INTRO` (exact
+  text in the reference doc §8).
 - `EXPLORE_TABS`: two entries, `chattanooga` ("Chattanooga · 30 min") and `atlanta`
   ("Atlanta · 2 hrs"), each with its 6 activities from reference doc §8 (exact names/descriptions
   — Lookout Mountain, Tennessee Aquarium, Walnut Street Bridge, Bluff View Art District, Downtown
   Dining, Coolidge Park / Georgia Aquarium, Ponce City Market, The Atlanta BeltLine, Piedmont
   Park, World of Coca-Cola, Historic Sweet Auburn).
-- Renders `<TabSwitch>` with each tab's `panel` being a `grid grid-cols-1 md:grid-cols-3` of
-  cards. Each card: a 16:10 placeholder block (`aspect-[16/10]`, a soft gradient built from the
-  site's palette tokens, e.g. `--bb-peach`→`--bb-blush`) with the activity name centered on it,
-  then the activity name (heading) and description below. Wrapped per-card in `Reveal
-  trigger="viewport"` with `delay={(index % 3) * 0.085}` matching the source's grid stagger.
+- `explore.tsx` renders `id="explore"` and `<TabSwitch>` with each tab's `panel` being a
+  `grid grid-cols-1 md:grid-cols-3` of cards. Each card: a 16:10 placeholder block
+  (`aspect-[16/10]`, a soft gradient built from the site's palette tokens, e.g.
+  `--bb-peach`→`--bb-blush`), then the activity name (heading) and description below. Wrapped
+  per-card in `Reveal trigger="viewport"` with `delay={(index % 3) * 0.085}` matching the
+  source's grid stagger.
 - Per your decision: no real photos this session — the placeholder block *is* the deliverable,
   not a stopgap needing a follow-up ticket, though swapping in real photography remains a natural
   future content update whenever the couple has some.
 
-### `details-section.tsx`
+### `details-content.ts` / `details.tsx`
 
 ```ts
 type DressCodeSwatch = string; // hex
 type RegistryLink = { label: string; href: string };
 ```
 
-- Section `id="details"`, `bg-bb-peach` (per reference doc §9), two cards
+- `details.tsx` renders `id="details"`, `bg-bb-peach` (per reference doc §9), two cards
   (`grid grid-cols-1 md:grid-cols-2`, stacking on mobile).
 - **Dress Code card**: eyebrow "What to Wear", H2 "Dress Code", "Garden Formal" emphasized line,
   body copy, five swatch chips rendered from `DRESS_CODE_SWATCHES = ["#F7DDD0", "#F2C7B4",
@@ -142,16 +153,16 @@ type RegistryLink = { label: string; href: string };
   (Crate & Barrel, Zola Registry, Honeymoon Fund), each `href="#rsvp"` per your decision to keep
   the source's placeholder target until real registry URLs exist.
 
-### `faq-section.tsx`
+### `faq-content.ts` / `faq.tsx`
 
 ```ts
 type FaqItem = { question: string; answer: string };
 ```
 
-- Section `id="faq"`, eyebrow "Good to Know", H2 "Questions?".
+- `FAQ_EYEBROW` "Good to Know", `FAQ_HEADING` "Questions?".
 - `FAQ_ITEMS`: the 6 Q&A pairs from reference doc §10, verbatim.
-- Renders `<Accordion type="single" collapsible>` from `@mocha/ui`, mapping each item to an
-  `AccordionItem`/`AccordionTrigger`/`AccordionContent`.
+- `faq.tsx` renders `id="faq"` and `<Accordion type="single" collapsible>` from `@mocha/ui`,
+  mapping each item to an `AccordionItem`/`AccordionTrigger`/`AccordionContent`.
 
 ## Composition — `apps/blackberry/src/app/page.tsx`
 
@@ -162,9 +173,9 @@ The current placeholder comment between `CountdownStrip` and `SiteFooter` covers
 {/* Session 2 adds Schedule of Events and Wedding Party here. */}
 {/* Session 3 adds Travel & Directions and Accommodations (Stay) here. */}
 
-<ExploreSection />
-<DetailsSection />
-<FaqSection />
+<Explore />
+<Details />
+<Faq />
 
 {/* Session 5 adds RSVP here. */}
 ```
@@ -216,13 +227,13 @@ composition over already-tested primitives with static content, exercised by `li
 
 1. `packages/ui` gains restyled `Tabs` and `Accordion` shadcn primitives and a new `TabSwitch`
    wrapper, each with passing behavior tests per the Testing section.
-2. `apps/blackberry/src/components/sections/explore-section.tsx` renders the two-tab switch with
-   the reference doc's exact Chattanooga/Atlanta activity data, 3-col desktop / 1-col mobile,
-   16:10 placeholder photo blocks.
-3. `apps/blackberry/src/components/sections/details-section.tsx` renders the Dress Code card
-   (five swatches, exact hex values) and Registry card (three rows, placeholder hrefs) side by
-   side, stacking on mobile.
-4. `apps/blackberry/src/components/sections/faq-section.tsx` renders a 6-item single-open
+2. `apps/blackberry/src/components/explore-content.ts` and `explore.tsx` render the two-tab
+   switch with the reference doc's exact Chattanooga/Atlanta activity data, 3-col desktop / 1-col
+   mobile, 16:10 placeholder photo blocks.
+3. `apps/blackberry/src/components/details-content.ts` and `details.tsx` render the Dress Code
+   card (five swatches, exact hex values) and Registry card (three rows, placeholder hrefs) side
+   by side, stacking on mobile.
+4. `apps/blackberry/src/components/faq-content.ts` and `faq.tsx` render a 6-item single-open
    accordion with the reference doc's exact Q&A content.
 5. `apps/blackberry/src/app/page.tsx` composes all three sections between the countdown strip and
    footer, with comments marking where Sessions 2, 3, and 5 insert their own sections.
