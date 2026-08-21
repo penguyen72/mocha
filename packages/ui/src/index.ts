@@ -9,3 +9,5 @@ export { SiteNav } from "./components/site-nav";
 export type { SiteNavProps, SiteNavLink } from "./components/site-nav";
 export { CountdownStrip } from "./components/countdown-strip";
 export type { CountdownStripProps, CountdownStripLabels } from "./components/countdown-strip";
+export { SiteFooter } from "./components/site-footer";
+export type { SiteFooterProps } from "./components/site-footer";
