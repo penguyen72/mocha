@@ -10,9 +10,9 @@
   --site-border: #e7d6c9;
   --site-primary: #d6866b;
   --site-primary-foreground: #ffffff;
-  --site-font-sans: "Jost", sans-serif;
-  --site-font-serif: "Cormorant Garamond", serif;
-  --site-font-script: "Pinyon Script", cursive;
+  --site-font-sans: var(--font-jost), sans-serif;
+  --site-font-serif: var(--font-cormorant-garamond), serif;
+  --site-font-script: var(--font-pinyon-script), cursive;
   --site-inverted-background: #000000;
   --site-inverted-foreground: #ffffff;
 
