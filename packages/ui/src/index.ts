@@ -1,6 +1,9 @@
 export { SiteShell } from "./site-shell";
 export { Button, buttonVariants } from "./components/ui/button";
 export type { ButtonProps } from "./components/ui/button";
+export { Label } from "./components/ui/label";
+export { Input } from "./components/ui/input";
+export { Textarea } from "./components/ui/textarea";
 export { Reveal } from "./components/reveal";
 export type { RevealProps } from "./components/reveal";
 export { Hero } from "./components/hero";
