@@ -6,6 +6,7 @@ export { Input } from "./components/ui/input";
 export { Textarea } from "./components/ui/textarea";
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
 export { Checkbox } from "./components/ui/checkbox";
+export { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 export { Reveal } from "./components/reveal";
 export type { RevealProps } from "./components/reveal";
 export { Hero } from "./components/hero";
