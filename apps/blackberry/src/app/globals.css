@@ -26,6 +26,16 @@
   --bb-ink-black: #000000;
 }
 
+@theme inline {
+  --color-bb-clay: var(--bb-clay);
+  --color-bb-terracotta: var(--bb-terracotta);
+  --color-bb-peach: var(--bb-peach);
+  --color-bb-blush: var(--bb-blush);
+  --color-bb-mauve: var(--bb-mauve);
+  --color-bb-line: var(--bb-line);
+  --color-bb-ink-black: var(--bb-ink-black);
+}
+
 * {
   box-sizing: border-box;
 }
