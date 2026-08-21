@@ -32,8 +32,8 @@ resolve rather than a guessing game:
 ```
 CountdownStrip
 <!-- Session 2 inserts Schedule + Party here -->
-TravelSection   (this session)
-StaySection     (this session)
+Travel   (this session)
+Stay     (this session)
 <!-- Sessions 4–5 insert Explore, Details, FAQ, RSVP here -->
 SiteFooter
 ```
@@ -58,27 +58,35 @@ composition primitives are already the right level of reuse.
 
 ### Blackberry-local, content-colocated — `apps/blackberry/src/components/`
 
-Per this session's instructions, each section's content lives as local consts inside its own
-component file — not in a shared `content.ts`, and not passed down as props from `page.tsx` —
-so that Sessions 2/4/5 touching the same `page.tsx` and working in the same time frame don't
-collide on shared data files or a growing prop-drilling block in `page.tsx`.
+Session 2's already-written spec (`2026-08-21-blackberry-wedding-schedule-party-design.md`,
+committed to `main` ahead of this one) established a concrete convention for this exact
+instruction — content colocated in a **sibling `*-content.ts` file** next to a flat, per-section
+`*.tsx` layout component (`schedule.tsx` + `schedule-content.ts`, `party.tsx` +
+`party-content.ts`), both living flat under `src/components/` with no shared `content.ts`. Since
+Travel and Stay will sit in the same directory, get reviewed alongside Schedule/Party, and were
+written to satisfy the identical instruction from the same brief, this session follows that
+precedent rather than inventing a second colocation style:
 
-- **`travel-section.tsx`** (Server Component, default export not required — named export
-  `TravelSection`). Colocates the eyebrow/heading/body copy, the 3-item icon list, and the
-  address lines. Renders the full `#travel` section markup directly (not a generic
+- **`travel-content.ts`** — typed consts: eyebrow, heading, body, the 3-item icon list, and the
+  address lines.
+- **`travel.tsx`** (Server Component, named export `Travel`). Imports its content from
+  `travel-content.ts` and renders the full `#travel` section markup directly (not a generic
   `packages/ui` component) — this section's two-column icon-list-plus-photo-card layout is
   specific enough to this page that pushing it into `packages/ui` today would be speculative
-  reuse with no second consumer.
-- **`stay-section.tsx`** (Server Component, named export `StaySection`). Colocates the static
-  eyebrow/heading/body copy for `#stay` and renders the dark section wrapper around
-  `<StayTabs />`.
+  reuse with no second consumer, mirroring Session 2's reasoning for `Schedule`/`Party`.
+- **`stay-content.ts`** — typed consts: eyebrow, heading, body, and both hotel arrays (On the
+  Estate / Downtown Chattanooga, 4 rows each).
+- **`stay.tsx`** (Server Component, named export `Stay`). Imports the eyebrow/heading/body
+  consts and renders the dark section wrapper around `<StayTabs />`.
 - **`stay-tabs.tsx`** (`"use client"`, named export `StayTabs`). The tab-switch interactive
-  boundary — the only client component this session adds. Colocates both hotel arrays (On the
-  Estate / Downtown Chattanooga, 4 rows each) and renders `Tabs`/`TabsList`/`TabsTrigger`/
-  `TabsContent` from `@mocha/ui` around a 4-card grid per tab.
+  boundary — the only client component this session adds. Imports both hotel arrays from
+  `stay-content.ts` and renders `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` from `@mocha/ui`
+  around a 4-card grid per tab.
 
-`apps/blackberry/src/app/page.tsx` imports `TravelSection` and `StaySection` and renders
-`<TravelSection />` then `<StaySection />` with no props, right after `<CountdownStrip />`.
+`apps/blackberry/src/app/page.tsx` imports `Travel` from `@/components/travel` and `Stay` from
+`@/components/stay` (the `@/*` → `./src/*` alias already configured in
+`apps/blackberry/tsconfig.json`) and renders `<Travel />` then `<Stay />` with no props, right
+after `<CountdownStrip />`.
 
 This keeps `packages/ui` limited to the one genuinely reusable addition (`Tabs`), keeps the
 Server/Client boundary narrow (only `stay-tabs.tsx` is a client component, per instruction #5),
@@ -177,9 +185,9 @@ repo currently depends on one, and the source itself doesn't use one either.
 Following Session 1's precedent: `packages/ui` components are unit-tested (Vitest + Testing
 Library); `apps/blackberry`'s composition layer is not (there is currently no vitest config or
 `test` script in `apps/blackberry/package.json`, and `page.tsx` itself has never had a test
-file). This session does not add a vitest setup to `apps/blackberry`, since `travel-section.tsx`,
-`stay-section.tsx`, and `stay-tabs.tsx` are content composition around already-tested primitives,
-not new branching logic of their own.
+file). This session does not add a vitest setup to `apps/blackberry`, since `travel.tsx`,
+`stay.tsx`, and `stay-tabs.tsx` are content composition around already-tested primitives, not
+new branching logic of their own.
 
 `packages/ui/src/components/ui/tabs.test.tsx` (new, following `button.test.tsx`'s pattern):
 
@@ -202,14 +210,14 @@ not new branching logic of their own.
 
 1. `packages/ui` gains a restyled `Tabs` (shadcn/Radix) component, exported from
    `packages/ui/src/index.ts`, with passing tests per the Testing section above.
-2. `apps/blackberry/src/components/travel-section.tsx` renders the `#travel` section with the
-   exact copy, icon list, and address card specified above.
-3. `apps/blackberry/src/components/stay-section.tsx` and `stay-tabs.tsx` render the `#stay`
-   section with the exact copy and both hotels tables specified above; the tab switch changes
-   the visible grid.
-4. `apps/blackberry/src/app/page.tsx` composes `TravelSection` and `StaySection` (no props)
-   directly after `CountdownStrip`, with an updated placeholder comment describing where
-   Sessions 2, 4, and 5 insert their sections relative to this one.
+2. `apps/blackberry/src/components/travel-content.ts` and `travel.tsx` render the `#travel`
+   section with the exact copy, icon list, and address card specified above.
+3. `apps/blackberry/src/components/stay-content.ts`, `stay.tsx`, and `stay-tabs.tsx` render the
+   `#stay` section with the exact copy and both hotel tables specified above; the tab switch
+   changes the visible grid.
+4. `apps/blackberry/src/app/page.tsx` composes `Travel` and `Stay` (no props) directly after
+   `CountdownStrip`, with an updated placeholder comment describing where Sessions 2, 4, and 5
+   insert their sections relative to this one.
 5. All 9 photo slots render as token-driven CSS placeholder blocks, not broken image requests.
 6. `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all pass from the repo root.
 
