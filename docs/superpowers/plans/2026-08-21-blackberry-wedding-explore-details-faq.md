@@ -174,10 +174,16 @@ export { Tabs, TabsList, TabsTrigger, TabsContent };
 
 This converts the CLI's `@/lib/utils` import to the repo's relative-import convention (required — the `@/*` alias doesn't exist in this package, see Global Constraints) and replaces shadcn's default underline-tab look with the source's pill segmented control and instant color-swap active state.
 
-- [ ] **Step 6: Delete the CLI's stray `@/` scratch directory, if one was created**
+- [ ] **Step 6: Delete the CLI's stray `@/` scratch directory and the unused `radix-ui` dependency, if either was added**
+
+The CLI's default template imports from the combined `radix-ui` package (not the per-primitive
+`@radix-ui/react-tabs` used above) and may add it to `packages/ui/package.json`. Since the
+restyled file above imports only `@radix-ui/react-tabs`, `radix-ui` is unused dead weight if
+present — it must not remain a real dependency.
 
 ```bash
 rm -rf packages/ui/@
+grep -q '"radix-ui"' packages/ui/package.json && pnpm --filter @mocha/ui remove radix-ui
 ```
 
 - [ ] **Step 7: Run the test and confirm it passes**
@@ -394,12 +400,24 @@ floatUp { ... }` block) with:
 }
 ```
 
-- [ ] **Step 6: Run the test and confirm it passes**
+- [ ] **Step 6: Delete the CLI's stray `@/` scratch directory and the unused `radix-ui` dependency, if either was added**
+
+Same CLI pitfall as Task 1: it may write a stray literal `packages/ui/@/` directory (since it
+can't resolve this package's removed `@/*` alias) and may add the combined `radix-ui` package to
+`packages/ui/package.json` even though the restyled file above imports only
+`@radix-ui/react-accordion`. Neither may remain in the final commit.
+
+```bash
+rm -rf packages/ui/@
+grep -q '"radix-ui"' packages/ui/package.json && pnpm --filter @mocha/ui remove radix-ui
+```
+
+- [ ] **Step 7: Run the test and confirm it passes**
 
 Run: `pnpm --filter @mocha/ui exec vitest run src/components/ui/accordion.test.tsx`
 Expected: PASS.
 
-- [ ] **Step 7: Export `Accordion` and verify lint/typecheck**
+- [ ] **Step 8: Export `Accordion` and verify lint/typecheck**
 
 Modify `packages/ui/src/index.ts` — add:
 
@@ -415,7 +433,7 @@ export {
 Run: `pnpm --filter @mocha/ui lint && pnpm --filter @mocha/ui typecheck`
 Expected: both clean.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 git add packages/ui/package.json pnpm-lock.yaml packages/ui/src/components/ui/accordion.tsx packages/ui/src/components/ui/accordion.test.tsx packages/ui/src/styles.css packages/ui/src/index.ts
