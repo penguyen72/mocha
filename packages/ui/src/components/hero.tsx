@@ -1,8 +1,8 @@
 import Image, { type StaticImageData } from "next/image";
 import type { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Reveal } from "@/components/reveal";
+import { Button } from "./ui/button";
+import { Reveal } from "./reveal";
 
 export type HeroProps = {
   eyebrow: ReactNode;

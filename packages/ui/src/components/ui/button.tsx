@@ -2,7 +2,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 
 // Only the variants this repo currently renders exist here. Add `secondary`/`destructive`
 // (and their tokens in styles.css) only when a session actually needs them.

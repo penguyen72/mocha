@@ -2,7 +2,7 @@
   "extends": "@mocha/typescript-config/nextjs.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*", "../../packages/ui/src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [

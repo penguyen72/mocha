@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "./ui/button";
 
 export type SiteNavLink = { label: string; href: string };
 
