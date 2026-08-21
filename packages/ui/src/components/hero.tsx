@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { Button } from "./ui/button";
 import { Reveal } from "./reveal";
+import { ScrollCue } from "./scroll-cue";
 import type { SiteLink } from "./site-nav";
 
 export type HeroProps = {
@@ -76,12 +77,7 @@ export function Hero({
         </Reveal>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 z-10 animate-[floatUp_3s_ease-in-out_infinite] text-center text-white">
-        <span className="mb-2 block text-xs uppercase tracking-[0.24em] opacity-85">
-          {scrollCueLabel}
-        </span>
-        <span className="mx-auto block h-10 w-px bg-white/70" />
-      </div>
+      <ScrollCue label={scrollCueLabel} />
     </section>
   );
 }
