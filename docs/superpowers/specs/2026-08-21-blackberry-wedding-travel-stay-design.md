@@ -40,21 +40,28 @@ SiteFooter
 
 ## Architecture
 
-### New shared primitive — `packages/ui`
+### Dependency — `TabSwitch` from `packages/ui` (built by Session 4)
 
-`Tabs` (shadcn/Radix), added the same way Session 1 added `Button`: via
-`pnpm dlx shadcn@latest add tabs` against `packages/ui`, with the CLI's `@/`-prefixed imports
-converted to relative paths per `AGENTS.md`. Restyled to the source's tab-group motion pattern
-(instant background/border/text-color swap on selection, no motion beyond the color transition):
-active `TabsTrigger` = `bg-primary text-primary-foreground` (terracotta/white), inactive =
-transparent with a `border-border` outline. Pill-shaped to match the rest of the design's button
-language. Exported from `packages/ui/src/index.ts` (`Tabs`, `TabsList`, `TabsTrigger`,
-`TabsContent`, plus their prop types). Fully content-agnostic — no Blackberry copy, no
-Blackberry-only styling beyond the token-driven classes already in play for `Button`.
+Cross-session coordination (live, via peer messages between running sessions, 2026-08-21):
+Session 4's spec independently designed a generic `TabSwitch` primitive in `packages/ui`,
+explicitly reserved for this session's Stay tabs so neither session builds a competing `Tabs`.
+Confirmed directly with Session 4's peer session: they own and are actively implementing
+`Tabs`/`Accordion` (restyled shadcn) and `TabSwitch` as Tasks 1–3 of their plan, and will notify
+this session once `TabSwitch` is committed. Locked contract:
 
-This is the only new shared component. Session 4's Explore section (Chattanooga/Atlanta tabs)
-imports these same four exports directly — no wrapper component is needed since shadcn's `Tabs`
-composition primitives are already the right level of reuse.
+```ts
+type TabSwitchProps = {
+  tabs: { id: string; label: string; panel: ReactNode }[];
+  defaultTabId?: string; // defaults to tabs[0].id
+};
+```
+
+`TabSwitch` renders `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` internally and is itself the
+client boundary — a caller hands it already-rendered `panel` content (including Server Component
+output; passing server-rendered JSX as a prop into a Client Component is supported by the
+framework) and never needs its own `"use client"`. This session does **not** add any `Tabs`
+primitive of its own — it imports `TabSwitch` from `@mocha/ui` once Session 4 lands it, and has
+no other packages/ui-level work.
 
 ### Blackberry-local, content-colocated — `apps/blackberry/src/components/`
 
@@ -76,23 +83,22 @@ precedent rather than inventing a second colocation style:
   reuse with no second consumer, mirroring Session 2's reasoning for `Schedule`/`Party`.
 - **`stay-content.ts`** — typed consts: eyebrow, heading, body, and both hotel arrays (On the
   Estate / Downtown Chattanooga, 4 rows each).
-- **`stay.tsx`** (Server Component, named export `Stay`). Imports the eyebrow/heading/body
-  consts and renders the dark section wrapper around `<StayTabs />`.
-- **`stay-tabs.tsx`** (`"use client"`, named export `StayTabs`). The tab-switch interactive
-  boundary — the only client component this session adds. Imports both hotel arrays from
-  `stay-content.ts` and renders `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` from `@mocha/ui`
-  around a 4-card grid per tab.
+- **`stay.tsx`** (Server Component, named export `Stay`). Imports all content from
+  `stay-content.ts`, builds both 4-card hotel grids as plain server-rendered JSX, and passes them
+  as the `panel` values into a single `<TabSwitch tabs={[...]} />` imported from `@mocha/ui`. No
+  separate client file is needed on this session's side — `TabSwitch` is itself the only client
+  boundary, and it lives in `packages/ui`, owned by Session 4.
 
 `apps/blackberry/src/app/page.tsx` imports `Travel` from `@/components/travel` and `Stay` from
 `@/components/stay` (the `@/*` → `./src/*` alias already configured in
 `apps/blackberry/tsconfig.json`) and renders `<Travel />` then `<Stay />` with no props, right
 after `<CountdownStrip />`.
 
-This keeps `packages/ui` limited to the one genuinely reusable addition (`Tabs`), keeps the
-Server/Client boundary narrow (only `stay-tabs.tsx` is a client component, per instruction #5),
-and keeps every session's footprint in the shared `page.tsx` file to two lines (one import, one
-JSX element) per section — minimizing merge conflicts with Sessions 2, 4, and 5 working the same
-file around the same time.
+This keeps `packages/ui` untouched by this session entirely (Session 4 owns the one shared
+addition, `TabSwitch`), keeps the Server/Client boundary as narrow as possible — `stay.tsx`
+itself never needs `"use client"`, per instruction #5 — and keeps every session's footprint in
+the shared `page.tsx` file to two lines (one import, one JSX element) per section, minimizing
+merge conflicts with Sessions 2, 4, and 5 working the same file around the same time.
 
 ## Travel & Directions (`#travel`)
 
@@ -126,11 +132,13 @@ file around the same time.
 - Eyebrow "Where to Stay" (`peach` color), H2 "Accommodations" (white serif), body: "Make a
   weekend of it. Stay right on the estate, or settle into downtown Chattanooga (about 30 minutes
   north). Mention the Liane & Peyton wedding block when you book." `Reveal`-wrapped.
-- `StayTabs`: `Tabs` defaulting to the "On the Estate" value. Two `TabsTrigger`s: "On the Estate"
-  / "Downtown Chattanooga", styled per the Architecture section above. Each `TabsContent` renders
-  a `grid-cols-1 md:grid-cols-4` grid of 4 hotel cards, `Reveal`-wrapped with `(i % 4) * ~85ms`
-  stagger delay. Each card: placeholder photo block, small uppercase tag label (`clay`/`peach`
-  tone), serif name, description.
+- `<TabSwitch tabs={[...]} />` (from `@mocha/ui`), defaulting to the "On the Estate" tab. Two
+  entries: `{ id: "estate", label: "On the Estate", panel: <EstateGrid /> }` and
+  `{ id: "downtown", label: "Downtown Chattanooga", panel: <DowntownGrid /> }`. Each panel is a
+  `grid-cols-1 md:grid-cols-4` grid of 4 hotel cards, `Reveal`-wrapped with `(i % 4) * ~85ms`
+  stagger delay, built inline in `stay.tsx` from the `stay-content.ts` arrays. Each card:
+  placeholder photo block, small uppercase tag label (`clay`/`peach` tone), serif name,
+  description.
 
   **On the Estate:**
 
@@ -150,10 +158,11 @@ file around the same time.
   | ~30 min · Boutique | Hotel Indigo Downtown | "A stylish boutique stay in the heart of downtown, walkable to the riverfront and restaurants." |
   | ~30 min · B&B | Mayor's Mansion Inn | "An 1889 mansion turned intimate bed & breakfast in the Fort Wood historic district. Romantic and quiet." |
 
-  Radix's `Tabs` unmounts inactive `TabsContent` by default, so switching tabs remounts the
-  grid, and each card's `Reveal` (`whileInView`, `once: true`) fires again as a fresh mount —
-  reproducing the source's "switching a tab re-triggers the scroll-reveal stagger" behavior with
-  no extra plumbing beyond the default Radix/Framer Motion behavior.
+  Radix's `Tabs` (underneath `TabSwitch`) unmounts inactive `TabsContent` by default, so
+  switching tabs remounts the grid, and each card's `Reveal` (`whileInView`, `once: true`) fires
+  again as a fresh mount — reproducing the source's "switching a tab re-triggers the
+  scroll-reveal stagger" behavior with no extra plumbing beyond `TabSwitch`'s own default
+  behavior.
 
 ## Placeholders (photos)
 
@@ -172,30 +181,27 @@ repo currently depends on one, and the source itself doesn't use one either.
 
 ## Error handling & edge cases
 
-- No client-only state beyond the `Tabs` primitive's own selection state (no timers, no network
-  calls, no hydration-sensitive values) — no SSR/hydration mismatch risk in this session's work,
-  unlike `CountdownStrip`.
+- No client-only state of this session's own (no timers, no network calls, no
+  hydration-sensitive values) — no SSR/hydration mismatch risk in this session's work, unlike
+  `CountdownStrip`. `TabSwitch`'s own selection state is Session 4's concern.
 - `prefers-reduced-motion` is already handled inside the shared `Reveal` primitive (Session 1);
   this session's `Reveal` usages inherit that behavior for free.
 - Tab keyboard navigation, focus management, and ARIA roles (`tablist`/`tab`/`tabpanel`) come
-  from Radix's `Tabs` primitive — no hand-rolled accessibility logic needed.
+  from `TabSwitch`'s underlying Radix `Tabs` — no hand-rolled accessibility logic needed here.
+- **Build-order dependency**: `stay.tsx` cannot compile once it imports `TabSwitch` until Session
+  4 lands it in `packages/ui`. Travel has no such dependency and can be implemented, tested, and
+  verified independently.
 
 ## Testing
 
-Following Session 1's precedent: `packages/ui` components are unit-tested (Vitest + Testing
-Library); `apps/blackberry`'s composition layer is not (there is currently no vitest config or
-`test` script in `apps/blackberry/package.json`, and `page.tsx` itself has never had a test
-file). This session does not add a vitest setup to `apps/blackberry`, since `travel.tsx`,
-`stay.tsx`, and `stay-tabs.tsx` are content composition around already-tested primitives, not
-new branching logic of their own.
-
-`packages/ui/src/components/ui/tabs.test.tsx` (new, following `button.test.tsx`'s pattern):
-
-- Renders with the first tab's content visible by default.
-- Clicking the second `TabsTrigger` switches the visible `TabsContent` to the second panel's
-  content (and hides the first, given Radix's default unmount-when-inactive behavior).
-- Renders proper ARIA roles (`tablist`, `tab`, `tabpanel`) and marks the active tab
-  `aria-selected="true"`.
+This session adds no `packages/ui` components (Travel needs nothing new; Stay consumes Session
+4's `TabSwitch`), so there is no new primitive to unit-test here — `TabSwitch`'s own behavior
+tests are Session 4's responsibility. Following the precedent every other session in this port
+has independently landed on: `apps/blackberry`'s composition layer gets no vitest setup (no
+`test` script exists in `apps/blackberry/package.json` today, and `page.tsx` has never had a
+test file) — `travel.tsx` and `stay.tsx` are thin Server Component composition over
+already-tested primitives with static, colocated content, exercised by `lint`/`typecheck`/
+`build` rather than Vitest.
 
 ## Non-goals for this session
 
@@ -203,28 +209,33 @@ new branching logic of their own.
 - Schedule of Events, Wedding Party (Session 2 — not yet merged; see the dependency note above).
 - Explore, Details, FAQ (Session 4).
 - RSVP (Session 5).
+- Building `Tabs`/`Accordion`/`TabSwitch` in `packages/ui` — confirmed directly with Session 4's
+  peer session as their scope (Tasks 1–3 of their plan); this session only consumes `TabSwitch`
+  once it lands.
 - Real venue/hotel photography (flagged above as a content gap; placeholders only).
 - Any change to `apps/canton`.
 
 ## Acceptance criteria
 
-1. `packages/ui` gains a restyled `Tabs` (shadcn/Radix) component, exported from
-   `packages/ui/src/index.ts`, with passing tests per the Testing section above.
-2. `apps/blackberry/src/components/travel-content.ts` and `travel.tsx` render the `#travel`
-   section with the exact copy, icon list, and address card specified above.
-3. `apps/blackberry/src/components/stay-content.ts`, `stay.tsx`, and `stay-tabs.tsx` render the
-   `#stay` section with the exact copy and both hotel tables specified above; the tab switch
-   changes the visible grid.
-4. `apps/blackberry/src/app/page.tsx` composes `Travel` and `Stay` (no props) directly after
+1. `apps/blackberry/src/components/travel-content.ts` and `travel.tsx` render the `#travel`
+   section with the exact copy, icon list, and address card specified above — independently of
+   any other session's work.
+2. `apps/blackberry/src/components/stay-content.ts` and `stay.tsx` render the `#stay` section
+   with the exact copy and both hotel tables specified above, using `TabSwitch` from `@mocha/ui`
+   once Session 4 lands it; the tab switch changes the visible grid.
+3. `apps/blackberry/src/app/page.tsx` composes `Travel` and `Stay` (no props) directly after
    `CountdownStrip`, with an updated placeholder comment describing where Sessions 2, 4, and 5
    insert their sections relative to this one.
-5. All 9 photo slots render as token-driven CSS placeholder blocks, not broken image requests.
-6. `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all pass from the repo root.
+4. All 9 photo slots render as token-driven CSS placeholder blocks, not broken image requests.
+5. `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm build` all pass from the repo root
+   (`stay.tsx`'s import of `TabSwitch` requires Session 4's `packages/ui` work to be present
+   locally for this to be verifiable end-to-end — see the Architecture dependency note above).
 
 ## References
 
 - `docs/superpowers/reference/blackberry-wedding-dc-source.md` — full extracted source design
   (sections 6 and 7 are this session's scope)
 - `docs/superpowers/specs/2026-08-19-blackberry-wedding-foundation-design.md` — Session 1's
-  spec; source of the token system, `Reveal`, and the `Button`-via-shadcn precedent this session
-  follows for `Tabs`
+  spec; source of the token system and `Reveal`
+- `docs/superpowers/specs/2026-08-21-blackberry-wedding-explore-details-faq-design.md` —
+  Session 4's spec; source of the `TabSwitch` contract this session depends on
