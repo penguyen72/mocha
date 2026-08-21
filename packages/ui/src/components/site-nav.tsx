@@ -53,10 +53,10 @@ export function SiteNav({
   return (
     <nav
       className={cn(
-        "fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-colors duration-300 sm:px-12",
+        "fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 transition-colors duration-300 sm:px-12",
         scrolled
-          ? "bg-background/94 text-foreground shadow-md backdrop-blur-md"
-          : "bg-transparent text-white",
+          ? "bg-background/94 py-4 text-foreground shadow-md backdrop-blur-md"
+          : "bg-transparent py-[22px] text-white",
       )}
     >
       <a href="#home" className="font-serif text-2xl tracking-widest">
