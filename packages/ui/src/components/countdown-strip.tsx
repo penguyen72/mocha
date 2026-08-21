@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useRef, useSyncExternalStore, type ReactNode } from "react";
 
 export type CountdownStripLabels = {
   days: string;
@@ -24,7 +24,7 @@ const DEFAULT_LABELS: CountdownStripLabels = {
 
 type CountdownValue = { days: string; hours: string; minutes: string; seconds: string };
 
-const INITIAL: CountdownValue = { days: "00", hours: "00", minutes: "00", seconds: "00" };
+const SERVER_SNAPSHOT: CountdownValue = { days: "00", hours: "00", minutes: "00", seconds: "00" };
 
 function computeCountdown(targetDate: string): CountdownValue {
   const diff = Math.max(0, new Date(targetDate).getTime() - Date.now());
@@ -37,21 +37,39 @@ function computeCountdown(targetDate: string): CountdownValue {
   };
 }
 
+function subscribe(callback: () => void) {
+  const timer = setInterval(callback, 1000);
+  return () => clearInterval(timer);
+}
+
+function useCountdown(targetDate: string): CountdownValue {
+  const cacheRef = useRef<CountdownValue | null>(null);
+
+  const getSnapshot = () => {
+    const next = computeCountdown(targetDate);
+    const cached = cacheRef.current;
+    if (
+      cached &&
+      cached.days === next.days &&
+      cached.hours === next.hours &&
+      cached.minutes === next.minutes &&
+      cached.seconds === next.seconds
+    ) {
+      return cached;
+    }
+    cacheRef.current = next;
+    return next;
+  };
+
+  return useSyncExternalStore(subscribe, getSnapshot, () => SERVER_SNAPSHOT);
+}
+
 export function CountdownStrip({
   tagline,
   targetDate,
   labels = DEFAULT_LABELS,
 }: CountdownStripProps) {
-  const [value, setValue] = useState<CountdownValue>(INITIAL);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setValue(computeCountdown(targetDate));
-    const timer = setInterval(() => {
-      setValue(computeCountdown(targetDate));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [targetDate]);
+  const value = useCountdown(targetDate);
 
   const stats: [string, string][] = [
     [value.days, labels.days],
