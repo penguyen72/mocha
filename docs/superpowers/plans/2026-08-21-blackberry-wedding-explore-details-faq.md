@@ -15,6 +15,9 @@
 - Default to Server Components; the only client boundaries in this plan are `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent`, `Accordion`/`AccordionItem`/`AccordionTrigger`/`AccordionContent`, and the `TabSwitch` primitive built on top of `Tabs` — every section component itself stays a Server Component.
 - `packages/ui`'s `@/*` path alias was removed in Session 1 (see `packages/ui/tsconfig.json`, `compilerOptions: {}`). The shadcn CLI still emits `@/`-prefixed imports (per `components.json`'s `aliases`) — every generated file's imports MUST be rewritten to relative paths before it will even compile, not just as a style preference.
 - Add shadcn components only when needed — this plan adds exactly `tabs` and `accordion`, nothing else.
+- Always run `pnpm add`/`pnpm dlx shadcn add` scoped with `pnpm --filter @mocha/ui` (or `cd packages/ui` first) — never bare `pnpm add` from the repo root, which adds the dependency to the root `package.json` instead of the package that needs it.
+- The shadcn CLI's default template imports from the combined `radix-ui` package; this repo's convention (see `Button`, and Task 1/2's given file content) imports each primitive from its own `@radix-ui/react-*` package instead, matching how `Button` already imports `@radix-ui/react-slot` directly. Don't let `radix-ui` end up as a real dependency — if the CLI adds it, remove it after replacing the generated file with the given restyled version.
+- Radix's `Tabs.Trigger` activates on `onMouseDown`/`onFocus`, not `onClick` — tests that click a `Tabs`/`TabSwitch` trigger must use `@testing-library/user-event`, not `fireEvent.click` (see Task 1). Radix's `Accordion.Trigger` uses plain `onClick` (verified by reading `@radix-ui/react-collapsible`'s source) — its test keeps `fireEvent.click`, no change needed.
 - Colocate each section's content data in a sibling `*-content.ts` file next to its flat `*.tsx` component (not inlined in the component, not a shared `content.ts`) — matches Session 2's (`schedule-content.ts`/`schedule.tsx`) and Session 3's convention, confirmed via cross-session coordination.
 - Keep Blackberry-specific copy and composition in `apps/blackberry`; keep `packages/ui` components prop-driven with no Blackberry copy inside their source.
 - Use the reference doc's copy verbatim: `docs/superpowers/reference/blackberry-wedding-dc-source.md`, §8 (Explore), §9 (Details), §10 (FAQ).
@@ -57,18 +60,32 @@
 - Consumes: `cn()` from `packages/ui/src/lib/utils.ts` (existing); `--color-primary`, `--color-primary-foreground`, `--color-border`, `--color-foreground` theme tokens (existing, Session 1).
 - Produces: `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` — thin restyled wrappers around `@radix-ui/react-tabs`'s `Root`/`List`/`Trigger`/`Content`, each accepting that primitive's own props (`value`/`defaultValue`/`onValueChange` on `Tabs`, `value` on `TabsTrigger`/`TabsContent`) plus an optional `className`.
 
-- [ ] **Step 1: Write the failing test**
+- [ ] **Step 1: Add `@testing-library/user-event`**
+
+Radix's `Tabs.Trigger` activates on `onMouseDown`/`onFocus`, not `onClick` (confirmed by reading
+`@radix-ui/react-tabs`'s source) — plain `fireEvent.click()` does not dispatch a `mousedown` or
+move focus, so it never triggers Radix's handler in jsdom. `@testing-library/user-event`
+simulates the full realistic pointer/focus sequence and is the standard fix for testing Radix
+primitives; it isn't a dependency anywhere in the monorepo yet.
+
+```bash
+pnpm --filter @mocha/ui add -D @testing-library/user-event@latest
+```
+
+- [ ] **Step 2: Write the failing test**
 
 Create `packages/ui/src/components/ui/tabs.test.tsx`:
 
 ```tsx
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 describe("Tabs", () => {
-  it("shows only the active tab's content, switching on trigger click", () => {
+  it("shows only the active tab's content, switching on trigger click", async () => {
+    const user = userEvent.setup();
     render(
       <Tabs defaultValue="a">
         <TabsList>
@@ -83,7 +100,7 @@ describe("Tabs", () => {
     expect(screen.getByText("Content A")).toBeInTheDocument();
     expect(screen.queryByText("Content B")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("tab", { name: "Tab B" }));
+    await user.click(screen.getByRole("tab", { name: "Tab B" }));
 
     expect(screen.getByText("Content B")).toBeInTheDocument();
     expect(screen.queryByText("Content A")).not.toBeInTheDocument();
@@ -91,20 +108,24 @@ describe("Tabs", () => {
 });
 ```
 
-- [ ] **Step 2: Run the test and confirm it fails**
+- [ ] **Step 3: Run the test and confirm it fails**
 
 Run: `pnpm --filter @mocha/ui exec vitest run src/components/ui/tabs.test.tsx`
 Expected: FAIL — `./tabs` does not exist.
 
-- [ ] **Step 3: Scaffold via the shadcn CLI**
+- [ ] **Step 4: Scaffold via the shadcn CLI**
 
 ```bash
 cd packages/ui && pnpm dlx shadcn@latest add tabs --yes
 ```
 
-This installs `@radix-ui/react-tabs` and writes an initial `packages/ui/src/components/ui/tabs.tsx` using `@/lib/utils` — replaced in the next step.
+This installs `@radix-ui/react-tabs` and writes an initial `packages/ui/src/components/ui/tabs.tsx`
+(and, since the CLI can't resolve this package's removed `@/*` alias, may also write a stray
+literal `packages/ui/@/components/ui/tabs.tsx` — delete that `packages/ui/@/` directory entirely
+once Step 5 below is done; it's CLI scratch output, not part of the package). The real target
+file is replaced in the next step.
 
-- [ ] **Step 4: Replace the generated file with the restyled version**
+- [ ] **Step 5: Replace the generated file with the restyled version**
 
 Replace the full contents of `packages/ui/src/components/ui/tabs.tsx` with:
 
@@ -153,12 +174,18 @@ export { Tabs, TabsList, TabsTrigger, TabsContent };
 
 This converts the CLI's `@/lib/utils` import to the repo's relative-import convention (required — the `@/*` alias doesn't exist in this package, see Global Constraints) and replaces shadcn's default underline-tab look with the source's pill segmented control and instant color-swap active state.
 
-- [ ] **Step 5: Run the test and confirm it passes**
+- [ ] **Step 6: Delete the CLI's stray `@/` scratch directory, if one was created**
+
+```bash
+rm -rf packages/ui/@
+```
+
+- [ ] **Step 7: Run the test and confirm it passes**
 
 Run: `pnpm --filter @mocha/ui exec vitest run src/components/ui/tabs.test.tsx`
 Expected: PASS.
 
-- [ ] **Step 6: Export `Tabs` and verify lint/typecheck**
+- [ ] **Step 8: Export `Tabs` and verify lint/typecheck**
 
 Modify `packages/ui/src/index.ts` — add:
 
@@ -169,7 +196,7 @@ export { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 Run: `pnpm --filter @mocha/ui lint && pnpm --filter @mocha/ui typecheck`
 Expected: both clean.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 git add packages/ui/package.json pnpm-lock.yaml packages/ui/src/components/ui/tabs.tsx packages/ui/src/components/ui/tabs.test.tsx packages/ui/src/index.ts
@@ -416,13 +443,15 @@ git commit -m "feat(ui): add shadcn Accordion primitive restyled to the site pal
 Create `packages/ui/src/components/tab-switch.test.tsx`:
 
 ```tsx
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 import { TabSwitch } from "./tab-switch";
 
 describe("TabSwitch", () => {
-  it("renders all tab labels and swaps the visible panel on click", () => {
+  it("renders all tab labels and swaps the visible panel on click", async () => {
+    const user = userEvent.setup();
     render(
       <TabSwitch
         tabs={[
@@ -437,13 +466,17 @@ describe("TabSwitch", () => {
     expect(screen.getByText("Panel A")).toBeInTheDocument();
     expect(screen.queryByText("Panel B")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("tab", { name: "Tab B" }));
+    await user.click(screen.getByRole("tab", { name: "Tab B" }));
 
     expect(screen.getByText("Panel B")).toBeInTheDocument();
     expect(screen.queryByText("Panel A")).not.toBeInTheDocument();
   });
 });
 ```
+
+`@testing-library/user-event` is required here for the same reason as Task 1's `Tabs` test — Radix's
+`Tabs.Trigger` (which `TabSwitch` renders under the hood) activates on `onMouseDown`/`onFocus`, not
+`onClick`; it's already a `packages/ui` devDependency from Task 1, no reinstall needed.
 
 - [ ] **Step 2: Run the test and confirm it fails**
 
