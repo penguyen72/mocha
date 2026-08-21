@@ -18,3 +18,15 @@ if (!window.matchMedia) {
     dispatchEvent: () => false,
   })) as typeof window.matchMedia;
 }
+
+if (!window.IntersectionObserver) {
+  window.IntersectionObserver = class IntersectionObserver {
+    constructor() {}
+    disconnect() {}
+    observe() {}
+    takeRecords() {
+      return [];
+    }
+    unobserve() {}
+  } as unknown as typeof IntersectionObserver;
+}
