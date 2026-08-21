@@ -17,6 +17,15 @@ re-authenticate against claude.ai or risk the live design project changing mid-e
 - Other files in the project: `assets/hero.jpeg` (the real hero background photo — not a
   placeholder), `uploads/IMG_1653.jpeg`, and `screenshots/01-w.png` … `06-w.png` (rendered
   reference screenshots of the live design — pull these for visual QA/comparison).
+- **Binary-asset gotcha (hit once already, cost a full debugging cycle):** `get_file` silently
+  caps at 256 KiB. Fetching `assets/hero.jpeg` this way truncated it mid-file — the response was
+  still valid, complete JSON with a syntactically-fine base64 `content` field, and the decoded
+  result still passed a `file`/dimension check (correct header, correct reported size) and even
+  looked plausible at a glance. It rendered as ~95% flat grey once actually used. If any future
+  session fetches a binary asset (photo, etc.) via this tool, verify the decoded file has a real
+  JPEG end-of-image marker (last two bytes `FF D9` — `xxd -s -2 <file>`) and render a visual
+  preview before trusting it; do not rely on `file` or reported dimensions alone. For anything
+  likely to exceed 256 KiB, ask the human to export it from the design project directly instead.
 - `image-slot.js` and `support.js` are Claude Design's own canvas runtime/tooling (a
   templating + class-component system used only inside the design tool to preview `.dc.html`
   files). They are **not application code** and must not be ported. They only tell you *how the
