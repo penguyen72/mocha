@@ -1,5 +1,7 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
+import { Travel } from "@/components/travel";
+
 import heroPhoto from "@/assets/hero.jpeg";
 
 const NAV_LINKS = [
@@ -47,11 +49,12 @@ export default function Home() {
           targetDate="2027-10-02T16:00:00-04:00"
         />
 
-        {/*
-          Sessions 2–5 add their sections here, in this order:
-          Schedule of Events, Wedding Party, Travel & Directions, Accommodations (Stay),
-          Explore, Details, FAQ, RSVP.
-        */}
+        {/* Session 2 inserts Schedule of Events and Wedding Party here. */}
+
+        <Travel />
+
+        {/* Session 3 inserts Accommodations (Stay) here once TabSwitch lands. */}
+        {/* Sessions 4-5 insert Explore, Details, FAQ, and RSVP here. */}
       </main>
 
       <SiteFooter
