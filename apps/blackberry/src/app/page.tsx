@@ -1,6 +1,7 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
 import heroPhoto from "@/assets/hero.jpeg";
+import { RsvpSection } from "@/components/rsvp-section";
 
 const NAV_LINKS = [
   { label: "Schedule", href: "#schedule" },
@@ -48,10 +49,12 @@ export default function Home() {
         />
 
         {/*
-          Sessions 2–5 add their sections here, in this order:
+          Sessions 2-4 still add their sections here, in this order:
           Schedule of Events, Wedding Party, Travel & Directions, Accommodations (Stay),
-          Explore, Details, FAQ, RSVP.
+          Explore, Details, FAQ. RSVP (Session 5) is composed below.
         */}
+
+        <RsvpSection />
       </main>
 
       <SiteFooter
