@@ -8,14 +8,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 export type TabSwitchProps = {
   tabs: { id: string; label: string; panel: ReactNode }[];
   defaultTabId?: string;
+  // Style overrides for reuse on alternate backgrounds (e.g. a future dark-mode Stay section).
+  listClassName?: string;
+  triggerClassName?: string;
 };
 
-export function TabSwitch({ tabs, defaultTabId }: TabSwitchProps) {
+export function TabSwitch({
+  tabs,
+  defaultTabId,
+  listClassName,
+  triggerClassName,
+}: TabSwitchProps) {
   return (
     <Tabs defaultValue={defaultTabId ?? tabs[0]?.id}>
-      <TabsList>
+      <TabsList className={listClassName}>
         {tabs.map((tab) => (
-          <TabsTrigger key={tab.id} value={tab.id}>
+          <TabsTrigger key={tab.id} value={tab.id} className={triggerClassName}>
             {tab.label}
           </TabsTrigger>
         ))}
