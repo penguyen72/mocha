@@ -7,8 +7,8 @@ import { Textarea } from "./textarea";
 describe("Textarea", () => {
   it("accepts typed text", async () => {
     const user = userEvent.setup();
-    render(<Textarea placeholder="Can't wait to celebrate with you both!" />);
-    const textarea = screen.getByPlaceholderText("Can't wait to celebrate with you both!");
+    render(<Textarea placeholder="Type your message here" />);
+    const textarea = screen.getByPlaceholderText("Type your message here");
     await user.type(textarea, "So excited!");
     expect(textarea).toHaveValue("So excited!");
   });
