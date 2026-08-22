@@ -1,5 +1,6 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
+import { Stay } from "@/components/stay";
 import { Travel } from "@/components/travel";
 
 import heroPhoto from "@/assets/hero.jpeg";
@@ -53,7 +54,8 @@ export default function Home() {
 
         <Travel />
 
-        {/* Session 3 inserts Accommodations (Stay) here once TabSwitch lands. */}
+        <Stay />
+
         {/* Sessions 4-5 insert Explore, Details, FAQ, and RSVP here. */}
       </main>
 
