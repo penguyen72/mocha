@@ -26,4 +26,17 @@ describe("TabSwitch", () => {
     expect(screen.getByText("Panel B")).toBeInTheDocument();
     expect(screen.queryByText("Panel A")).not.toBeInTheDocument();
   });
+
+  it("passes listClassName and triggerClassName through to the tab list and triggers", () => {
+    render(
+      <TabSwitch
+        tabs={[{ id: "a", label: "Tab A", panel: <p>Panel A</p> }]}
+        listClassName="border-white/20"
+        triggerClassName="text-white"
+      />,
+    );
+
+    expect(screen.getByRole("tablist")).toHaveClass("border-white/20");
+    expect(screen.getByRole("tab", { name: "Tab A" })).toHaveClass("text-white");
+  });
 });

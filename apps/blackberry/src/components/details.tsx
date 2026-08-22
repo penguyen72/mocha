@@ -18,7 +18,7 @@ export function Details() {
     <section id="details" className="bg-bb-peach px-6 py-24 sm:px-12">
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
         <Reveal>
-          <div className="rounded-lg bg-surface p-10">
+          <div className="h-full rounded-lg bg-surface p-10">
             <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">
               {DETAILS_DRESS_EYEBROW}
             </p>
@@ -42,7 +42,7 @@ export function Details() {
         </Reveal>
 
         <Reveal delay={0.085}>
-          <div className="rounded-lg bg-surface p-10">
+          <div className="h-full rounded-lg bg-surface p-10">
             <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">
               {DETAILS_REGISTRY_EYEBROW}
             </p>
