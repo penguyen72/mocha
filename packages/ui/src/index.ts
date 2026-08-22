@@ -18,3 +18,5 @@ export { CountdownStrip } from "./components/countdown-strip";
 export type { CountdownStripProps, CountdownStripLabels } from "./components/countdown-strip";
 export { SiteFooter } from "./components/site-footer";
 export type { SiteFooterProps } from "./components/site-footer";
+export { TabSwitch } from "./components/tab-switch";
+export type { TabSwitchProps } from "./components/tab-switch";
