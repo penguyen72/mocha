@@ -1,7 +1,15 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
-import heroPhoto from "@/assets/hero.jpeg";
+import { Details } from "@/components/details";
+import { Explore } from "@/components/explore";
+import { Faq } from "@/components/faq";
+import { Party } from "@/components/party";
 import { RsvpSection } from "@/components/rsvp-section";
+import { Schedule } from "@/components/schedule";
+import { Stay } from "@/components/stay";
+import { Travel } from "@/components/travel";
+
+import heroPhoto from "@/assets/hero.jpeg";
 
 const NAV_LINKS = [
   { label: "Schedule", href: "#schedule" },
@@ -48,11 +56,16 @@ export default function Home() {
           targetDate="2027-10-02T16:00:00-04:00"
         />
 
-        {/*
-          Sessions 2-4 still add their sections here, in this order:
-          Schedule of Events, Wedding Party, Travel & Directions, Accommodations (Stay),
-          Explore, Details, FAQ. RSVP (Session 5) is composed below.
-        */}
+        <Schedule />
+        <Party />
+
+        <Travel />
+
+        <Stay />
+
+        <Explore />
+        <Details />
+        <Faq />
 
         <RsvpSection />
       </main>
