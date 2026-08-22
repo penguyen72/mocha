@@ -15,6 +15,7 @@
   --site-font-script: var(--font-pinyon-script), cursive;
   --site-inverted-background: #000000;
   --site-inverted-foreground: #ffffff;
+  --site-destructive: #b3261e;
 
   /* Blackberry's local editorial palette — not part of the shared @mocha/ui token contract. */
   --bb-clay: #b2795e;

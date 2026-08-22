@@ -1,14 +1,15 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
-import { Stay } from "@/components/stay";
-import { Travel } from "@/components/travel";
-
-import heroPhoto from "@/assets/hero.jpeg";
 import { Details } from "@/components/details";
 import { Explore } from "@/components/explore";
 import { Faq } from "@/components/faq";
 import { Party } from "@/components/party";
+import { RsvpSection } from "@/components/rsvp-section";
 import { Schedule } from "@/components/schedule";
+import { Stay } from "@/components/stay";
+import { Travel } from "@/components/travel";
+
+import heroPhoto from "@/assets/hero.jpeg";
 
 const NAV_LINKS = [
   { label: "Schedule", href: "#schedule" },
@@ -66,7 +67,7 @@ export default function Home() {
         <Details />
         <Faq />
 
-        {/* Session 5 adds RSVP here. */}
+        <RsvpSection />
       </main>
 
       <SiteFooter

@@ -12,6 +12,7 @@
   --site-font-script: cursive;
   --site-inverted-background: #1a1a1a;
   --site-inverted-foreground: #ffffff;
+  --site-destructive: #b91c1c;
 }
 
 @theme inline {
@@ -28,6 +29,7 @@
   --font-script: var(--site-font-script);
   --color-inverted-background: var(--site-inverted-background);
   --color-inverted-foreground: var(--site-inverted-foreground);
+  --color-destructive: var(--site-destructive);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
