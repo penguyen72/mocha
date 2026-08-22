@@ -21,7 +21,7 @@ import {
   Textarea,
 } from "@mocha/ui";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import {
   EVENT_OPTIONS,
@@ -51,6 +51,7 @@ export function RsvpForm() {
     resolver: zodResolver(rsvpFormSchema),
     defaultValues: DEFAULT_VALUES,
   });
+  const attending = useWatch({ control: form.control, name: "attending" });
 
   if (submitted) {
     return (
@@ -69,12 +70,11 @@ export function RsvpForm() {
     );
   }
 
-  const attending = form.watch("attending");
-
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((values) => setSubmitted(values.attending))}
+        noValidate
         className="flex flex-col gap-6 rounded-2xl bg-surface p-10"
       >
         <FormField
@@ -110,9 +110,15 @@ export function RsvpForm() {
           name="attending"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-bb-clay">Will you be attending?</FormLabel>
+              <FormLabel id="attending-label" className="text-bb-clay">
+                Will you be attending?
+              </FormLabel>
               <FormControl>
-                <RadioGroup onValueChange={field.onChange} value={field.value}>
+                <RadioGroup
+                  aria-labelledby="attending-label"
+                  onValueChange={field.onChange}
+                  value={field.value ?? ""}
+                >
                   <RadioGroupItem value="yes">Joyfully accepts</RadioGroupItem>
                   <RadioGroupItem value="no">Regretfully declines</RadioGroupItem>
                 </RadioGroup>
@@ -129,10 +135,12 @@ export function RsvpForm() {
               name="guestCount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-bb-clay">Number of guests</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
+                  <FormLabel id="guest-count-label" className="text-bb-clay">
+                    Number of guests
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value ?? ""}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger aria-labelledby="guest-count-label">
                         <SelectValue placeholder="Select a number" />
                       </SelectTrigger>
                     </FormControl>
@@ -154,8 +162,10 @@ export function RsvpForm() {
               name="events"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-bb-clay">Which events will you join?</FormLabel>
-                  <div className="flex flex-col gap-3">
+                  <FormLabel id="events-label" className="text-bb-clay">
+                    Which events will you join?
+                  </FormLabel>
+                  <div role="group" aria-labelledby="events-label" className="flex flex-col gap-3">
                     {EVENT_OPTIONS.map((option) => {
                       const checked = field.value?.includes(option) ?? false;
                       return (
@@ -186,9 +196,15 @@ export function RsvpForm() {
               name="mealPreference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-bb-clay">Meal preference</FormLabel>
+                  <FormLabel id="meal-preference-label" className="text-bb-clay">
+                    Meal preference
+                  </FormLabel>
                   <FormControl>
-                    <RadioGroup onValueChange={field.onChange} value={field.value}>
+                    <RadioGroup
+                      aria-labelledby="meal-preference-label"
+                      onValueChange={field.onChange}
+                      value={field.value ?? ""}
+                    >
                       {MEAL_OPTIONS.map((option) => (
                         <RadioGroupItem key={option} value={option}>
                           {option}
@@ -220,9 +236,15 @@ export function RsvpForm() {
               name="lodgingPreference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-bb-clay">Lodging preference</FormLabel>
+                  <FormLabel id="lodging-preference-label" className="text-bb-clay">
+                    Lodging preference
+                  </FormLabel>
                   <FormControl>
-                    <RadioGroup onValueChange={field.onChange} value={field.value}>
+                    <RadioGroup
+                      aria-labelledby="lodging-preference-label"
+                      onValueChange={field.onChange}
+                      value={field.value ?? ""}
+                    >
                       {LODGING_OPTIONS.map((option) => (
                         <RadioGroupItem key={option.value} value={option.value}>
                           {option.label}
