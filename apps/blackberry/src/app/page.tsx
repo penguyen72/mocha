@@ -1,6 +1,9 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
 import heroPhoto from "@/assets/hero.jpeg";
+import { Details } from "@/components/details";
+import { Explore } from "@/components/explore";
+import { Faq } from "@/components/faq";
 import { Party } from "@/components/party";
 import { Schedule } from "@/components/schedule";
 
@@ -52,10 +55,13 @@ export default function Home() {
         <Schedule />
         <Party />
 
-        {/*
-          Sessions 3–5 add their sections here, in this order:
-          Travel & Directions, Accommodations (Stay), Explore, Details, FAQ, RSVP.
-        */}
+        {/* Session 3 adds Travel & Directions and Accommodations (Stay) here. */}
+
+        <Explore />
+        <Details />
+        <Faq />
+
+        {/* Session 5 adds RSVP here. */}
       </main>
 
       <SiteFooter

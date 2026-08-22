@@ -1,6 +1,13 @@
 export { SiteShell } from "./site-shell";
 export { Button, buttonVariants } from "./components/ui/button";
 export type { ButtonProps } from "./components/ui/button";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./components/ui/accordion";
 export { Reveal } from "./components/reveal";
 export type { RevealProps } from "./components/reveal";
 export { Hero } from "./components/hero";
@@ -11,3 +18,5 @@ export { CountdownStrip } from "./components/countdown-strip";
 export type { CountdownStripProps, CountdownStripLabels } from "./components/countdown-strip";
 export { SiteFooter } from "./components/site-footer";
 export type { SiteFooterProps } from "./components/site-footer";
+export { TabSwitch } from "./components/tab-switch";
+export type { TabSwitchProps } from "./components/tab-switch";
