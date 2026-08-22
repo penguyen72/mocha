@@ -18,7 +18,7 @@ function HotelGrid({ hotels }: { hotels: Hotel[] }) {
             {/* Placeholder pending real hotel photography. */}
             <div className="aspect-square rounded-lg bg-gradient-to-br from-bb-clay/40 to-bb-terracotta/40" />
             <p className="mt-4 text-xs uppercase tracking-[0.2em] text-bb-peach">{hotel.tag}</p>
-            <h3 className="mt-1 font-serif text-xl text-inverted-foreground">{hotel.name}</h3>
+            <h3 className="mt-1 font-serif text-xl">{hotel.name}</h3>
             <p className="mt-2 text-sm text-inverted-foreground/70">{hotel.description}</p>
           </div>
         </Reveal>
@@ -44,7 +44,7 @@ export function Stay() {
           <p className="mt-4 max-w-2xl text-inverted-foreground/70">{STAY_INTRO}</p>
         </Reveal>
 
-        <div className="mt-14">
+        <div className="mt-14 [--color-foreground:var(--site-inverted-foreground)]">
           <TabSwitch
             tabs={[
               {

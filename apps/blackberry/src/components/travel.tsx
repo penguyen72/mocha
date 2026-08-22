@@ -46,9 +46,9 @@ export function Travel() {
           </div>
 
           <Reveal>
+            {/* Placeholder pending real venue photography. */}
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gradient-to-br from-bb-blush to-bb-peach">
-              {/* Placeholder pending real venue photography. */}
-              <div className="absolute bottom-6 left-6 rounded-md bg-white px-6 py-4 shadow-lg">
+              <div className="absolute bottom-6 left-6 rounded-md bg-inverted-foreground px-6 py-4 shadow-lg">
                 <p className="font-serif text-lg text-foreground">{TRAVEL_ADDRESS_LINE_1}</p>
                 <p className="text-sm text-muted">{TRAVEL_ADDRESS_LINE_2}</p>
               </div>
