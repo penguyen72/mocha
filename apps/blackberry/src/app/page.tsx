@@ -1,6 +1,9 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
 import heroPhoto from "@/assets/hero.jpeg";
+import { Details } from "@/components/details";
+import { Explore } from "@/components/explore";
+import { Faq } from "@/components/faq";
 
 const NAV_LINKS = [
   { label: "Schedule", href: "#schedule" },
@@ -47,11 +50,14 @@ export default function Home() {
           targetDate="2027-10-02T16:00:00-04:00"
         />
 
-        {/*
-          Sessions 2–5 add their sections here, in this order:
-          Schedule of Events, Wedding Party, Travel & Directions, Accommodations (Stay),
-          Explore, Details, FAQ, RSVP.
-        */}
+        {/* Session 2 adds Schedule of Events and Wedding Party here. */}
+        {/* Session 3 adds Travel & Directions and Accommodations (Stay) here. */}
+
+        <Explore />
+        <Details />
+        <Faq />
+
+        {/* Session 5 adds RSVP here. */}
       </main>
 
       <SiteFooter
