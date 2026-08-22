@@ -4,6 +4,8 @@ import heroPhoto from "@/assets/hero.jpeg";
 import { Details } from "@/components/details";
 import { Explore } from "@/components/explore";
 import { Faq } from "@/components/faq";
+import { Party } from "@/components/party";
+import { Schedule } from "@/components/schedule";
 
 const NAV_LINKS = [
   { label: "Schedule", href: "#schedule" },
@@ -50,7 +52,9 @@ export default function Home() {
           targetDate="2027-10-02T16:00:00-04:00"
         />
 
-        {/* Session 2 adds Schedule of Events and Wedding Party here. */}
+        <Schedule />
+        <Party />
+
         {/* Session 3 adds Travel & Directions and Accommodations (Stay) here. */}
 
         <Explore />
