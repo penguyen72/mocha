@@ -1,5 +1,8 @@
 import { CountdownStrip, Hero, SiteFooter, SiteNav } from "@mocha/ui";
 
+import { Stay } from "@/components/stay";
+import { Travel } from "@/components/travel";
+
 import heroPhoto from "@/assets/hero.jpeg";
 import { Details } from "@/components/details";
 import { Explore } from "@/components/explore";
@@ -55,7 +58,9 @@ export default function Home() {
         <Schedule />
         <Party />
 
-        {/* Session 3 adds Travel & Directions and Accommodations (Stay) here. */}
+        <Travel />
+
+        <Stay />
 
         <Explore />
         <Details />
