@@ -44,8 +44,9 @@ export function Stay() {
           <p className="mt-4 max-w-2xl text-inverted-foreground/70">{STAY_INTRO}</p>
         </Reveal>
 
-        <div className="mt-14 [--color-foreground:var(--site-inverted-foreground)]">
+        <div className="mt-14">
           <TabSwitch
+            triggerClassName="text-inverted-foreground"
             tabs={[
               {
                 id: "estate",
