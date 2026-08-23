@@ -11,7 +11,22 @@ Shared packages live in `packages/`. Read the approved design and current implem
 
 ## Required workflow
 
-Use relevant Superpowers skills when they are available:
+Never push or commit directly to `main`. Every change — docs included — lands through a pull
+request on its own branch, reviewed and merged through GitHub. When using the branch-finishing
+workflow, always choose "push and create a pull request"; never "merge locally," and never push
+`main` directly under any circumstance.
+
+This repo accepts two paths, chosen by scope. If in doubt which one applies, treat the change as
+Superpowers-worthy.
+
+**Direct PR** — for small, well-scoped changes: docs, config or tooling fixes, dependency bumps,
+backfilling tests for existing behavior, small bug fixes with an obvious, already-understood root
+cause. Branch, make the change, verify it, open a PR. The full brainstorm/plan ceremony below
+isn't required, but still verify before opening the PR and still request review.
+
+**Superpowers workflow** — for anything creative, behavioral, or architectural: new features, new
+components or page sections, new business logic, or any change that involves a design decision a
+human should weigh in on. Use the relevant Superpowers skills:
 
 1. Brainstorm and obtain approval before creative, behavioral, or architectural changes.
 2. Write a plan for approved multi-step work.
