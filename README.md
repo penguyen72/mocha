@@ -78,15 +78,26 @@ Vitest and React Testing Library cover shared and interactive component behavior
 
 ## Agentic contribution flow
 
-This repository is intended to be developed primarily with compatible coding agents and the Superpowers workflow:
+This repository is intended to be developed primarily with compatible coding agents. Every
+change — docs included — lands through a pull request on its own branch; nothing is pushed or
+committed directly to `main`.
 
-1. Use `superpowers:brainstorming` before creative, architectural, or behavioral work and obtain approval.
-2. Use `superpowers:writing-plans` for approved multi-step changes.
-3. Implement with `superpowers:test-driven-development`.
-4. Diagnose unexpected behavior with `superpowers:systematic-debugging`.
-5. Run `superpowers:verification-before-completion` before claiming success.
-6. Use `superpowers:requesting-code-review` before merge.
-7. Use `superpowers:finishing-a-development-branch` to prepare the final pull request or integration handoff.
+Two paths are accepted, chosen by scope:
+
+- **Direct PR** for small, well-scoped changes (docs, config/tooling fixes, dependency bumps,
+  backfilling tests, small bug fixes with an obvious root cause): branch, make the change, verify
+  it, open a PR.
+- **Superpowers workflow** for anything creative, behavioral, or architectural (new features, new
+  components or page sections, new business logic, or any change involving a design decision):
+
+  1. Use `superpowers:brainstorming` before creative, architectural, or behavioral work and obtain approval.
+  2. Use `superpowers:writing-plans` for approved multi-step changes.
+  3. Implement with `superpowers:test-driven-development`.
+  4. Diagnose unexpected behavior with `superpowers:systematic-debugging`.
+  5. Run `superpowers:verification-before-completion` before claiming success.
+  6. Use `superpowers:requesting-code-review` before merge.
+  7. Use `superpowers:finishing-a-development-branch` to open the pull request — always "push and
+     create a PR," never a local merge or a direct push to `main`.
 
 Keep specifications in `docs/superpowers/specs/` and implementation plans in `docs/superpowers/plans/`.
 
