@@ -2,10 +2,11 @@
 
 ## Scope
 
-This pnpm/Turborepo contains two independently deployed Next.js applications:
+This pnpm/Turborepo contains three independently deployed Next.js applications:
 
 - `apps/canton`: family wedding site
 - `apps/blackberry`: friends wedding site
+- `apps/save-the-date`: save-the-date card
 
 Shared packages live in `packages/`. Read the approved design and current implementation plan under `docs/superpowers/` before architectural work.
 
@@ -41,11 +42,12 @@ Direct user instructions override this workflow.
 ## Boundaries
 
 - Use pnpm; do not add npm or Yarn lockfiles.
-- Do not regenerate either application with `create-next-app`.
+- Do not regenerate any application with `create-next-app`.
 - Default to Server Components and keep client boundaries narrow.
 - Keep Canton-specific copy and composition in `apps/canton`.
 - Keep Blackberry-specific copy and composition in `apps/blackberry`.
-- Add to `@mocha/ui` only when both applications intentionally share the visual API.
+- Keep Save the Date-specific copy and composition in `apps/save-the-date`.
+- Add to `@mocha/ui` only when more than one application intentionally shares the visual API.
 - Do not introduce runtime microfrontend machinery, storage, authentication, analytics, or a CMS without an approved design.
 - shadcn/ui is approved and lives in `packages/ui` (see `docs/superpowers/specs/2026-08-19-blackberry-wedding-foundation-design.md`), hand-authored to this repo's `--site-*` token convention rather than shadcn's own default scaffold. Add components there with `pnpm dlx shadcn@latest add <component>` only when an approved design actually needs them — don't pre-install unused components. shadcn's CLI emits `@/`-prefixed imports (e.g. `@/lib/utils`); convert them to relative paths before committing, since `packages/ui` ships raw source and consuming apps resolve `@/*` against their own `src`, not this package's.
 - Preserve framework guidance in any app-local `AGENTS.md`; within an app, compatible app-local instructions are more specific than this file.
