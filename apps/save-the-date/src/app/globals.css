@@ -1,0 +1,530 @@
+@import "tailwindcss";
+@import "@mocha/ui/styles.css";
+@source "../../../../packages/ui/src";
+
+:root {
+  /* The shared @mocha/ui contract, overridden for the save-the-date palette.
+     packages/ui/src/styles.css is never edited. */
+  --site-background: #fdf7f5;
+  --site-surface: #ffffff;
+  --site-foreground: #2a2426;
+  --site-muted: #6f6264;
+  --site-border: #f3d3da;
+  --site-primary: #9e3d53;
+  --site-primary-foreground: #ffffff;
+  --site-inverted-background: #2a2426;
+  --site-inverted-foreground: #ffffff;
+  --site-destructive: #b2334f;
+
+  --site-font-sans: var(--font-josefin-sans), sans-serif;
+  --site-font-serif: var(--font-lora), Georgia, serif;
+  --site-font-script: var(--font-parisienne), cursive;
+
+  /* ---------------------------------------------------------------------------
+     Save the Date's local palette — app-local, and NOT part of the shared
+     @mocha/ui token contract. Blackberry's analogue is --bb-*.
+     --------------------------------------------------------------------------- */
+
+  /* One design pixel. The invitation is drawn in a fixed 455x779 space and scaled
+     by a container query on the stage frame, so 1/455 = 0.2198% of its inline size.
+     Custom properties resolve where they are used, so this is always relative to
+     the stage container. */
+  --std-u: 0.2198cqw;
+
+  /* Two app-local faces; the shared contract has only three font slots. */
+  --std-font-flourish: var(--font-pinyon-script), cursive;
+  --std-font-envelope: var(--font-allura), cursive;
+
+  /* Shell */
+  --std-page: #fdf7f5;
+  --std-stage: #fcf5f2;
+  --std-link: #9e3d53;
+  --std-link-hover: #7a2a3e;
+  --std-focus-ring: #9e3d53;
+  --std-focus-glow: rgba(178, 71, 94, 0.25);
+
+  /* Envelope */
+  --std-env-ink: #6f6869;
+  --std-liner-rule: #d9be7e;
+  --std-prompt-ink: #5f5859;
+  --std-seal-ink: #7a2839;
+
+  /* Cards */
+  --std-blush-card: #f8e3e8;
+  --std-announce-ink: #6b6264;
+  --std-lace-line: rgba(255, 255, 255, 0.95);
+  --std-date-card: #f2c8d2;
+  --std-date-ink: #2d2628;
+
+  /* Ribbon */
+  --std-ribbon-loop: #edb2c0;
+
+  /* Note and CTA */
+  --std-note-ink: #2a2426;
+  --std-cta-fill: #f3c9d3;
+  --std-cta-ink: #1e1a1b;
+  --std-heading-ink: #1e1a1b;
+
+  /* Address page */
+  --std-form-heading: #be5168;
+  --std-label: #9e3d53;
+  --std-field-border: #edb8c4;
+  --std-field-border-error: #b2334f;
+  --std-field-ink: #2a2426;
+  --std-help-ink: #6f6264;
+  --std-error-ink: #a3304a;
+  --std-alert-fill: #fbeff2;
+  --std-alert-ink: #8e2a42;
+  --std-submit-fill: #f6c8d0;
+  --std-submit-fill-hover: #f2b9c4;
+  --std-submit-ink: #8e3348;
+  --std-check-ring: #edb8c4;
+  --std-check-stroke: #b2475e;
+
+  /* ---------------------------------------------------------------------------
+     Composed ornaments. Every decoration in this design is a multi-layer gradient
+     or mask. Naming each one here keeps raw hex and escaped spaces out of JSX:
+     components reference them as a single token, e.g.
+       className="[background:var(--std-liner-pattern)]"
+     --------------------------------------------------------------------------- */
+
+  --std-gold-edge: linear-gradient(
+    135deg,
+    #b38a45 0%,
+    #e9d295 35%,
+    #b8914c 60%,
+    #e2c987 85%,
+    #b08642 100%
+  );
+  --std-env-back-fill: linear-gradient(180deg, #e3d1ac 0%, #ecdec1 55%, #f0e4ca 100%);
+  --std-env-left-fill: linear-gradient(90deg, #f1e5cb, #f6ecd8);
+  --std-env-right-fill: linear-gradient(270deg, #efe2c6, #f5ead5);
+  --std-env-bottom-fill: linear-gradient(0deg, #f7eedb, #f3e7cf);
+  --std-env-flap-fill: linear-gradient(180deg, #f4e9d2, #f2e5cb);
+  --std-env-flap-back-fill: #f1e4c9;
+
+  --std-liner-pattern:
+    radial-gradient(
+        circle,
+        #dfa7b5 0 calc(1.3 * var(--std-u)),
+        transparent calc(1.7 * var(--std-u))
+      )
+      0 0 / calc(11 * var(--std-u)) calc(11 * var(--std-u)),
+    radial-gradient(
+        circle,
+        #ebc3cd 0 calc(0.9 * var(--std-u)),
+        transparent calc(1.3 * var(--std-u))
+      )
+      calc(5.5 * var(--std-u)) calc(5.5 * var(--std-u)) / calc(11 * var(--std-u))
+      calc(11 * var(--std-u)),
+    #f7e6ea;
+
+  --std-lace-pattern: radial-gradient(
+      circle,
+      transparent 34%,
+      rgba(255, 255, 255, 0.95) 38%,
+      rgba(255, 255, 255, 0.95) 54%,
+      transparent 58%
+    )
+    0 0 / calc(9 * var(--std-u)) calc(9 * var(--std-u));
+
+  --std-date-scallop:
+    radial-gradient(
+        circle at 50% 0,
+        transparent calc(2.4 * var(--std-u)),
+        #000 calc(2.7 * var(--std-u))
+      )
+      top / calc(8 * var(--std-u)) 51% repeat-x,
+    radial-gradient(
+        circle at 50% 100%,
+        transparent calc(2.4 * var(--std-u)),
+        #000 calc(2.7 * var(--std-u))
+      )
+      bottom / calc(8 * var(--std-u)) 51% repeat-x;
+
+  --std-photo-mat-fill: linear-gradient(160deg, #f8f4e4, #eee8d1);
+  --std-leaf-a-fill: linear-gradient(135deg, #afc098, #7f9a6e);
+  --std-leaf-b-fill: linear-gradient(135deg, #a3b78e, #7a9468);
+  --std-bud-fill: radial-gradient(circle at 35% 35%, #f7d2da, #e3a3b2);
+  --std-bloom-fill:
+    radial-gradient(circle at 50% 50%, #d6a84e 0 11%, transparent 12%),
+    radial-gradient(circle at 50% 24%, #f4c2cd 0 21%, transparent 22%),
+    radial-gradient(circle at 75% 42%, #f4c2cd 0 21%, transparent 22%),
+    radial-gradient(circle at 65% 73%, #edb0bf 0 21%, transparent 22%),
+    radial-gradient(circle at 35% 73%, #edb0bf 0 21%, transparent 22%),
+    radial-gradient(circle at 25% 42%, #f4c2cd 0 21%, transparent 22%);
+  --std-petal-fill: radial-gradient(ellipse at 32% 30%, #f8d6dd, #ebaaba 68%, #d98c9e);
+  --std-ribbon-fill: linear-gradient(90deg, #e4a3b2, #f7d3db 45%, #e8adbb);
+  --std-ribbon-knot-fill: linear-gradient(90deg, #de98a9, #f2c4ce, #e1a0b0);
+
+  /* Placeholders pending the real Canva exports. See the app README. */
+  --std-seal-wax-fill: radial-gradient(circle at 38% 32%, #c25068 0%, #9c3348 46%, #7a2839 100%);
+  --std-photo-placeholder: linear-gradient(150deg, #dcd6c4 0%, #ece5d4 45%, #d9cfbb 100%);
+  --std-bg-wash:
+    radial-gradient(circle at 12% 8%, rgba(244, 194, 205, 0.55) 0%, transparent 38%),
+    radial-gradient(circle at 88% 14%, rgba(237, 176, 191, 0.45) 0%, transparent 34%),
+    radial-gradient(circle at 78% 86%, rgba(244, 194, 205, 0.5) 0%, transparent 36%),
+    radial-gradient(circle at 8% 78%, rgba(223, 167, 181, 0.4) 0%, transparent 32%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+
+  /* Shadows */
+  --std-env-back-shadow:
+    0 14px 26px -10px rgba(110, 80, 50, 0.3), 0 2px 5px rgba(110, 80, 50, 0.12);
+  --std-env-left-shadow: drop-shadow(1px 0 1.5px rgba(110, 80, 50, 0.16));
+  --std-env-right-shadow: drop-shadow(-1px 0 1.5px rgba(110, 80, 50, 0.16));
+  --std-env-bottom-shadow: drop-shadow(0 -1px 2px rgba(110, 80, 50, 0.2));
+  --std-env-flap-shadow: drop-shadow(0 1.5px 2px rgba(110, 80, 50, 0.22));
+  --std-env-lift-shadow: drop-shadow(0 8px 10px rgba(110, 70, 50, 0.16));
+  --std-env-lift-transition: translate 180ms ease, scale 120ms ease;
+  --std-announce-shadow: 0 1px 4px rgba(120, 70, 85, 0.16);
+  --std-photo-shadow: 0 2px 6px rgba(90, 70, 40, 0.2);
+  --std-date-shadow: drop-shadow(0 1px 3px rgba(120, 60, 80, 0.2));
+  --std-petal-shadow: 0 1px 1.5px rgba(120, 60, 70, 0.18);
+  --std-ribbon-shadow: 0 1px 2px rgba(120, 60, 70, 0.2);
+  --std-seal-monogram-shadow:
+    0 1px 0 rgba(255, 220, 225, 0.45), 0 -1px 0 rgba(90, 20, 35, 0.25);
+
+  /* ---------------------------------------------------------------------------
+     The opening choreography. Every delay and duration is the design value from
+     docs/superpowers/reference/save-the-date-dc-source.md multiplied by the
+     prototype's default animSpeed of 1.6. The last petal ends at 4624ms, which is
+     OPENING_DURATION_MS in src/components/invitation-phase.ts — keep the two in
+     sync.
+
+     The flap and the three cards each run two animations at once (a transform and
+     a discrete z-index step), composed in one arbitrary property:
+       [animation:var(--std-anim-card-a),var(--std-anim-card-a-z)]
+     --------------------------------------------------------------------------- */
+
+  --std-anim-stage-in: std-stage-in 300ms ease-out both;
+  --std-anim-prompt-out: std-prompt-out 224ms linear both;
+  --std-anim-seal-out: std-seal-out 416ms ease-out 160ms both;
+  --std-anim-flap: std-flap-open 1152ms cubic-bezier(0.5, 0, 0.3, 1) 384ms both;
+  --std-anim-flap-z: std-flap-z 1152ms cubic-bezier(0.5, 0, 0.3, 1) 384ms both;
+  --std-anim-card-a: std-card-a 2192ms linear 1248ms both;
+  --std-anim-card-a-z: std-card-a-z 2192ms linear 1248ms both;
+  --std-anim-card-d: std-card-d 2288ms linear 1248ms both;
+  --std-anim-card-d-z: std-card-d-z 2288ms linear 1248ms both;
+  --std-anim-card-p: std-card-p 2384ms linear 1248ms both;
+  --std-anim-card-p-z: std-card-p-z 2384ms linear 1248ms both;
+  --std-anim-ribbon: std-ribbon 2192ms linear 1248ms both;
+  --std-anim-ribbon-z: std-ribbon-z 2192ms linear 1248ms both;
+  --std-anim-note-in: std-note-in 416ms ease-out 3200ms both;
+  --std-anim-check-draw: std-check-draw 340ms ease-out both;
+  --std-anim-petal-0: std-petal-in 832ms ease-out 3120ms both;
+  --std-anim-petal-1: std-petal-in 832ms ease-out 3232ms both;
+  --std-anim-petal-2: std-petal-in 832ms ease-out 3344ms both;
+  --std-anim-petal-3: std-petal-in 832ms ease-out 3456ms both;
+  --std-anim-petal-4: std-petal-in 832ms ease-out 3568ms both;
+  --std-anim-petal-5: std-petal-in 832ms ease-out 3680ms both;
+  --std-anim-petal-6: std-petal-in 832ms ease-out 3792ms both;
+}
+
+/* The phase machine in invitation-stage.tsx already skips the whole `opening`
+   phase under reduced motion. Switching every shorthand off here is the second
+   line of defence: each element's static classes are its resting state, so with
+   the animations gone everything simply appears in place. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --std-anim-stage-in: std-stage-in 120ms ease-out both;
+    --std-anim-prompt-out: none;
+    --std-anim-seal-out: none;
+    --std-anim-flap: none;
+    --std-anim-flap-z: none;
+    --std-anim-card-a: none;
+    --std-anim-card-a-z: none;
+    --std-anim-card-d: none;
+    --std-anim-card-d-z: none;
+    --std-anim-card-p: none;
+    --std-anim-card-p-z: none;
+    --std-anim-ribbon: none;
+    --std-anim-ribbon-z: none;
+    --std-anim-note-in: none;
+    --std-anim-check-draw: none;
+    --std-anim-petal-0: none;
+    --std-anim-petal-1: none;
+    --std-anim-petal-2: none;
+    --std-anim-petal-3: none;
+    --std-anim-petal-4: none;
+    --std-anim-petal-5: none;
+    --std-anim-petal-6: none;
+  }
+}
+
+@theme inline {
+  --color-std-page: var(--std-page);
+  --color-std-stage: var(--std-stage);
+  --color-std-link: var(--std-link);
+  --color-std-link-hover: var(--std-link-hover);
+  --color-std-focus-ring: var(--std-focus-ring);
+  --color-std-env-ink: var(--std-env-ink);
+  --color-std-liner-rule: var(--std-liner-rule);
+  --color-std-prompt-ink: var(--std-prompt-ink);
+  --color-std-seal-ink: var(--std-seal-ink);
+  --color-std-blush-card: var(--std-blush-card);
+  --color-std-announce-ink: var(--std-announce-ink);
+  --color-std-lace-line: var(--std-lace-line);
+  --color-std-date-card: var(--std-date-card);
+  --color-std-date-ink: var(--std-date-ink);
+  --color-std-ribbon-loop: var(--std-ribbon-loop);
+  --color-std-note-ink: var(--std-note-ink);
+  --color-std-cta-fill: var(--std-cta-fill);
+  --color-std-cta-ink: var(--std-cta-ink);
+  --color-std-heading-ink: var(--std-heading-ink);
+  --color-std-form-heading: var(--std-form-heading);
+  --color-std-label: var(--std-label);
+  --color-std-field-border: var(--std-field-border);
+  --color-std-field-border-error: var(--std-field-border-error);
+  --color-std-field-ink: var(--std-field-ink);
+  --color-std-help-ink: var(--std-help-ink);
+  --color-std-error-ink: var(--std-error-ink);
+  --color-std-alert-fill: var(--std-alert-fill);
+  --color-std-alert-ink: var(--std-alert-ink);
+  --color-std-submit-fill: var(--std-submit-fill);
+  --color-std-submit-fill-hover: var(--std-submit-fill-hover);
+  --color-std-submit-ink: var(--std-submit-ink);
+  --color-std-check-ring: var(--std-check-ring);
+  --color-std-check-stroke: var(--std-check-stroke);
+
+  --font-std-flourish: var(--std-font-flourish);
+  --font-std-envelope: var(--std-font-envelope);
+}
+
+@keyframes std-stage-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes std-prompt-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes std-seal-out {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(calc(-10 * var(--std-u))) rotate(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(calc(-12 * var(--std-u))) rotate(-3deg);
+    opacity: 0;
+  }
+}
+
+@keyframes std-flap-open {
+  0% {
+    transform: rotateX(0deg);
+  }
+  8% {
+    transform: rotateX(-4deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(178deg);
+  }
+}
+
+@keyframes std-flap-z {
+  0%,
+  50% {
+    z-index: 6;
+  }
+  50.1%,
+  100% {
+    z-index: 2;
+  }
+}
+
+@keyframes std-card-a {
+  0% {
+    transform: translate(calc(59.5 * var(--std-u)), calc(191.4425 * var(--std-u))) rotate(0deg)
+      scale(0.82);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  46.715% {
+    transform: translate(calc(59.5 * var(--std-u)), calc(-44.82 * var(--std-u))) rotate(0deg)
+      scale(0.9);
+    animation-timing-function: cubic-bezier(0.25, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-9deg) scale(1);
+  }
+}
+
+@keyframes std-card-a-z {
+  0%,
+  46.715% {
+    z-index: 3;
+  }
+  46.815%,
+  100% {
+    z-index: 7;
+  }
+}
+
+@keyframes std-card-d {
+  0% {
+    transform: translate(calc(-85.5 * var(--std-u)), calc(78.4425 * var(--std-u))) rotate(0deg)
+      scale(0.82);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  44.755% {
+    transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg)
+      scale(0.9);
+    animation-timing-function: linear;
+  }
+  51.049% {
+    transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg)
+      scale(0.9);
+    animation-timing-function: cubic-bezier(0.25, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate(0, 0) rotate(9.5deg) scale(1);
+  }
+}
+
+@keyframes std-card-d-z {
+  0%,
+  44.755% {
+    z-index: 3;
+  }
+  44.855%,
+  100% {
+    z-index: 7;
+  }
+}
+
+@keyframes std-card-p {
+  0% {
+    transform: translate(calc(77.5 * var(--std-u)), calc(6.4425 * var(--std-u))) rotate(0deg)
+      scale(0.82);
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  42.953% {
+    transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg)
+      scale(0.9);
+    animation-timing-function: linear;
+  }
+  55.034% {
+    transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg)
+      scale(0.9);
+    animation-timing-function: cubic-bezier(0.25, 1, 0.3, 1);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-7deg) scale(1);
+  }
+}
+
+@keyframes std-card-p-z {
+  0%,
+  42.953% {
+    z-index: 3;
+  }
+  43.053%,
+  100% {
+    z-index: 7;
+  }
+}
+
+@keyframes std-ribbon {
+  0% {
+    transform: translateY(calc(236.2625 * var(--std-u))) scale(0.91);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  46.715% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  51.095% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    animation-timing-function: ease-in;
+  }
+  74.453%,
+  100% {
+    transform: translateY(calc(18 * var(--std-u))) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes std-ribbon-z {
+  0%,
+  46.715% {
+    z-index: 3;
+  }
+  46.815%,
+  100% {
+    z-index: 8;
+  }
+}
+
+@keyframes std-petal-in {
+  from {
+    opacity: 0;
+    translate: 0 calc(-8 * var(--std-u));
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes std-check-draw {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes std-note-in {
+  from {
+    opacity: 0;
+    transform: translateY(calc(6 * var(--std-u)));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--site-background);
+}
+
+/* Lora is this design's body face, so `body` takes --site-font-serif rather than
+   --site-font-sans as Blackberry does. Josefin Sans is reserved for the display
+   numerals on the date card. */
+body {
+  margin: 0;
+  font-family: var(--site-font-serif);
+}
+
+a {
+  color: var(--std-link);
+}
+
+a:hover {
+  color: var(--std-link-hover);
+}
