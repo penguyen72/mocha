@@ -7,6 +7,7 @@ import {
   INVITATION_HEADING,
   NOTE_CTA_HREF,
   NOTE_CTA_LABEL,
+  SEAL_MONOGRAM,
 } from "./invitation-content";
 import { OPENING_DURATION_MS } from "./invitation-phase";
 import { InvitationStage } from "./invitation-stage";
@@ -51,14 +52,49 @@ describe("InvitationStage", () => {
     expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
     expect(window.location.hash).toBe("#open");
 
+    // Still mid-choreography: the seal is on its way out but has not been dropped.
+    expect(screen.getByText(SEAL_MONOGRAM)).toBeInTheDocument();
+
     act(() => {
       vi.advanceTimersByTime(OPENING_DURATION_MS);
     });
 
+    // Only reaching the `open` phase unmounts the seal layer.
+    expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toHaveAttribute(
       "href",
       NOTE_CTA_HREF,
     );
+  });
+
+  it("moves focus to the invitation heading once the choreography completes", () => {
+    vi.useFakeTimers();
+    render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+    expect(document.activeElement).not.toBe(
+      screen.getByRole("heading", { level: 1, name: INVITATION_HEADING }),
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(OPENING_DURATION_MS);
+    });
+
+    expect(document.activeElement).toBe(
+      screen.getByRole("heading", { level: 1, name: INVITATION_HEADING }),
+    );
+  });
+
+  it("clears the pending timer when unmounted mid-choreography", () => {
+    vi.useFakeTimers();
+    const { unmount } = render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+    expect(vi.getTimerCount()).toBe(1);
+
+    unmount();
+
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it("skips the choreography entirely under reduced motion", () => {

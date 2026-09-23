@@ -11,8 +11,18 @@ type EnvelopeProps = {
   onOpen: () => void;
 };
 
-/** Every envelope layer occupies this same box inside the stage frame. */
-const LAYER_BOX = "absolute left-[13%] top-[42%] aspect-[8/5] w-[74%]";
+/**
+ * Every envelope layer occupies this same box inside the stage frame, and every layer
+ * lifts together when the envelope is hovered or pressed. The stage frame carries
+ * `group`, and the envelope button is the only <button> inside it, so `group-has-` scopes
+ * the lift precisely — and that button only exists while the envelope is closed, which is
+ * exactly when the design lifts. Under reduced motion the affordance stays but the
+ * transition does not.
+ */
+const LAYER_BOX =
+  "absolute left-[13%] top-[42%] aspect-[8/5] w-[74%] " +
+  "[transition:var(--std-env-lift-transition)] motion-reduce:[transition:none] " +
+  "group-has-[button:hover]:[translate:0_-3px] group-has-[button:active]:[scale:0.99]";
 
 export function Envelope({ phase, onOpen }: EnvelopeProps) {
   const opening = phase === "opening";
@@ -67,7 +77,10 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
       </div>
 
       {/* Front pocket: three panels and the gold rim. */}
-      <div aria-hidden className={`${LAYER_BOX} pointer-events-none z-[5]`}>
+      <div
+        aria-hidden
+        className={`${LAYER_BOX} pointer-events-none z-[5] group-has-[button:hover]:[filter:var(--std-env-lift-shadow)]`}
+      >
         <div className="absolute inset-0 [filter:var(--std-env-left-shadow)]">
           <div className="absolute inset-0 [background:var(--std-env-left-fill)] [clip-path:polygon(0_0,50%_56%,0_100%)]" />
         </div>
@@ -112,7 +125,10 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
               aria-hidden
               className="absolute inset-0 rounded-full [background:var(--std-seal-wax-fill)]"
             />
-            <span className="absolute inset-0 flex items-center justify-center font-std-flourish text-[calc(19*var(--std-u))] leading-none text-std-seal-ink opacity-[0.82] [text-shadow:var(--std-seal-monogram-shadow)]">
+            <span
+              aria-hidden
+              className="absolute inset-0 flex items-center justify-center font-std-flourish text-[calc(19*var(--std-u))] leading-none text-std-seal-ink opacity-[0.82] [text-shadow:var(--std-seal-monogram-shadow)]"
+            >
               {SEAL_MONOGRAM}
             </span>
           </div>

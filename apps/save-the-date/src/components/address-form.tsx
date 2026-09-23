@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "@mocha/ui";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -59,6 +59,7 @@ const BACK_LINK =
 
 export function AddressForm() {
   const [status, setStatus] = useState<AddressStatus>("idle");
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(addressFormSchema),
     defaultValues: DEFAULT_VALUES,
@@ -66,6 +67,16 @@ export function AddressForm() {
 
   const sending = status === "sending";
   const succeeded = status === "success";
+
+  // Submitting unmounts the button the user was focused on, so focus would otherwise
+  // fall back to <body> and a keyboard user would lose their place. Moving it to the
+  // success heading keeps them where the new content is; role="status" below still
+  // announces for anyone who is not keyboard-driven.
+  useEffect(() => {
+    if (succeeded) {
+      successHeadingRef.current?.focus({ preventScroll: true });
+    }
+  }, [succeeded]);
 
   async function onSubmit(values: AddressFormValues) {
     setStatus("sending");
@@ -90,13 +101,18 @@ export function AddressForm() {
               <path
                 d="M16 27 L23 34 L37 19"
                 fill="none"
-                className="stroke-std-check-stroke"
                 strokeWidth="2.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                strokeDasharray="40"
+                className="[animation:var(--std-anim-check-draw)] stroke-std-check-stroke"
               />
             </svg>
-            <h2 className="m-0 font-script text-[40px] font-normal text-std-heading-ink">
+            <h2
+              ref={successHeadingRef}
+              tabIndex={-1}
+              className="m-0 font-script text-[40px] font-normal text-std-heading-ink outline-none"
+            >
               {ADDRESS_SUCCESS_HEADING}
             </h2>
             <p className="m-0 text-pretty font-serif text-base leading-[1.55] text-std-field-ink">
@@ -123,7 +139,7 @@ export function AddressForm() {
                   <FormItem className="gap-1.5">
                     <FormLabel className={LABEL}>{ADDRESS_NAME_LABEL}</FormLabel>
                     <FormControl>
-                      <Input type="text" autoComplete="name" className={FIELD} {...field} />
+                      <Input type="text" autoComplete="name" required className={FIELD} {...field} />
                     </FormControl>
                     <FormMessage className={MESSAGE} />
                   </FormItem>
@@ -168,6 +184,7 @@ export function AddressForm() {
                       <Textarea
                         rows={4}
                         autoComplete="street-address"
+                        required
                         className={`${FIELD} min-h-[104px] resize-y leading-[1.45]`}
                         {...field}
                       />
@@ -190,7 +207,7 @@ export function AddressForm() {
                 type="submit"
                 disabled={sending}
                 aria-disabled={sending}
-                className="mt-1.5 h-auto min-h-[46px] w-full rounded-full bg-std-submit-fill font-serif text-[15px] font-normal normal-case tracking-[0.12em] text-std-submit-ink uppercase hover:bg-std-submit-fill-hover hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring"
+                className="mt-1.5 h-auto min-h-[46px] w-full rounded-full bg-std-submit-fill font-serif text-[15px] font-normal uppercase tracking-[0.12em] text-std-submit-ink hover:bg-std-submit-fill-hover hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring"
               >
                 {sending ? ADDRESS_SENDING_LABEL : ADDRESS_SUBMIT_LABEL}
               </Button>

@@ -7,9 +7,12 @@ import {
   ADDRESS_CLOSING_LINE_1,
   ADDRESS_FIELD_HELP,
   ADDRESS_FIELD_LABEL,
+  ADDRESS_EMAIL_ERROR,
+  ADDRESS_EMAIL_LABEL,
   ADDRESS_MAILING_ERROR,
   ADDRESS_NAME_ERROR,
   ADDRESS_NAME_LABEL,
+  ADDRESS_SENDING_LABEL,
   ADDRESS_SUBMIT_ERROR,
   ADDRESS_SUBMIT_LABEL,
   ADDRESS_SUCCESS_BODY,
@@ -97,5 +100,54 @@ describe("AddressForm", () => {
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent(ADDRESS_SUBMIT_ERROR);
     expect(screen.getByRole("button", { name: ADDRESS_SUBMIT_LABEL })).toBeEnabled();
+  });
+  it("rejects a malformed email without sending anything", async () => {
+    const user = userEvent.setup();
+    render(<AddressForm />);
+    await fillValidForm(user);
+    await user.type(screen.getByLabelText(ADDRESS_EMAIL_LABEL, { exact: false }), "jordan@");
+
+    await user.click(screen.getByRole("button", { name: ADDRESS_SUBMIT_LABEL }));
+
+    expect(await screen.findByText(ADDRESS_EMAIL_ERROR)).toBeInTheDocument();
+    expect(submitAddress).not.toHaveBeenCalled();
+  });
+
+  it("shows the sending state and blocks a second submit while in flight", async () => {
+    let release: () => void = () => {};
+    vi.mocked(submitAddress).mockImplementationOnce(
+      () => new Promise<void>((resolve) => { release = resolve; }),
+    );
+    const user = userEvent.setup();
+    render(<AddressForm />);
+    await fillValidForm(user);
+
+    await user.click(screen.getByRole("button", { name: ADDRESS_SUBMIT_LABEL }));
+
+    const sendingButton = await screen.findByRole("button", { name: ADDRESS_SENDING_LABEL });
+    expect(sendingButton).toBeDisabled();
+    expect(sendingButton).toHaveAttribute("aria-disabled", "true");
+    expect(submitAddress).toHaveBeenCalledTimes(1);
+
+    release();
+    expect(
+      await screen.findByRole("heading", { level: 2, name: ADDRESS_SUCCESS_HEADING }),
+    ).toBeInTheDocument();
+  });
+
+  it("moves focus to the success heading so a keyboard user is not stranded", async () => {
+    const user = userEvent.setup();
+    render(<AddressForm />);
+    await fillValidForm(user);
+
+    await user.click(screen.getByRole("button", { name: ADDRESS_SUBMIT_LABEL }));
+
+    const heading = await screen.findByRole("heading", {
+      level: 2,
+      name: ADDRESS_SUCCESS_HEADING,
+    });
+    await waitFor(() => {
+      expect(document.activeElement).toBe(heading);
+    });
   });
 });

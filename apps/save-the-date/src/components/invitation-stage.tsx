@@ -17,7 +17,7 @@ import { OPENING_DURATION_MS, type InvitationPhase } from "./invitation-phase";
 const OPEN_HASH = "#open";
 
 const STAGE_FRAME =
-  "relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
+  "group relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
   "[animation:var(--std-anim-stage-in)] @container";
 
 function subscribeToHash(onStoreChange: () => void) {
@@ -54,8 +54,12 @@ export function InvitationStage() {
   // useSyncExternalStore rather than an effect is what keeps the server render, the
   // hydration render and the client render consistent without a cascading setState:
   // the server and hydration both see the sealed envelope, then React re-renders with
-  // the real hash. The stage's 300ms fade-in covers the swap, so the closed envelope
-  // is never actually seen.
+  // the real hash.
+  //
+  // On a hard load of /#open the prerendered sealed envelope does paint first; the
+  // stage's 300ms fade-in runs over that swap rather than hiding it outright. On a
+  // client navigation back from /share-your-address the hash is already applied by the
+  // time this subscription is read, so the invitation renders open immediately.
   const effectivePhase: InvitationPhase =
     phase === "closed" && entryHash === OPEN_HASH ? "open" : phase;
 
@@ -67,6 +71,28 @@ export function InvitationStage() {
     },
     [],
   );
+
+  // Turning reduced motion on mid-choreography stops every animation in CSS, but the
+  // ribbon has keyframes and no resting state, so it would hang around until the timer
+  // fired. Settle immediately instead, as the design prototype does.
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const settle = () => {
+      if (!query.matches) return;
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+      setPhase((current) => (current === "opening" ? "open" : current));
+    };
+
+    query.addEventListener("change", settle);
+    return () => {
+      query.removeEventListener("change", settle);
+    };
+  }, []);
 
   // Announce the invitation once it has finished opening.
   useEffect(() => {

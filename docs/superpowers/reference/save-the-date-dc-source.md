@@ -100,6 +100,13 @@ None are in the design project; none were fetched (this repo does not fetch exte
 Also missing, by the author's own note: the champagne-glass illustration on the date card. The
 prototype draws a dashed box containing the text "glass art" in its place.
 
+## A note on apostrophes
+
+The source HTML uses the typographic apostrophe **U+2019** (`’`) in every string that has
+one — "You’ve been invited", "We couldn’t send your address", "We can’t wait to celebrate
+with you!". An earlier revision of this document normalised those to the straight ASCII
+apostrophe; they have been restored. Copy in `*-content.ts` must use U+2019 to be verbatim.
+
 ## Global design tokens
 
 ### Palette
@@ -127,7 +134,7 @@ Every literal color in the source, by role.
 | `#F1E4C9` | Flap back cream fill (flat) |
 | `#B38A45` 0%, `#E9D295` 35%, `#B8914C` 60%, `#E2C987` 85%, `#B08642` 100% | The gold edge gradient, `linear-gradient(135deg, …)`. Used three times: the front rim (`border-image`), the flap-front edge, the flap-back edge |
 | `#D9BE7E` | Inset rule around the envelope liner |
-| `#6F6869` | Envelope lettering ("You've been invited") |
+| `#6F6869` | Envelope lettering ("You’ve been invited") |
 | `rgba(110,80,50,…)` | Every envelope shadow, alphas `.12`/`.16`/`.2`/`.22`/`.3` |
 
 #### Liner floral pattern (envelope interior + flap back)
@@ -234,11 +241,11 @@ Loaded from Google Fonts:
 
 | Face | Used for |
 | --- | --- |
-| **Parisienne** | Couple names and announcement on the announcement card; the address-page `h1`; the "We can't wait to celebrate with you!" closing line; the "Thank you!" success heading |
+| **Parisienne** | Couple names and announcement on the announcement card; the address-page `h1`; the "We can’t wait to celebrate with you!" closing line; the "Thank you!" success heading |
 | **Josefin Sans** (300) | "Save", "Date", and the numeric date `10.16.2027` |
 | **Pinyon Script** | The word "the" on the date card; the "P&L" wax-seal monogram |
 | **Lora** | "Trenton, Georgia"; the note copy; the "CLICK TO OPEN" arc; the CTA/BACK controls; every form label, input, help text, error and button |
-| **Allura** | The envelope lettering, "You've been invited" |
+| **Allura** | The envelope lettering, "You’ve been invited" |
 | `ui-monospace, Menlo, monospace` | The prototype's own "CSS STAND-IN" tags and the "glass art" label — **tooling affordances, not design** |
 
 ### The scaling unit
@@ -356,7 +363,7 @@ Front face — `backface-visibility: hidden`, `filter: drop-shadow(0 1.5px 2px r
 Lettering: `left: 0; right: 0; top: 10%; text-align: center; font-family: Allura;`
 `font-size: calc(36*u); line-height: 1; color: #6F6869; white-space: nowrap`
 
-> You've been invited
+> You’ve been invited
 
 Back face — `transform: rotateX(180deg)`, `backface-visibility: hidden`:
 
@@ -386,7 +393,7 @@ Back face — `transform: rotateX(180deg)`, `backface-visibility: hidden`:
   `inset: -2%`, transparent, `border-radius: 6px`, `cursor: pointer`, `padding: 0`,
   focus `outline: 2px solid #9E3D53; outline-offset: 4px`. This is the whole interactive surface.
 
-  `aria-label="You've been invited. Open the envelope."`
+  `aria-label="You’ve been invited. Open the envelope."`
 
 ### Hover / press lift
 
@@ -602,7 +609,7 @@ Address help text (`id="help-address"`), `font: 13.5px/1.45 Lora; color: #6F6264
 **Submission-error alert**, `role="alert"`, shown when status is `error`:
 `padding: 10px 12px; border-radius: 8px; background: #FBEFF2; font: 14.5px/1.45 Lora; color: #8E2A42`
 
-> We couldn't send your address. Please try again.
+> We couldn’t send your address. Please try again.
 
 **Submit button**: `margin-top: 6px; width: 100%; min-height: 46px; border: none;`
 `border-radius: 999px; background: #F6C8D0; color: #8E3348; font: 15px Lora;`
@@ -642,7 +649,7 @@ Replaces the form inside the same card. `display: flex; flex-direction: column; 
 
 - Body: `font: 16px/1.55 Lora; color: #2A2426; text-wrap: pretty`
 
-  > Your address has been received. We can't wait to celebrate with you!
+  > Your address has been received. We can’t wait to celebrate with you!
 
 - Control: `min-height: 44px; padding: 8px 16px; background: #F3C9D3; font: 16px Lora;`
   `color: #1E1A1B; text-decoration: underline`
@@ -662,7 +669,7 @@ Replaces the form inside the same card. `display: flex; flex-direction: column; 
 - Closing line, **only while the form is showing** (hidden on success): Parisienne, 26px,
   `line-height: 1.15`, `#1E1A1B`, right-aligned, with a hard `<br>`:
 
-  > We can't wait to
+  > We can’t wait to
   > celebrate with you!
 
 ### Submission behavior

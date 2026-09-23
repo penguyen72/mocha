@@ -280,6 +280,12 @@ The design is mobile-first by construction: a single column capped at 560px, cen
 separate desktop layout to invent — on a wide screen the invitation is a centered card, which is
 what a save-the-date should be.
 
+- The envelope keeps the design's hover and press lift — all four layers translate `0 -3px` on
+  hover and scale to `0.99` on press, with the front panel taking a deeper drop shadow. It is the
+  only affordance besides the cursor telling a mouse user the envelope is interactive, since the
+  "CLICK TO OPEN" arc is decorative `aria-hidden` SVG text. It stays CSS-only: the stage frame
+  carries `group` and the layers key off `group-has-[button:hover]`, which is precise because the
+  envelope button is the only `<button>` in the frame and exists only while the envelope is closed.
 - Stage frame: `width: min(100vw, 560px, max(58.4dvh, 340px))`. The `58.4dvh` term keeps the whole
   invitation inside a desktop viewport's height; the `340px` floor stops it collapsing on a small
   phone.
@@ -304,11 +310,18 @@ Ported from the prototype, which already took this seriously.
 - The address page's `<h1>` and the form's `<h2>` are real headings; every field has a real
   `<label>`; the address field's help text is a `FormDescription` wired through `aria-describedby`;
   errors are `FormMessage` with `aria-invalid` on the control.
-- The submission-error alert is `role="alert"`; the success panel is `role="status"`. The prototype
-  moved focus to the success heading instead; a live region is the better React idiom and does not
-  steal focus from a user who is still reading.
+- The submission-error alert is `role="alert"`; the success panel is `role="status"` **and** moves
+  focus to its heading, as the prototype did. Code review corrected an earlier version of this
+  spec that chose the live region alone, on the reasoning that it "does not steal focus from a user
+  who is still reading" — that reasoning does not hold here. Submitting unmounts the button the
+  user was focused on, so focus falls back to `<body>` and a keyboard user loses their place
+  entirely; and a live region inserted into the DOM together with its content is not reliably
+  announced. Doing both is what actually works.
 - Every control is at least 44 × 44px and every focusable element shows a visible
   `outline: 2px solid var(--std-focus-ring)`.
+- The name and address fields keep the design's `required` attribute. The form is `noValidate`
+  because Zod owns validation, but `required` still sets `aria-required`, which is how a screen
+  reader user learns a field is mandatory before submitting rather than after.
 - Decorative glyphs, sprigs, petals, the ribbon and the envelope layers are all `aria-hidden`.
 - `prefers-reduced-motion: reduce` skips the opening animation entirely, in both the state machine
   and CSS.
