@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { AnnouncementCard } from "./announcement-card";
 import { DateCard } from "./date-card";
@@ -20,6 +20,22 @@ const STAGE_FRAME =
   "relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
   "[animation:var(--std-anim-stage-in)] @container";
 
+function subscribeToHash(onStoreChange: () => void) {
+  window.addEventListener("hashchange", onStoreChange);
+  return () => {
+    window.removeEventListener("hashchange", onStoreChange);
+  };
+}
+
+function readHash() {
+  return window.location.hash;
+}
+
+/** The server has no location, and the prerendered page is always the sealed envelope. */
+function readServerHash() {
+  return "";
+}
+
 function prefersReducedMotion() {
   return (
     typeof window.matchMedia === "function" &&
@@ -29,17 +45,19 @@ function prefersReducedMotion() {
 
 export function InvitationStage() {
   const [phase, setPhase] = useState<InvitationPhase>("closed");
+  const entryHash = useSyncExternalStore(subscribeToHash, readHash, readServerHash);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previousPhaseRef = useRef<InvitationPhase>("closed");
 
-  // The server prerenders the closed envelope, so the first client render must match it.
-  // Arriving at /#open upgrades here; the stage's 300ms fade-in covers the swap.
-  useEffect(() => {
-    if (window.location.hash === OPEN_HASH) {
-      setPhase("open");
-    }
-  }, []);
+  // Arriving at /#open shows the opened invitation straight away. Deriving that from
+  // useSyncExternalStore rather than an effect is what keeps the server render, the
+  // hydration render and the client render consistent without a cascading setState:
+  // the server and hydration both see the sealed envelope, then React re-renders with
+  // the real hash. The stage's 300ms fade-in covers the swap, so the closed envelope
+  // is never actually seen.
+  const effectivePhase: InvitationPhase =
+    phase === "closed" && entryHash === OPEN_HASH ? "open" : phase;
 
   useEffect(
     () => () => {
@@ -52,11 +70,11 @@ export function InvitationStage() {
 
   // Announce the invitation once it has finished opening.
   useEffect(() => {
-    if (previousPhaseRef.current === "opening" && phase === "open") {
+    if (previousPhaseRef.current === "opening" && effectivePhase === "open") {
       headingRef.current?.focus({ preventScroll: true });
     }
-    previousPhaseRef.current = phase;
-  }, [phase]);
+    previousPhaseRef.current = effectivePhase;
+  }, [effectivePhase]);
 
   const open = useCallback(() => {
     if (phase !== "closed") return;
@@ -72,12 +90,12 @@ export function InvitationStage() {
     timerRef.current = setTimeout(() => setPhase("open"), OPENING_DURATION_MS);
   }, [phase]);
 
-  const opening = phase === "opening";
-  const revealed = phase !== "closed";
+  const opening = effectivePhase === "opening";
+  const revealed = effectivePhase !== "closed";
 
   return (
     <div className={STAGE_FRAME}>
-      <Envelope phase={phase} onOpen={open} />
+      <Envelope phase={effectivePhase} onOpen={open} />
 
       {revealed && (
         <>
