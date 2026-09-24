@@ -128,7 +128,8 @@ For each project:
 8. Wait for Vercel to report **Valid Configuration**, then smoke-check the production custom hostname.
 9. Configure environment variables separately for each project. Save the Date needs
    `NEXT_PUBLIC_FORMSPREE_ENDPOINT` set to `https://formspree.io/f/<form id>` for Production and
-   Preview — without it, its address form fails into an error state by design. See
+   Preview — without it, its address form fails into an error state by design. `NEXT_PUBLIC_*`
+   values are inlined at build time, so redeploy after adding or changing one. See
    [`apps/save-the-date/README.md`](apps/save-the-date/README.md).
 
 No root proxy or `vercel.json` is required for separate subdomains.

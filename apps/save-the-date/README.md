@@ -43,10 +43,14 @@ server code and no secret: the endpoint is public by necessity, since the browse
 
 Set `NEXT_PUBLIC_FORMSPREE_ENDPOINT` to `https://formspree.io/f/<form id>`:
 
-- **Vercel** — add it to the Save the Date project for both Production and Preview.
-- **Locally** — put it in `apps/save-the-date/.env.local`, which is gitignored. Point it at a
-  throwaway Formspree form rather than the real one, so development submissions do not land in
-  the guest list.
+- **Vercel** — add it to the Save the Date project for both Production and Preview, then
+  **redeploy**. `NEXT_PUBLIC_*` values are inlined into the client bundle at build time, so an
+  already-deployed build will not pick up a variable you add or change afterwards. Skipping the
+  redeploy produces a confusing symptom: the form still errors, and the console still says the
+  variable "is not set", even though you have set it.
+- **Locally** — put it in `apps/save-the-date/.env.local`, which is gitignored, and **restart the
+  dev server**; the same build-time inlining applies. Point it at a throwaway Formspree form
+  rather than the real one, so development submissions do not land in the guest list.
 
 If the variable is unset, submitting fails into the form's error state and logs the reason. That is
 deliberate: falling back to a fake success would tell a guest their address arrived when nothing
@@ -58,7 +62,15 @@ validation errors in the body with a `200` — its own client never checks `resp
 [`docs/superpowers/specs/2026-09-23-save-the-date-address-submission-design.md`](../../docs/superpowers/specs/2026-09-23-save-the-date-address-submission-design.md).
 
 **Before relying on it, submit the live form once** and confirm the address arrives, as an email
-and in the Formspree dashboard. No test can verify that a real form id points at a real inbox.
+and in the Formspree dashboard. No test can verify that a real form id points at a real inbox — and
+if that live test fails, check the form's own settings in Formspree first (captcha or verification
+options can reject a plain JSON POST) before suspecting this code.
+
+Two things worth watching once it is live. The endpoint is public and has no honeypot, by design —
+Formspree's own spam filtering is the defence, so turn it on. And on a metered plan a spam flood
+can exhaust the submission quota, after which real guest submissions start failing; they fail
+honestly into the error state rather than silently, but nobody will tell you, so glance at the
+quota occasionally.
 
 ## Known gaps
 

@@ -115,11 +115,52 @@ describe("submitAddress", () => {
     await expect(submitAddress(VALUES)).rejects.toThrow();
   });
 
-  it("ignores a body whose errors array is not Formspree-shaped", async () => {
-    // A 200 with an unrelated `errors` key that does not match Formspree's predicate
-    // is not a submission failure; only `{ message: string }` entries count.
+  it("accepts a body whose errors key is not Formspree-shaped but carries a success token", async () => {
+    // Faithful to the reference client: `[42]` fails its error predicate, and `next`
+    // is present, so this is a success.
     stubFetch(async () => jsonResponse({ next: "ok", errors: [42] }));
 
     await expect(submitAddress(VALUES)).resolves.toBeUndefined();
+  });
+
+  // An empty errors array satisfies the reference client's `every()` and carries no
+  // success token, so it is a failure. Pins the choice, which is otherwise invisible.
+  it("throws on an empty errors array", async () => {
+    stubFetch(async () => jsonResponse({ errors: [] }));
+
+    await expect(submitAddress(VALUES)).rejects.toThrow();
+  });
+
+  // Acceptance requires the success token, not merely the absence of errors. Without
+  // this, an unrecognised 200 would be reported to the guest as delivered.
+  it("throws on a 200 with no success token", async () => {
+    stubFetch(async () => jsonResponse({}));
+
+    await expect(submitAddress(VALUES)).rejects.toThrow();
+  });
+
+  it("throws on a mixed errors array that matches neither predicate", async () => {
+    stubFetch(async () => jsonResponse({ errors: [{ message: "bad" }, { code: "OTHER" }] }));
+
+    await expect(submitAddress(VALUES)).rejects.toThrow();
+  });
+
+  it("throws when the endpoint variable is absent rather than empty", async () => {
+    vi.stubEnv(ENDPOINT_ENV, undefined);
+    const fetchMock = stubFetch(async () => jsonResponse({ next: "ok" }));
+
+    await expect(submitAddress(VALUES)).rejects.toThrow();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("logs Formspree's own messages for the site owner instead of rendering them", async () => {
+    stubFetch(async () => jsonResponse({ error: "Form not found" }, 404));
+
+    await expect(submitAddress(VALUES)).rejects.toThrow();
+
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining("HTTP 404"),
+      ["Form not found"],
+    );
   });
 });

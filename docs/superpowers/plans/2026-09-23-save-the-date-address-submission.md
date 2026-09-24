@@ -645,8 +645,9 @@ https://claude.ai/code/session_018mP2WQSjAs6bLLAkW58pkp
 the Formspree contract → Task 1 Step 3; reading the endpoint per call → Task 1 Step 3, guarded by
 the "endpoint unset" test; the payload shape → Task 1 Step 1's body assertion; all four failure
 modes → four of the eight tests; the two deliberate omissions (honeypot, retry) → Global
-Constraints, with no task implementing them; the testing table → Task 1 Step 1 one-for-one, plus a
-ninth case for a non-Formspree `errors` key; documentation → Task 2; the handoff → Task 2 Step 1
+Constraints, with no task implementing them; the testing table → Task 1 Step 1 (the spec's
+"Success response" row folds into the happy-path assertion, and a further case covers a
+non-Formspree `errors` key, giving eight `it` blocks); documentation → Task 2; the handoff → Task 2 Step 1
 and Task 3 Step 5.
 
 **Placeholder scan.** No TBD/TODO. Every code step carries complete code. Every doc edit quotes the

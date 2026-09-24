@@ -4,9 +4,12 @@ const ENDPOINT_ENV = "NEXT_PUBLIC_FORMSPREE_ENDPOINT";
 
 /**
  * Formspree reports failures in the response body rather than only through the HTTP
- * status — its own client (@formspree/core@4.0.0) never inspects `response.ok`. This
- * mirrors that client's predicate: an `errors` array whose every entry has a string
- * `message`, or a single string `error`.
+ * status — its own client (@formspree/core@4.0.0) never inspects `response.ok`.
+ *
+ * This mirrors that client's error predicate exactly: an `errors` array whose every
+ * entry has a string `message`, or a single string `error`. An empty `errors` array
+ * satisfies `every` and so counts as a failure here too, which is the safe direction —
+ * it carries no success token.
  *
  * Returns the messages when the body is a Formspree failure, or null when it is not.
  */
@@ -17,7 +20,6 @@ function readFormspreeErrors(body: unknown): string[] | null {
     const { errors } = body as { errors: unknown };
     const isFormspreeErrorList =
       Array.isArray(errors) &&
-      errors.length > 0 &&
       errors.every(
         (entry) =>
           entry !== null &&
@@ -39,12 +41,25 @@ function readFormspreeErrors(body: unknown): string[] | null {
 }
 
 /**
+ * Formspree's success body carries a `next` redirect URL. The reference client treats a
+ * body that is neither error-shaped nor `next`-shaped as "Unexpected response format" —
+ * an error, not a success — so acceptance requires this token rather than merely the
+ * absence of errors. That is what stops a `{}` or a half-recognised body from being
+ * reported to a guest as delivered.
+ */
+function hasFormspreeSuccessToken(body: unknown): boolean {
+  if (body === null || typeof body !== "object") return false;
+  return "next" in body && typeof (body as { next: unknown }).next === "string";
+}
+
+/**
  * Sends a guest's mailing address to the Formspree form configured by
  * NEXT_PUBLIC_FORMSPREE_ENDPOINT. Resolves only when Formspree accepted it; throws
  * otherwise, which is what drives the form's error state.
  *
  * Every failure path throws rather than resolving. Reporting success when nothing was
- * sent would tell a guest their address arrived when it did not.
+ * sent would tell a guest their address arrived when it did not, so anything
+ * unrecognised is treated as a failure.
  *
  * Formspree's own error text is logged for the site owner and never rendered — it is
  * written for a developer, not a wedding guest.
@@ -52,12 +67,17 @@ function readFormspreeErrors(body: unknown): string[] | null {
 export async function submitAddress(values: AddressFormValues): Promise<void> {
   // Read per call, not at module scope: a module-scope read is frozen at import and
   // cannot be stubbed in tests. Next inlines NEXT_PUBLIC_* inside function bodies too.
+  //
+  // This must stay a literal member access. Next's inlining is syntactic, so rewriting
+  // it to process.env[ENDPOINT_ENV] would leave every test green — Vitest has a real
+  // process.env — while the browser bundle got `undefined` and the form errored forever.
   const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
 
   if (!endpoint) {
     console.error(
       `submitAddress: ${ENDPOINT_ENV} is not set, so the address was not sent. ` +
-        "Set it to https://formspree.io/f/<form id> in the Vercel project.",
+        "Set it to https://formspree.io/f/<form id> in the Vercel project, then redeploy — " +
+        "NEXT_PUBLIC_* values are baked into the client bundle at build time.",
     );
     throw new Error(`${ENDPOINT_ENV} is not configured.`);
   }
@@ -93,13 +113,29 @@ export async function submitAddress(values: AddressFormValues): Promise<void> {
     throw new Error("The address submission response could not be read.", { cause });
   }
 
-  const errors = readFormspreeErrors(body);
-
-  if (!response.ok || errors !== null) {
+  if (!response.ok) {
     console.error(
       `submitAddress: Formspree rejected the submission (HTTP ${response.status}).`,
-      errors ?? body,
+      readFormspreeErrors(body) ?? body,
     );
     throw new Error("Formspree rejected the address submission.");
+  }
+
+  const errors = readFormspreeErrors(body);
+  if (errors !== null) {
+    console.error(
+      `submitAddress: Formspree reported errors despite HTTP ${response.status}.`,
+      errors.length > 0 ? errors : body,
+    );
+    throw new Error("Formspree rejected the address submission.");
+  }
+
+  if (!hasFormspreeSuccessToken(body)) {
+    console.error(
+      `submitAddress: Formspree returned an unrecognised body (HTTP ${response.status}); ` +
+        "treating it as a failure rather than reporting success.",
+      body,
+    );
+    throw new Error("The address submission response was not recognised.");
   }
 }
