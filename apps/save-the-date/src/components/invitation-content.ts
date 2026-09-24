@@ -31,11 +31,7 @@ export const DATE_CARD_DATE = "Date";
 export const DATE_CARD_LOCATION = "Trenton, Georgia";
 export const DATE_CARD_NUMERALS = "10.16.2027";
 
-/**
- * The couple photograph is not available yet, so the Polaroid renders an aria-hidden
- * gradient placeholder instead. This alt text is preserved verbatim from the design so
- * it is ready the moment the real photograph lands.
- */
+/** Alt text for the couple photograph on the Polaroid card, verbatim from the design. */
 export const PHOTO_ALT =
   "The couple smiling together outdoors among green trees, " +
   "with an engagement ring visible";

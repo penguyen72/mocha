@@ -38,6 +38,7 @@
   /* Shell */
   --std-page: #fdf7f5;
   --std-stage: #fcf5f2;
+  --std-photo-well: #dcd6c4;
   --std-link: #9e3d53;
   --std-link-hover: #7a2a3e;
   --std-focus-ring: #9e3d53;
@@ -157,16 +158,6 @@
   --std-ribbon-fill: linear-gradient(90deg, #e4a3b2, #f7d3db 45%, #e8adbb);
   --std-ribbon-knot-fill: linear-gradient(90deg, #de98a9, #f2c4ce, #e1a0b0);
 
-  /* Placeholders pending the real Canva exports. See the app README. */
-  --std-seal-wax-fill: radial-gradient(circle at 38% 32%, #c25068 0%, #9c3348 46%, #7a2839 100%);
-  --std-photo-placeholder: linear-gradient(150deg, #dcd6c4 0%, #ece5d4 45%, #d9cfbb 100%);
-  --std-bg-wash:
-    radial-gradient(circle at 12% 8%, rgba(244, 194, 205, 0.55) 0%, transparent 38%),
-    radial-gradient(circle at 88% 14%, rgba(237, 176, 191, 0.45) 0%, transparent 34%),
-    radial-gradient(circle at 78% 86%, rgba(244, 194, 205, 0.5) 0%, transparent 36%),
-    radial-gradient(circle at 8% 78%, rgba(223, 167, 181, 0.4) 0%, transparent 32%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
-
   /* Shadows */
   --std-env-back-shadow:
     0 14px 26px -10px rgba(110, 80, 50, 0.3), 0 2px 5px rgba(110, 80, 50, 0.12);
@@ -254,6 +245,7 @@
 @theme inline {
   --color-std-page: var(--std-page);
   --color-std-stage: var(--std-stage);
+  --color-std-photo-well: var(--std-photo-well);
   --color-std-link: var(--std-link);
   --color-std-link-hover: var(--std-link-hover);
   --color-std-focus-ring: var(--std-focus-ring);

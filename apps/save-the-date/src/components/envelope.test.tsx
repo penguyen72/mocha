@@ -9,6 +9,11 @@ import {
   SEAL_MONOGRAM,
 } from "./invitation-content";
 
+const sealSrc = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll("img"))
+    .map((img) => decodeURIComponent(img.getAttribute("src") ?? ""))
+    .find((src) => src.includes("/images/wax-seal.png"));
+
 describe("Envelope", () => {
   it("renders the lettering, the prompt, the monogram and the open button when closed", () => {
     render(<Envelope phase="closed" onOpen={vi.fn()} />);
@@ -37,5 +42,14 @@ describe("Envelope", () => {
     expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
     expect(screen.queryByText(ENVELOPE_PROMPT)).not.toBeInTheDocument();
     expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
+  });
+  it.each(["closed", "opening"] as const)("renders the wax-seal image while %s", (phase) => {
+    const { container } = render(<Envelope phase={phase} onOpen={vi.fn()} />);
+    expect(sealSrc(container)).toBeDefined();
+  });
+
+  it("removes the wax-seal image once open", () => {
+    const { container } = render(<Envelope phase="open" onOpen={vi.fn()} />);
+    expect(sealSrc(container)).toBeUndefined();
   });
 });
