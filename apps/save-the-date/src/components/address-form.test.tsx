@@ -22,7 +22,6 @@ import {
 import { AddressForm } from "./address-form";
 
 vi.mock("./address-submit", () => ({
-  SUBMIT_DELAY_MS: 0,
   submitAddress: vi.fn(async () => {}),
 }));
 
