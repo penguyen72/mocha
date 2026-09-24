@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import {
   ENVELOPE_BUTTON_LABEL,
   ENVELOPE_LETTERING,
@@ -120,10 +122,13 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
                 : "absolute left-[39.1%] top-[58%] aspect-[777/800] w-[21.8%]"
             }
           >
-            {/* Placeholder pending the real wax-seal export. */}
-            <div
-              aria-hidden
-              className="absolute inset-0 rounded-full [background:var(--std-seal-wax-fill)]"
+            <Image
+              src="/images/wax-seal.png"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 560px) 22vw, 123px"
+              className="object-contain"
             />
             <span
               aria-hidden

@@ -158,7 +158,6 @@
   --std-ribbon-knot-fill: linear-gradient(90deg, #de98a9, #f2c4ce, #e1a0b0);
 
   /* Placeholders pending the real Canva exports. See the app README. */
-  --std-seal-wax-fill: radial-gradient(circle at 38% 32%, #c25068 0%, #9c3348 46%, #7a2839 100%);
   --std-photo-placeholder: linear-gradient(150deg, #dcd6c4 0%, #ece5d4 45%, #d9cfbb 100%);
 
   /* Shadows */
