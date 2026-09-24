@@ -43,8 +43,8 @@ describe("Envelope", () => {
     expect(screen.queryByText(ENVELOPE_PROMPT)).not.toBeInTheDocument();
     expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
   });
-  it("renders the wax-seal image while closed", () => {
-    const { container } = render(<Envelope phase="closed" onOpen={vi.fn()} />);
+  it.each(["closed", "opening"] as const)("renders the wax-seal image while %s", (phase) => {
+    const { container } = render(<Envelope phase={phase} onOpen={vi.fn()} />);
     expect(sealSrc(container)).toBeDefined();
   });
 

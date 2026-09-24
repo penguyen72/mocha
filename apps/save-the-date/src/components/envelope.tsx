@@ -126,7 +126,7 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
               src="/images/wax-seal.png"
               alt=""
               fill
-              priority
+              loading="eager"
               sizes="(max-width: 560px) 22vw, 123px"
               className="object-contain"
             />

@@ -75,7 +75,8 @@ export function FloralBackground() {
       src="/images/floral-background.png"
       alt=""
       fill
-      priority
+      loading="eager"
+      fetchPriority="high"
       sizes="(max-width: 560px) 100vw, 560px"
       className="pointer-events-none object-cover object-center"
     />
@@ -151,7 +152,7 @@ with:
               src="/images/wax-seal.png"
               alt=""
               fill
-              priority
+              loading="eager"
               sizes="(max-width: 560px) 22vw, 123px"
               className="object-contain"
             />

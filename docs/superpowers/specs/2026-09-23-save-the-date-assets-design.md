@@ -20,23 +20,23 @@ Paths are relative to `apps/save-the-date/`. `public/` does not exist yet and is
 
 ## Rendering
 
-All three use `next/image` so Next.js serves resized, re-encoded variants instead of the raw PNGs.
+All three use `next/image` (Next 16 deprecates `priority`; eager loading uses `loading`/`fetchPriority`) so Next.js serves resized, re-encoded variants instead of the raw PNGs.
 
 - **Floral background** — a new `FloralBackground` component (`src/components/floral-background.tsx`)
-  rendering `<Image fill priority alt="" className="object-cover object-center" />` absolutely
+  rendering `<Image fill loading="eager" fetchPriority="high" alt="" className="object-cover object-center" />` absolutely
   positioned behind page content. Both `src/app/page.tsx` and `src/app/share-your-address/page.tsx`
   render it in place of the "Placeholder pending the real floral background art" comment, and drop
   the `--std-bg-wash` gradient. The `bg-std-stage` (`#FCF5F2`) color stays underneath, matching the
   design source (`background: #FCF5F2 url(<floral>) center/cover no-repeat`). The `--std-bg-wash`
   token is removed from `globals.css` once unused.
 - **Wax seal** — in `envelope.tsx`, the gradient `div` is replaced by
-  `<Image fill priority alt="" />` inside the existing `aspect-[777/800]` box. The `P&L` monogram
+  `<Image fill loading="eager" alt="" />` inside the existing `aspect-[777/800]` box. The `P&L` monogram
   stays layered on top. The image is decorative; the open button carries the accessible label. The
   `--std-seal-wax-fill` token is removed once unused.
 - **Couple photo** — in `photo-card.tsx`, the gradient `div` is replaced by a positioned wrapper at
   the same `left-[5.5%] top-[4.6%] h-[71%] w-[89%]` box, filled with a new `--std-photo-well:
   #dcd6c4` token (the design's photo-well color), holding
-  `<Image fill alt={PHOTO_ALT} className="object-cover" />`. Not `priority`: it is only visible after
+  `<Image fill alt={PHOTO_ALT} className="object-cover" />`. Left lazy: it is only visible after
   the envelope opens. The `--std-photo-placeholder` token is removed.
 
 Each `fill` image gets a `sizes` hint matching its rendered width within the 560px-max stage
