@@ -38,10 +38,6 @@ with the approved design in
 
 ## Known gaps
 
-- **Three images are placeholders.** The floral background, the couple photograph and the wax seal
-  live in Canva and were never exported into the design project. Each renders as a CSS gradient
-  built from app-local tokens. The photograph's intended alt text is preserved in
-  `src/components/invitation-content.ts` as `PHOTO_ALT`, ready for the real file.
 - **The champagne-glass illustration is missing.** The design prototype drew a dashed placeholder
   box on the date card to mark it. That box is deliberately not ported — in production it would read
   as a rendering bug — so the date card is slightly barer than the design until the export arrives.

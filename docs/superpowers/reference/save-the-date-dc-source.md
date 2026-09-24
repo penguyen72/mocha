@@ -89,11 +89,14 @@ re-authenticate against claude.ai or risk the live design project changing mid-e
 Five images are referenced by absolute URL against `https://mochabearsavethedate.my.canva.site/_assets/media/`.
 None are in the design project; none were fetched (this repo does not fetch external images).
 
+The three used images were later downloaded into `apps/save-the-date/public/images/` (see
+[the assets design](../specs/2026-09-23-save-the-date-assets-design.md)).
+
 | Asset | Canva filename | Used where | Status |
 | --- | --- | --- | --- |
-| Floral background | `bad2c19288d18845ca69c05075a755c6.png` | `main` background, `center/cover` | Not available |
-| Couple photo | `1162478877cca35e31c841767195395d.jpg` | Polaroid card | Not available |
-| Wax seal | `7ce1b1e7c61a0192620dacaed4351f19.png` | Seal under the "P&L" monogram | Not available |
+| Floral background | `bad2c19288d18845ca69c05075a755c6.png` | `main` background, `center/cover` | `apps/save-the-date/public/images/floral-background.png` |
+| Couple photo | `1162478877cca35e31c841767195395d.jpg` | Polaroid card | `apps/save-the-date/public/images/couple-photo.jpg` |
+| Wax seal | `7ce1b1e7c61a0192620dacaed4351f19.png` | Seal under the "P&L" monogram | `apps/save-the-date/public/images/wax-seal.png` |
 | Closed envelope | `98838e3889a3bd49c0278a93d9663eb1.png` | Preloaded but **never rendered** — the envelope is entirely CSS | Not needed |
 | Open envelope | `bcd77b4662bb6e94ddc049f905f37767.png` | Preloaded but **never rendered** | Not needed |
 
