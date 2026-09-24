@@ -126,7 +126,10 @@ For each project:
 6. Add the corresponding custom subdomain under Project Settings → Domains.
 7. At your domain registrar or DNS provider, apply the DNS record Vercel provides for that subdomain.
 8. Wait for Vercel to report **Valid Configuration**, then smoke-check the production custom hostname.
-9. Configure any future environment variables separately for each project.
+9. Configure environment variables separately for each project. Save the Date needs
+   `NEXT_PUBLIC_FORMSPREE_ENDPOINT` set to `https://formspree.io/f/<form id>` for Production and
+   Preview — without it, its address form fails into an error state by design. See
+   [`apps/save-the-date/README.md`](apps/save-the-date/README.md).
 
 No root proxy or `vercel.json` is required for separate subdomains.
 

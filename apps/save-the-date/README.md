@@ -36,6 +36,30 @@ The design this was ported from is recorded in
 with the approved design in
 [`docs/superpowers/specs/2026-09-23-save-the-date-design.md`](../../docs/superpowers/specs/2026-09-23-save-the-date-design.md).
 
+## Address form submission
+
+The address form posts to a [Formspree](https://formspree.io) form from the browser. There is no
+server code and no secret: the endpoint is public by necessity, since the browser posts to it.
+
+Set `NEXT_PUBLIC_FORMSPREE_ENDPOINT` to `https://formspree.io/f/<form id>`:
+
+- **Vercel** — add it to the Save the Date project for both Production and Preview.
+- **Locally** — put it in `apps/save-the-date/.env.local`, which is gitignored. Point it at a
+  throwaway Formspree form rather than the real one, so development submissions do not land in
+  the guest list.
+
+If the variable is unset, submitting fails into the form's error state and logs the reason. That is
+deliberate: falling back to a fake success would tell a guest their address arrived when nothing
+was sent.
+
+Failure is detected from the response body as well as the HTTP status, because Formspree reports
+validation errors in the body with a `200` — its own client never checks `response.ok`. See
+`src/components/address-submit.ts` and the design at
+[`docs/superpowers/specs/2026-09-23-save-the-date-address-submission-design.md`](../../docs/superpowers/specs/2026-09-23-save-the-date-address-submission-design.md).
+
+**Before relying on it, submit the live form once** and confirm the address arrives, as an email
+and in the Formspree dashboard. No test can verify that a real form id points at a real inbox.
+
 ## Known gaps
 
 - **Three images are placeholders.** The floral background, the couple photograph and the wax seal
@@ -45,9 +69,5 @@ with the approved design in
 - **The champagne-glass illustration is missing.** The design prototype drew a dashed placeholder
   box on the date card to mark it. That box is deliberately not ported — in production it would read
   as a rendering bug — so the date card is slightly barer than the design until the export arrives.
-- **The address form does not submit anywhere.** `src/components/address-submit.ts` is the single
-  seam: it validates and resolves after a short delay, and the form's error state is driven by that
-  promise rejecting. Wiring a real endpoint or form provider there makes the whole status machine
-  live. Nothing is stored or sent today.
 - **Opening the envelope needs JavaScript.** The prerendered HTML is the sealed envelope, so a
   visitor with JavaScript disabled sees the envelope but cannot open it.
