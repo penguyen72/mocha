@@ -9,7 +9,7 @@ import {
   NOTE_TEXT,
   REPLAY_LABEL,
 } from "./invitation-content";
-import { OPENING_DURATION_MS } from "./invitation-phase";
+import { CLOSING_DURATION_MS, OPENING_DURATION_MS } from "./invitation-phase";
 import { InvitationStage } from "./invitation-stage";
 
 // The live countdown runs its own one-second clock; these tests are about the opening
@@ -127,7 +127,60 @@ describe("InvitationStage", () => {
     expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
-  it("reseals the envelope and returns focus to it when asked to open again", () => {
+  it("tucks the invitation back into the envelope before resealing it", () => {
+    vi.useFakeTimers();
+    window.history.replaceState(null, "", "/#open");
+    const { container } = render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+
+    // Mid-close: the cards and note are still going back in, the flap has not shut, and a
+    // whole seal is pressing on. The hash clears straight away.
+    expect(window.location.hash).toBe("");
+    expect(screen.queryByRole("button", { name: ENVELOPE_BUTTON_LABEL })).not.toBeInTheDocument();
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
+    expect(screen.getByText(NOTE_TEXT).closest("[inert]")).not.toBeNull();
+    expect(sealCount(container)).toBe(1);
+
+    act(() => {
+      vi.advanceTimersByTime(CLOSING_DURATION_MS);
+    });
+
+    const envelope = screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL });
+    expect(document.activeElement).toBe(envelope);
+    expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
+    expect(screen.getByText(MAIL_EYEBROW)).toBeInTheDocument();
+  });
+
+  it("ignores a second request to open again while the envelope is closing", () => {
+    vi.useFakeTimers();
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+
+    const replay = screen.getByRole("button", { name: REPLAY_LABEL });
+    fireEvent.click(replay);
+    fireEvent.click(replay);
+
+    expect(vi.getTimerCount()).toBe(1);
+  });
+
+  it("can be opened again once it has resealed", () => {
+    vi.useFakeTimers();
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+    act(() => {
+      vi.advanceTimersByTime(CLOSING_DURATION_MS);
+    });
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+
+    expect(window.location.hash).toBe("#open");
+    expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
+  });
+
+  it("reseals at once under reduced motion and returns focus to the envelope", () => {
+    setReducedMotion(true);
     window.history.replaceState(null, "", "/#open");
     render(<InvitationStage />);
 

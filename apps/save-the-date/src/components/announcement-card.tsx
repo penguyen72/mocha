@@ -1,4 +1,4 @@
-import { FOIL, PARALLAX_FAR, SPRIG_IN, WRITE_ON } from "./card-motion";
+import { FOIL, PARALLAX_FAR, SPRIG_IN, SPRIG_OUT, WRITE_ON } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import {
   ANNOUNCEMENT_LINE_1,
@@ -9,6 +9,8 @@ import {
 
 type AnnouncementCardProps = {
   animated: boolean;
+  /** True while the card goes back into the envelope as it reseals. */
+  tucking?: boolean;
 };
 
 const CARD =
@@ -16,6 +18,8 @@ const CARD =
   `[box-shadow:var(--std-announce-shadow)] [transform:rotate(-9deg)] ${PARALLAX_FAR}`;
 
 const CARD_ANIMATION = "[animation:var(--std-anim-card-a),var(--std-anim-card-a-z)]";
+
+const CARD_TUCK = "[animation:var(--std-anim-tuck-a),var(--std-anim-tuck-a-z)]";
 
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
 
@@ -34,10 +38,10 @@ const ANNOUNCEMENT =
  * card's upper two-thirds, the part the Polaroid does not cover. While the card is being
  * delivered, each line writes itself on in turn; at rest the names keep a slow sheen.
  */
-export function AnnouncementCard({ animated }: AnnouncementCardProps) {
-  const sprig = animated ? `${SPRIG} ${SPRIG_IN}` : SPRIG;
+export function AnnouncementCard({ animated, tucking = false }: AnnouncementCardProps) {
+  const sprig = animated ? `${SPRIG} ${SPRIG_IN}` : tucking ? `${SPRIG} ${SPRIG_OUT}` : SPRIG;
   return (
-    <div className={animated ? `${CARD} ${CARD_ANIMATION}` : CARD}>
+    <div className={animated ? `${CARD} ${CARD_ANIMATION}` : tucking ? `${CARD} ${CARD_TUCK}` : CARD}>
       <div className="absolute inset-[calc(5*var(--std-u))] [background:var(--std-lace-pattern)]" />
       <div className="absolute inset-[calc(14*var(--std-u))] border border-std-lace-line bg-std-blush-card" />
 

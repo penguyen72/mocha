@@ -14,6 +14,11 @@ type EnvelopeProps = {
   onOpen: () => void;
   /** The open control, so the stage can return focus to it when the envelope is resealed. */
   buttonRef?: Ref<HTMLButtonElement>;
+  /**
+   * True once the envelope has been resealed on this visit. Its postmark then came back
+   * while it closed, so it must not stamp itself on a second time.
+   */
+  resealed?: boolean;
 };
 
 /**
@@ -45,6 +50,9 @@ const SEAL_HALVES = [
   "[clip-path:polygon(52%_0,100%_0,100%_100%,51%_100%,47%_86%,54%_70%,45%_52%,55%_34%,46%_18%)] [animation:var(--std-anim-seal-right)]",
 ] as const;
 
+/** A fresh seal pressed onto the flap's point as the envelope closes again. */
+const SEAL_PRESS = "absolute inset-0 [animation:var(--std-anim-seal-press)]";
+
 /** The whole seal swells a little while the envelope is hovered; the press still shrinks it. */
 const SEAL_SWELL =
   "absolute inset-0 [transition:scale_250ms_ease] motion-reduce:[transition:none] " +
@@ -55,9 +63,12 @@ const SEAL_SHIMMER =
   "pointer-events-none absolute inset-0 mix-blend-screen [background:var(--std-seal-shimmer)] " +
   "[mask-image:var(--std-seal-shimmer-mask)] [animation:var(--std-anim-seal-shimmer)]";
 
-const SPARKLE_BASE =
-  "absolute left-1/2 top-1/2 opacity-0 [animation:var(--std-anim-sparkle)] " +
+const SPARKLE_SHAPE =
+  "absolute left-1/2 top-1/2 opacity-0 " +
   "[clip-path:polygon(50%_0,62%_38%,100%_50%,62%_62%,50%_100%,38%_62%,0_50%,38%_38%)]";
+
+const SPARKLE_BURST = `${SPARKLE_SHAPE} [animation:var(--std-anim-sparkle)]`;
+const SPARKLE_RESEAL = `${SPARKLE_SHAPE} [animation:var(--std-anim-reseal-sparkle)]`;
 
 /** One complete literal class string per sparkle — Tailwind cannot see a constructed one. */
 const SPARKLES = [
@@ -93,16 +104,23 @@ function SealFace() {
  * carrying the city and the date — so a guest learns where and when before the envelope
  * is even opened.
  */
-function Postmark({ fading }: { fading: boolean }) {
+const POSTMARK = "pointer-events-none absolute right-[2.5%] top-[4%] w-[37%]";
+
+/** The postmark's motion: stamped on at first load, stepping aside, rising back, or still. */
+type PostmarkMotion = "stamp" | "out" | "return" | "rest";
+
+const POSTMARK_MOTION: Record<PostmarkMotion, string> = {
+  stamp: POSTMARK,
+  out: `${POSTMARK} [animation:var(--std-anim-prompt-out)]`,
+  return: `${POSTMARK} [animation:var(--std-anim-postmark-return)]`,
+  rest: POSTMARK,
+};
+
+const POSTMARK_INK = "fill-none stroke-std-postmark-ink [transform-box:fill-box] [transform-origin:center] [transform:rotate(-8deg)]";
+
+function Postmark({ motion }: { motion: PostmarkMotion }) {
   return (
-    <div
-      aria-hidden
-      className={
-        fading
-          ? "pointer-events-none absolute right-[2.5%] top-[4%] w-[37%] [animation:var(--std-anim-prompt-out)]"
-          : "pointer-events-none absolute right-[2.5%] top-[4%] w-[37%]"
-      }
-    >
+    <div aria-hidden className={POSTMARK_MOTION[motion]}>
       <svg viewBox="0 0 168 84" className="block w-full overflow-visible">
         <g transform="translate(116 10) rotate(5 22 28)">
           <rect x="0" y="0" width="44" height="56" className="fill-std-stamp-fill" />
@@ -130,7 +148,7 @@ function Postmark({ fading }: { fading: boolean }) {
           <circle cx="22" cy="24" r="2.4" className="fill-std-postmark-ink" opacity="0.55" />
         </g>
         <g
-          className="fill-none stroke-std-postmark-ink [animation:var(--std-anim-stamp)] [transform-box:fill-box] [transform-origin:center] [transform:rotate(-8deg)]"
+          className={motion === "stamp" ? `${POSTMARK_INK} [animation:var(--std-anim-stamp)]` : POSTMARK_INK}
           opacity="0.85"
         >
           <path d="M4 26 q 6.5 -4 13 0 t 13 0 t 13 0 t 13 0 t 13 0" strokeWidth="1.3" />
@@ -158,11 +176,19 @@ function Postmark({ fading }: { fading: boolean }) {
     </div>
   );
 }
-export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
+export function Envelope({ phase, onOpen, buttonRef, resealed = false }: EnvelopeProps) {
   const closed = phase === "closed";
   const opening = phase === "opening";
   const open = phase === "open";
-  const showSealLayer = closed || opening;
+  const closing = phase === "closing";
+  const showSealLayer = !open;
+  const postmark: PostmarkMotion = opening
+    ? "out"
+    : closing
+      ? "return"
+      : resealed
+        ? "rest"
+        : "stamp";
   const box = closed ? `${LAYER_BOX} ${FLOAT}` : LAYER_BOX;
 
   return (
@@ -174,7 +200,7 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
       </div>
 
       {/* The flap. Rotates back through 178deg as the envelope opens, and drops
-          behind the cards at the halfway point. */}
+          behind the cards at the halfway point; closing runs the same steps backwards. */}
       <div
         aria-hidden
         className={
@@ -182,6 +208,8 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
             ? `${LAYER_BOX} pointer-events-none z-[2] [perspective-origin:50%_0] [perspective:760px]`
             : opening
               ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-z)] [perspective-origin:50%_0] [perspective:760px]`
+              : closing
+                ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-close-z)] [perspective-origin:50%_0] [perspective:760px]`
               : `${box} pointer-events-none z-[6] [perspective-origin:50%_0] [perspective:760px]`
         }
       >
@@ -189,7 +217,9 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
           className={
             opening
               ? "absolute inset-0 origin-top [animation:var(--std-anim-flap)] [transform-style:preserve-3d] [transform:rotateX(0deg)]"
-              : open
+              : closing
+                ? "absolute inset-0 origin-top [animation:var(--std-anim-flap-close)] [transform-style:preserve-3d] [transform:rotateX(0deg)]"
+                : open
                 ? "absolute inset-0 origin-top [transform-style:preserve-3d] [transform:rotateX(178deg)]"
                 : "absolute inset-0 origin-top [transform-style:preserve-3d] [transform:rotateX(0deg)]"
           }
@@ -227,7 +257,7 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
       {/* Postmark, wax seal, and the single control that opens the envelope. */}
       {showSealLayer && (
         <div className={`${box} z-[8]`}>
-          <Postmark fading={opening} />
+          <Postmark motion={postmark} />
 
           {opening ? (
             <div aria-hidden className={SEAL_BOX}>
@@ -237,7 +267,16 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
                 </div>
               ))}
               {SPARKLES.map((sparkle) => (
-                <span key={sparkle} className={`${SPARKLE_BASE} ${sparkle}`} />
+                <span key={sparkle} className={`${SPARKLE_BURST} ${sparkle}`} />
+              ))}
+            </div>
+          ) : closing ? (
+            <div aria-hidden className={SEAL_BOX}>
+              <div className={SEAL_PRESS}>
+                <SealFace />
+              </div>
+              {SPARKLES.map((sparkle) => (
+                <span key={sparkle} className={`${SPARKLE_RESEAL} ${sparkle}`} />
               ))}
             </div>
           ) : (

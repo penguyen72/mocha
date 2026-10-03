@@ -1,4 +1,4 @@
-import { PARALLAX_NEAR, SPRIG_IN } from "./card-motion";
+import { PARALLAX_NEAR, SPRIG_IN, SPRIG_OUT } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import { RecordPlayer } from "./record-player";
 import {
@@ -13,6 +13,8 @@ import {
 
 type DateCardProps = {
   animated: boolean;
+  /** True while the card goes back into the envelope as it reseals. */
+  tucking?: boolean;
 };
 
 const CARD =
@@ -20,6 +22,8 @@ const CARD =
   `[filter:var(--std-date-shadow)] [transform:rotate(9.5deg)] ${PARALLAX_NEAR}`;
 
 const CARD_ANIMATION = "[animation:var(--std-anim-card-d),var(--std-anim-card-d-z)]";
+
+const CARD_TUCK = "[animation:var(--std-anim-tuck-d),var(--std-anim-tuck-d-z)]";
 
 const RULE = "absolute left-[3%] right-[3%] border-t-[1.5px] border-dotted border-std-lace-line";
 
@@ -40,9 +44,9 @@ const RECORD_IN = "[animation:var(--std-anim-record-in)]";
 /** Hand-drawn strokes: pathLength 1 lets one dash animation draw any path. */
 const STROKE = "[stroke-dasharray:1] [stroke-dashoffset:0]";
 
-export function DateCard({ animated }: DateCardProps) {
+export function DateCard({ animated, tucking = false }: DateCardProps) {
   return (
-    <div className={animated ? `${CARD} ${CARD_ANIMATION}` : CARD}>
+    <div className={animated ? `${CARD} ${CARD_ANIMATION}` : tucking ? `${CARD} ${CARD_TUCK}` : CARD}>
       <div className="absolute inset-0 bg-std-date-card [-webkit-mask:var(--std-date-scallop)] [mask:var(--std-date-scallop)]" />
 
       <div className={`${RULE} top-[calc(5*var(--std-u))]`} />
@@ -142,7 +146,7 @@ export function DateCard({ animated }: DateCardProps) {
       </div>
 
       <RecordPlayer animated={animated} className={animated ? `${RECORD} ${RECORD_IN}` : RECORD} />
-      <FloralSprig className={animated ? `${SPRIG} ${SPRIG_IN}` : SPRIG} />
+      <FloralSprig className={animated ? `${SPRIG} ${SPRIG_IN}` : tucking ? `${SPRIG} ${SPRIG_OUT}` : SPRIG} />
     </div>
   );
 }
