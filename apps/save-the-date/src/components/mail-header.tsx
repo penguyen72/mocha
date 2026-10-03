@@ -11,7 +11,7 @@ type FadingProps = {
   fading: boolean;
 };
 
-const HEADER = "absolute inset-x-0 top-[21%] z-[8] flex flex-col items-center text-center";
+const HEADER = "absolute inset-x-0 top-[18.5%] z-[8] flex flex-col items-center text-center";
 
 const EYEBROW =
   "m-0 font-serif text-[calc(13*var(--std-u))] font-semibold uppercase leading-none " +

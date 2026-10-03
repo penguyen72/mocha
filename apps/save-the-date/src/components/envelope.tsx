@@ -32,8 +32,8 @@ const LAYER_BOX =
 /** While sealed, every layer floats together; they all mount at once, so they stay in step. */
 const FLOAT = "[animation:var(--std-anim-float)]";
 
-/** Centred on the flap's point (80% down), as a real seal would be pressed. */
-const SEAL_BOX = "absolute left-[40%] top-[61%] aspect-[777/800] w-[20%]";
+/** Pressed on the flap's point, which sits just below the envelope's middle. */
+const SEAL_BOX = "absolute left-[39.5%] top-[39%] aspect-[777/800] w-[21%]";
 
 /** Two jagged halves of the same seal, for the moment it cracks. */
 const SEAL_HALVES = [
@@ -84,8 +84,8 @@ function Postmark({ fading }: { fading: boolean }) {
       aria-hidden
       className={
         fading
-          ? "pointer-events-none absolute left-[27%] top-[7%] w-[46%] [animation:var(--std-anim-prompt-out)]"
-          : "pointer-events-none absolute left-[27%] top-[7%] w-[46%]"
+          ? "pointer-events-none absolute right-[-5%] top-[-26%] w-[40%] [animation:var(--std-anim-prompt-out)]"
+          : "pointer-events-none absolute right-[-5%] top-[-26%] w-[40%]"
       }
     >
       <svg viewBox="0 0 168 84" className="block w-full overflow-visible">
@@ -187,7 +187,7 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
           {/* Flap back, revealed as the flap lies over. */}
           <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateX(180deg)]">
             <div className="absolute inset-0 [background:var(--std-env-flap-back-fill)] [mask:var(--std-flap-back-mask)]" />
-            <div className="absolute inset-0 [background:var(--std-liner-pattern)] [clip-path:polygon(5%_97%,95%_97%,50%_28%)]" />
+            <div className="absolute inset-0 [background:var(--std-liner-pattern)] [clip-path:polygon(5%_97%,95%_97%,50%_44%)]" />
           </div>
         </div>
       </div>
