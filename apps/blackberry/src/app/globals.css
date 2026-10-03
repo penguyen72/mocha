@@ -3,38 +3,41 @@
 @source "../../../../packages/ui/src";
 
 :root {
-  --site-background: #fbf6f1;
-  --site-surface: #fbf6f1;
-  --site-foreground: #4a3b35;
-  --site-muted: #7a675e;
-  --site-border: #e7d6c9;
-  --site-primary: #d6866b;
-  --site-primary-foreground: #ffffff;
+  /* Wedding palette from docs/brand/color-palette.md. */
+  --bb-soft-white: #f5f4f4;
+  --bb-soft-blush: #f1ebed;
+  --bb-intimate-pink: #efe0e3;
+  --bb-raindrops-on-roses: #e6dadc;
+  --bb-sugar-swizzle: #f0eeeb;
+
+  --site-background: var(--bb-sugar-swizzle);
+  --site-surface: var(--bb-soft-white);
+  --site-foreground: #3f3439;
+  --site-muted: #68565d;
+  --site-border: var(--bb-raindrops-on-roses);
+  --site-primary: #71525b;
+  --site-primary-foreground: var(--bb-soft-white);
   --site-font-sans: var(--font-jost), sans-serif;
   --site-font-serif: var(--font-cormorant-garamond), serif;
   --site-font-script: var(--font-pinyon-script), cursive;
-  --site-inverted-background: #000000;
-  --site-inverted-foreground: #ffffff;
+  --site-inverted-background: var(--site-foreground);
+  --site-inverted-foreground: var(--bb-soft-white);
   --site-destructive: #b3261e;
 
-  /* Blackberry's local editorial palette — not part of the shared @mocha/ui token contract. */
-  --bb-clay: #b2795e;
-  --bb-terracotta: #d6866b;
-  --bb-peach: #f2c7b4;
-  --bb-blush: #f4e9e0;
-  --bb-mauve: #c3a6a8;
-  --bb-line: #e7d6c9;
-  --bb-ink-black: #000000;
+  /* Local editorial roles; dark plum provides contrast for text and controls. */
+  --bb-accent: var(--site-primary);
+  --bb-blush: var(--bb-soft-blush);
+  --bb-pink: var(--bb-intimate-pink);
+  --bb-rose: var(--bb-raindrops-on-roses);
+  --bb-line: var(--site-border);
 }
 
 @theme inline {
-  --color-bb-clay: var(--bb-clay);
-  --color-bb-terracotta: var(--bb-terracotta);
-  --color-bb-peach: var(--bb-peach);
+  --color-bb-accent: var(--bb-accent);
   --color-bb-blush: var(--bb-blush);
-  --color-bb-mauve: var(--bb-mauve);
+  --color-bb-pink: var(--bb-pink);
+  --color-bb-rose: var(--bb-rose);
   --color-bb-line: var(--bb-line);
-  --color-bb-ink-black: var(--bb-ink-black);
 }
 
 * {

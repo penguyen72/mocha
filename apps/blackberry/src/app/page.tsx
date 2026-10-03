@@ -45,7 +45,7 @@ export default function Home() {
               Peyton
             </>
           }
-          dateLabel="Oct 1–3, 2027"
+          dateLabel="October 16, 2027"
           locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
           cta={{ label: "RSVP Now", href: "#rsvp" }}
           backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
@@ -53,7 +53,7 @@ export default function Home() {
 
         <CountdownStrip
           tagline="We can't wait to celebrate with you"
-          targetDate="2027-10-02T16:00:00-04:00"
+          targetDate="2027-10-16T16:00:00-04:00"
         />
 
         <Schedule />
@@ -76,7 +76,7 @@ export default function Home() {
             Liane <span className="font-script font-normal">&amp;</span> Peyton
           </>
         }
-        subline="October 1–3, 2027 · Trenton, Georgia"
+        subline="October 15–17, 2027 · Trenton, Georgia"
         tagline="Made with love for our favorite people."
       />
     </>

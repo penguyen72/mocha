@@ -9,8 +9,8 @@ import {
 } from "./schedule-content";
 
 const DAY_BADGE_BG: Record<ScheduleEvent["dayColor"], string> = {
-  mauve: "bg-bb-mauve",
-  terracotta: "bg-bb-terracotta",
+  blush: "bg-bb-blush",
+  rose: "bg-bb-rose",
 };
 
 export function Schedule() {
@@ -18,7 +18,7 @@ export function Schedule() {
     <section id="schedule" className="px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">{SCHEDULE_EYEBROW}</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{SCHEDULE_EYEBROW}</p>
         </Reveal>
         <Reveal>
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{SCHEDULE_HEADING}</h2>
@@ -42,7 +42,7 @@ export function Schedule() {
                   <Reveal>
                     <div className="relative z-10 mb-10 flex justify-center">
                       <span
-                        className={`rounded-full px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-white ${DAY_BADGE_BG[event.dayColor]}`}
+                        className={`rounded-full px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-foreground ${DAY_BADGE_BG[event.dayColor]}`}
                       >
                         {event.day}
                       </span>
@@ -52,12 +52,12 @@ export function Schedule() {
 
                 <Reveal>
                   <div className="relative md:grid md:grid-cols-2 md:gap-x-12">
-                    <span className="absolute left-4 top-2 h-3 w-3 -translate-x-1/2 rounded-full bg-bb-terracotta md:left-1/2" />
+                    <span className="absolute left-4 top-2 h-3 w-3 -translate-x-1/2 rounded-full bg-bb-accent md:left-1/2" />
                     <div className={`pl-10 md:pl-0 ${side === "right" ? "md:col-start-2" : ""}`}>
                       <div
-                        className={`rounded-2xl bg-white p-6 shadow-sm ${side === "left" ? "md:text-right" : ""}`}
+                        className={`rounded-2xl bg-surface p-6 shadow-sm ${side === "left" ? "md:text-right" : ""}`}
                       >
-                        <p className="font-serif text-xl text-bb-terracotta">{event.time}</p>
+                        <p className="font-serif text-xl text-bb-accent">{event.time}</p>
                         <h3 className="mt-1 font-serif text-2xl">{event.title}</h3>
                         <p className="mt-2 text-sm text-muted">{event.description}</p>
                       </div>

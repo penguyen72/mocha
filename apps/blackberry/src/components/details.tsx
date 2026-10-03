@@ -15,11 +15,11 @@ import {
 
 export function Details() {
   return (
-    <section id="details" className="bg-bb-peach px-6 py-24 sm:px-12">
+    <section id="details" className="bg-bb-pink px-6 py-24 sm:px-12">
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
         <Reveal>
           <div className="h-full rounded-lg bg-surface p-10">
-            <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">
+            <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">
               {DETAILS_DRESS_EYEBROW}
             </p>
             <h2 className="mt-3 font-serif text-3xl text-foreground sm:text-4xl">
@@ -27,13 +27,14 @@ export function Details() {
             </h2>
             <p className="mt-4 font-serif text-2xl text-foreground">{DETAILS_DRESS_EMPHASIS}</p>
             <p className="mt-4 text-sm text-muted">{DETAILS_DRESS_BODY}</p>
-            <div className="mt-6 flex gap-3">
-              {DETAILS_DRESS_SWATCHES.map((hex) => (
+            <p className="mt-6 text-xs uppercase tracking-[0.2em] text-muted">Our wedding palette</p>
+            <div className="mt-3 flex gap-3">
+              {DETAILS_DRESS_SWATCHES.map((color) => (
                 <span
-                  key={hex}
+                  key={color}
                   aria-hidden="true"
                   className="size-10 rounded-full border border-border"
-                  style={{ backgroundColor: hex }}
+                  style={{ backgroundColor: color }}
                 />
               ))}
             </div>
@@ -43,7 +44,7 @@ export function Details() {
 
         <Reveal delay={0.085}>
           <div className="h-full rounded-lg bg-surface p-10">
-            <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">
+            <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">
               {DETAILS_REGISTRY_EYEBROW}
             </p>
             <h2 className="mt-3 font-serif text-3xl text-foreground sm:text-4xl">

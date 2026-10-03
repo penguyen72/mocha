@@ -17,7 +17,7 @@ export function Party() {
     <section id="party" className="bg-bb-blush px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">{PARTY_EYEBROW}</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{PARTY_EYEBROW}</p>
         </Reveal>
         <Reveal>
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{PARTY_HEADING}</h2>
@@ -31,11 +31,11 @@ export function Party() {
         {PARTY_MEMBERS.map((member, index) => (
           <Reveal key={member.name} delay={(index % STAGGER_COLUMNS) * STAGGER_STEP}>
             <article aria-label={member.name} className="text-center">
-              <div className="mx-auto flex aspect-[3/4] w-full max-w-[180px] items-center justify-center rounded-2xl bg-bb-peach">
-                <span className="font-serif text-4xl text-bb-clay">{initialsFor(member.name)}</span>
+              <div className="mx-auto flex aspect-[3/4] w-full max-w-[180px] items-center justify-center rounded-2xl bg-bb-pink">
+                <span className="font-serif text-4xl text-bb-accent">{initialsFor(member.name)}</span>
               </div>
               <p className="mt-4 font-serif text-xl">{member.name}</p>
-              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-bb-clay">{member.role}</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.2em] text-bb-accent">{member.role}</p>
               <p className="mt-1 font-serif text-sm italic text-muted">For {member.for}</p>
             </article>
           </Reveal>

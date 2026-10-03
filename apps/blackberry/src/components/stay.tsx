@@ -16,8 +16,8 @@ function HotelGrid({ hotels }: { hotels: Hotel[] }) {
         <Reveal key={hotel.name} delay={(index % 4) * 0.085}>
           <div className="flex flex-col">
             {/* Placeholder pending real hotel photography. */}
-            <div className="aspect-square rounded-lg bg-gradient-to-br from-bb-clay/40 to-bb-terracotta/40" />
-            <p className="mt-4 text-xs uppercase tracking-[0.2em] text-bb-peach">{hotel.tag}</p>
+            <div className="aspect-square rounded-lg bg-gradient-to-br from-bb-rose/40 to-bb-pink/40" />
+            <p className="mt-4 text-xs uppercase tracking-[0.2em] text-bb-pink">{hotel.tag}</p>
             <h3 className="mt-1 font-serif text-xl">{hotel.name}</h3>
             <p className="mt-2 text-sm text-inverted-foreground/70">{hotel.description}</p>
           </div>
@@ -35,7 +35,7 @@ export function Stay() {
     >
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.28em] text-bb-peach">{STAY_EYEBROW}</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-bb-pink">{STAY_EYEBROW}</p>
         </Reveal>
         <Reveal delay={0.08}>
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{STAY_HEADING}</h2>
