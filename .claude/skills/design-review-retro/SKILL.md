@@ -13,7 +13,7 @@ Look back over the conversation and the session's diff for:
 
 - **Design rules the user stated or corrected**: "keep X", "never Y", "that looks wrong because…".
 - **Issues found in the app**: what a `design-review` run, a screenshot, or the user caught that the checklist did not already cover.
-- **Checks that are wrong or stale**: routes, copy, labels, or reference screenshots that no longer match the app.
+- **Checks that are wrong or stale**: routes, states, labels, or instructions that no longer match the app.
 - **Verification gotchas**: a tool or technique that gave a misleading result, and what worked instead.
 
 Each candidate needs a source you can point to: the user's words, or something observed in the running app or the code. Leave out anything you would have to guess.
@@ -30,7 +30,8 @@ A candidate becomes an edit when all of these hold:
 
 - Put each rule in the matching section of `design-review/SKILL.md` as one checkable bullet, written like the bullets around it.
 - Rewrite an existing bullet when the rule refines it. Delete a bullet the session proved wrong.
-- Replace a file in `references/` only when the user approved a change to that settled screen. Take the screenshot from a production build, at the same viewport as the image it replaces.
+- Write rules about intent (what must not change unless asked) rather than snapshots of today's layout, so they hold up when the design is meant to change.
+- Put an app-specific screen, state, or behavior under **App notes**.
 - Keep `design-review/SKILL.md` under about 120 lines. If an edit would push it over, merge overlapping bullets first.
 
 ## 4. Get approval, then land it
