@@ -288,6 +288,30 @@
   --std-anim-note-in: std-note-in 420ms ease-out 4300ms both;
   --std-anim-extras-in: std-note-in 420ms ease-out 4550ms both;
 
+  /* Resealing, when a guest asks to open it again (docs/superpowers/specs/
+     2026-10-03-save-the-date-reseal-design.md). The note clears away, the cards tuck back
+     in top card first — running their opening keyframes backwards, compressed — the flap
+     folds down over them, and a whole seal presses on. The last beat,
+     --std-anim-reseal-sparkle, ends at 2880ms, which is CLOSING_DURATION_MS in
+     src/components/invitation-phase.ts — keep the two in sync. */
+  --std-anim-note-out: std-note-out 320ms ease-in both;
+  --std-anim-sprig-out: std-prompt-out 200ms linear both;
+  --std-anim-petals-out: std-prompt-out 400ms linear both;
+  --std-anim-tuck-p: std-card-p 1192ms linear 150ms reverse both;
+  --std-anim-tuck-p-z: std-card-p-z 1192ms linear 150ms reverse both;
+  --std-anim-tuck-d: std-card-d 1144ms linear 300ms reverse both;
+  --std-anim-tuck-d-z: std-card-d-z 1144ms linear 300ms reverse both;
+  --std-anim-tuck-a: std-card-a 1096ms linear 450ms reverse both;
+  --std-anim-tuck-a-z: std-card-a-z 1096ms linear 450ms reverse both;
+  --std-anim-flap-close: std-flap-open 850ms cubic-bezier(0.5, 0, 0.3, 1) 1350ms reverse both;
+  --std-anim-flap-close-z: std-flap-z 850ms cubic-bezier(0.5, 0, 0.3, 1) 1350ms reverse both;
+  --std-anim-seal-press: std-seal-press 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 2100ms both;
+  --std-anim-reseal-sparkle: std-sparkle 600ms ease-out 2280ms both;
+  --std-anim-postmark-return: std-note-in 420ms ease-out 2300ms both;
+
+  /* The stage drifts back down to its sealed height while the flap folds. */
+  --std-stage-lower-transition: translate 900ms cubic-bezier(0.45, 0, 0.25, 1) 1300ms;
+
   /* Ambient loops once open */
   --std-anim-foil: std-foil 7000ms ease-in-out 600ms infinite;
   --std-anim-fall-0: std-petal-fall 13s linear -4s infinite both;
@@ -363,6 +387,21 @@
     --std-anim-caption: none;
     --std-anim-note-in: none;
     --std-anim-extras-in: none;
+    --std-anim-note-out: none;
+    --std-anim-sprig-out: none;
+    --std-anim-petals-out: none;
+    --std-anim-tuck-p: none;
+    --std-anim-tuck-p-z: none;
+    --std-anim-tuck-d: none;
+    --std-anim-tuck-d-z: none;
+    --std-anim-tuck-a: none;
+    --std-anim-tuck-a-z: none;
+    --std-anim-flap-close: none;
+    --std-anim-flap-close-z: none;
+    --std-anim-seal-press: none;
+    --std-anim-reseal-sparkle: none;
+    --std-anim-postmark-return: none;
+    --std-stage-lower-transition: none;
     --std-anim-foil: none;
                     --std-anim-fall-0: none;
     --std-anim-fall-1: none;
@@ -712,6 +751,30 @@
 }
 
 
+@keyframes std-note-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(6 * var(--std-u)));
+  }
+}
+@keyframes std-seal-press {
+  0% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.92, 0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
 @keyframes std-note-in {
   from {
     opacity: 0;

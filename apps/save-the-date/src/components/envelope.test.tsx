@@ -58,4 +58,13 @@ describe("Envelope", () => {
     const { container } = render(<Envelope phase="open" onOpen={vi.fn()} />);
     expect(sealSrc(container)).toBeUndefined();
   });
+
+  it("presses one whole seal back on, with no button, while closing", () => {
+    const { container } = render(<Envelope phase="closing" onOpen={vi.fn()} />);
+    const seals = Array.from(container.querySelectorAll("img")).filter((img) =>
+      decodeURIComponent(img.getAttribute("src") ?? "").includes("/images/wax-seal.png"),
+    );
+    expect(seals).toHaveLength(1);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
 });
