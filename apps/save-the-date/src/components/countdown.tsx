@@ -42,20 +42,20 @@ const plural = (value: number, unit: string) => `${value} ${unit}${value === 1 ?
 
 const EYEBROW =
   "m-0 font-sans text-[calc(8.5*var(--std-u))] font-medium uppercase leading-none " +
-  "tracking-[0.22em] text-std-postmark-ink";
+  "tracking-[0.28em] text-std-postmark-ink";
 
 const NUMBER =
-  "font-serif text-[calc(27*var(--std-u))] font-medium leading-none tabular-nums lining-nums text-std-note-ink";
+  "font-serif text-[calc(31*var(--std-u))] font-medium leading-none tabular-nums lining-nums text-std-note-ink";
 
-const COLON = "pb-[calc(14*var(--std-u))] font-serif text-[calc(22*var(--std-u))] leading-none text-std-postmark-ink";
+const COLON = "pb-[calc(17*var(--std-u))] font-serif text-[calc(24*var(--std-u))] leading-none text-std-postmark-ink";
 
 const LABEL =
-  "mt-[calc(4*var(--std-u))] font-sans text-[calc(7*var(--std-u))] font-medium uppercase " +
-  "leading-none tracking-[0.18em] text-std-accent-ink";
+  "mt-[calc(7*var(--std-u))] font-sans text-[calc(6.5*var(--std-u))] font-medium uppercase " +
+  "leading-none tracking-[0.22em] text-std-postmark-ink";
 
 function Unit({ value, label }: { value: string; label: string }) {
   return (
-    <span className="flex min-w-[calc(48*var(--std-u))] flex-col items-center">
+    <span className="flex min-w-[calc(52*var(--std-u))] flex-col items-center">
       <span className={NUMBER}>{value}</span>
       <span className={LABEL}>{label}</span>
     </span>
@@ -80,7 +80,7 @@ export function Countdown() {
   const { days, hours, minutes, seconds } = splitCountdown(remaining);
 
   return (
-    <div className="flex flex-col items-center gap-[calc(7*var(--std-u))]">
+    <div className="flex flex-col items-center gap-[calc(11*var(--std-u))]">
       <p className={EYEBROW}>{COUNTDOWN_EYEBROW}</p>
       <p className="sr-only">
         {`${plural(days, "day")}, ${plural(hours, "hour")}, ${plural(minutes, "minute")} and ${plural(seconds, "second")} to go`}
