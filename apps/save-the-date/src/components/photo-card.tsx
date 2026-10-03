@@ -1,11 +1,13 @@
 import Image from "next/image";
 
-import { PARALLAX_MID, SPRIG_IN } from "./card-motion";
+import { PARALLAX_MID, SPRIG_IN, SPRIG_OUT } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import { PHOTO_ALT, PHOTO_CAPTION } from "./invitation-content";
 
 type PhotoCardProps = {
   animated: boolean;
+  /** True while the card goes back into the envelope as it reseals. */
+  tucking?: boolean;
 };
 
 const CARD =
@@ -15,6 +17,8 @@ const CARD =
 
 const CARD_ANIMATION = "[animation:var(--std-anim-card-p),var(--std-anim-card-p-z)]";
 
+const CARD_TUCK = "[animation:var(--std-anim-tuck-p),var(--std-anim-tuck-p-z)]";
+
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
 
 /** The photograph and its caption are already there when the Polaroid comes out of the envelope. */
@@ -22,9 +26,9 @@ const CAPTION =
   "absolute inset-x-0 top-[79%] flex items-center justify-center " +
   "font-script text-[calc(20*var(--std-u))] leading-none text-std-announce-ink";
 
-export function PhotoCard({ animated }: PhotoCardProps) {
+export function PhotoCard({ animated, tucking = false }: PhotoCardProps) {
   return (
-    <div className={animated ? `${CARD} ${CARD_ANIMATION}` : CARD}>
+    <div className={animated ? `${CARD} ${CARD_ANIMATION}` : tucking ? `${CARD} ${CARD_TUCK}` : CARD}>
       <div className="absolute left-[5.5%] top-[4.6%] h-[71%] w-[89%] overflow-hidden bg-std-photo-well">
         <Image
           src="/images/couple-photo.jpg"
@@ -52,7 +56,9 @@ export function PhotoCard({ animated }: PhotoCardProps) {
         className={
           animated
             ? `${SPRIG} ${SPRIG_IN} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
-            : `${SPRIG} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
+            : tucking
+              ? `${SPRIG} ${SPRIG_OUT} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
+              : `${SPRIG} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
         }
       />
     </div>

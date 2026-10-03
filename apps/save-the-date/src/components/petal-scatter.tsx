@@ -48,9 +48,21 @@ const DEPTHS = [
   },
 ] as const;
 
-export function PetalScatter() {
+type PetalScatterProps = {
+  /** True while the envelope reseals: the petals clear away with the note. */
+  leaving?: boolean;
+};
+
+export function PetalScatter({ leaving = false }: PetalScatterProps) {
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0">
+    <div
+      aria-hidden
+      className={
+        leaving
+          ? "pointer-events-none absolute inset-0 [animation:var(--std-anim-petals-out)]"
+          : "pointer-events-none absolute inset-0"
+      }
+    >
       {DEPTHS.map(({ depth, layer, petals }) => (
         <div key={depth} data-petal-depth={depth} className={`absolute inset-0 ${layer}`}>
           {petals.map((petal) => (

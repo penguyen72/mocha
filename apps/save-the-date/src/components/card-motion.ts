@@ -19,6 +19,9 @@ export const FOIL =
 /** Holds a card's floral sprig back until the card is out of the envelope. */
 export const SPRIG_IN = "[animation:var(--std-anim-sprig-in)]";
 
+/** Takes a card's floral sprig away before the card goes back into the envelope. */
+export const SPRIG_OUT = "[animation:var(--std-anim-sprig-out)]";
+
 /** Pointer parallax: each card follows the stage's --std-tilt-* by its own depth. */
 export const PARALLAX_NEAR =
   "[translate:calc(var(--std-tilt-x,0)*7*var(--std-u))_calc(var(--std-tilt-y,0)*6*var(--std-u))] [transition:var(--std-parallax-transition)]";

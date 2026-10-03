@@ -18,7 +18,11 @@ import { PetalScatter } from "./petal-scatter";
 import { PhotoCard } from "./photo-card";
 
 import { INVITATION_HEADING } from "./invitation-content";
-import { OPENING_DURATION_MS, type InvitationPhase } from "./invitation-phase";
+import {
+  CLOSING_DURATION_MS,
+  OPENING_DURATION_MS,
+  type InvitationPhase,
+} from "./invitation-phase";
 
 /** Addressable state for the opened invitation, so a reload or shared link stays open. */
 const OPEN_HASH = "#open";
@@ -27,7 +31,8 @@ const OPEN_HASH = "#open";
  * The opened invitation's cards and note sit lower in the frame than the sealed envelope
  * does, so the whole stage sits 3.5% higher, sealed or open. Once open it rises a further
  * 2.5% so the cards, note and links sit centred in the floral frame; while opening, it
- * drifts up as the cards rise rather than jumping.
+ * drifts up as the cards rise rather than jumping, and while closing it drifts back down
+ * as the flap folds.
  */
 const STAGE_FRAME =
   "group relative aspect-[455/779] w-[var(--std-stage-width)] flex-none " +
@@ -36,6 +41,7 @@ const STAGE_FRAME =
 const STAGE_SEALED = "[translate:0_-3.5%]";
 const STAGE_OPEN = "[translate:0_-6%]";
 const STAGE_RISING = "[translate:0_-6%] [transition:var(--std-stage-rise-transition)]";
+const STAGE_LOWERING = "[translate:0_-3.5%] [transition:var(--std-stage-lower-transition)]";
 
 function subscribeToHash(onStoreChange: () => void) {
   window.addEventListener("hashchange", onStoreChange);
@@ -89,6 +95,7 @@ export function InvitationStage() {
   const previousPhaseRef = useRef<InvitationPhase>("closed");
   const envelopeButtonRef = useRef<HTMLButtonElement>(null);
   const resealedRef = useRef(false);
+  const [resealed, setResealed] = useState(false);
 
   // Arriving at /#open shows the opened invitation straight away. Deriving that from
   // useSyncExternalStore rather than an effect is what keeps the server render, the
@@ -123,7 +130,9 @@ export function InvitationStage() {
         clearTimeout(timerRef.current);
         timerRef.current = null;
       }
-      setPhase((current) => (current === "opening" ? "open" : current));
+      setPhase((current) =>
+        current === "opening" ? "open" : current === "closing" ? "closed" : current,
+      );
     };
 
     query.addEventListener("change", settle);
@@ -160,22 +169,29 @@ export function InvitationStage() {
   }, [phase]);
 
   const replay = useCallback(() => {
-    if (timerRef.current !== null) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
+    if (effectivePhase !== "open") return;
+
     resealedRef.current = true;
+    setResealed(true);
     window.history.replaceState(null, "", window.location.pathname + window.location.search);
-    setPhase("closed");
     notifyHashChange();
-  }, []);
+
+    if (prefersReducedMotion()) {
+      setPhase("closed");
+      return;
+    }
+
+    setPhase("closing");
+    timerRef.current = setTimeout(() => setPhase("closed"), CLOSING_DURATION_MS);
+  }, [effectivePhase]);
 
   const opening = effectivePhase === "opening";
+  const closing = effectivePhase === "closing";
   const revealed = effectivePhase !== "closed";
 
   return (
     <div
-      className={`${STAGE_FRAME} ${opening ? STAGE_RISING : revealed ? STAGE_OPEN : STAGE_SEALED}`}
+      className={`${STAGE_FRAME} ${opening ? STAGE_RISING : closing ? STAGE_LOWERING : revealed ? STAGE_OPEN : STAGE_SEALED}`}
       onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
       {/* Candlelight: an ivory glow behind the names and envelope that pushes the floral
           watercolour back. */}
@@ -186,18 +202,23 @@ export function InvitationStage() {
           <OpenPrompt fading={opening} />
         </>
       ) : null}
-      <Envelope phase={effectivePhase} onOpen={open} buttonRef={envelopeButtonRef} />
+      <Envelope
+        phase={effectivePhase}
+        onOpen={open}
+        buttonRef={envelopeButtonRef}
+        resealed={resealed}
+      />
 
       {revealed && (
         <>
           <h1 ref={headingRef} tabIndex={-1} className="sr-only">
             {INVITATION_HEADING}
           </h1>
-          <PetalScatter />
-          <AnnouncementCard animated={opening} />
-          <DateCard animated={opening} />
-          <PhotoCard animated={opening} />
-          <InvitationNote animated={opening} onReplay={replay} />
+          <PetalScatter leaving={closing} />
+          <AnnouncementCard animated={opening} tucking={closing} />
+          <DateCard animated={opening} tucking={closing} />
+          <PhotoCard animated={opening} tucking={closing} />
+          <InvitationNote animated={opening} leaving={closing} onReplay={replay} />
         </>
       )}
     </div>

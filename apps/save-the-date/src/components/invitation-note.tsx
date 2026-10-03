@@ -11,6 +11,11 @@ import {
 
 type InvitationNoteProps = {
   animated: boolean;
+  /**
+   * True while the envelope reseals: the note sinks away and can no longer be used, so
+   * "Open again" cannot be pressed twice.
+   */
+  leaving?: boolean;
   /** Reseals the envelope so the invitation can be opened again. */
   onReplay: () => void;
 };
@@ -37,7 +42,7 @@ const CALENDAR_OPTION =
   "text-std-accent-ink hover:bg-std-blush-card focus-visible:outline-2 " +
   "focus-visible:outline-offset-2 focus-visible:outline-std-focus-ring";
 
-export function InvitationNote({ animated, onReplay }: InvitationNoteProps) {
+export function InvitationNote({ animated, leaving = false, onReplay }: InvitationNoteProps) {
   // Build the subscription URL when opening, so it uses the current deployment's
   // host and port without reading window during server rendering or hydration.
   const [appleHref, setAppleHref] = useState<string | null>(null);
@@ -58,7 +63,7 @@ export function InvitationNote({ animated, onReplay }: InvitationNoteProps) {
   }, [calendarOpen]);
 
   return (
-    <div className={NOTE}>
+    <div className={leaving ? `${NOTE} [animation:var(--std-anim-note-out)]` : NOTE} inert={leaving}>
       <div className={animated ? `${LINE} [animation:var(--std-anim-note-in)]` : LINE}>
         <span aria-hidden className={RULE} />
         <p className="m-0 text-center font-serif text-[calc(17*var(--std-u))] font-medium tracking-[0.06em] text-std-note-ink">
