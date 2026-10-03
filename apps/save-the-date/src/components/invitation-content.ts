@@ -44,6 +44,21 @@ export const DATE_CARD_MONTH = "October 2027";
 export const DATE_CARD_WEEK = [10, 11, 12, 13, 14, 15, 16] as const;
 export const DATE_CARD_DAY = 16;
 
+/**
+ * The couple's song, played from its official YouTube video by the record on the date card.
+ * YouTube requires the player to stay visible, so it opens in a small panel of its own.
+ */
+export const SONG_VIDEO_ID = "WfYgbFBFe1E";
+export const SONG_TITLE = "Dream";
+export const SONG_ARTIST = "Suzy & Baekhyun";
+export const RECORD_PLAY_LABEL = `Play ${SONG_TITLE} by ${SONG_ARTIST}`;
+export const RECORD_PAUSE_LABEL = `Pause ${SONG_TITLE} by ${SONG_ARTIST}`;
+/** Curved beneath the record, like the hint on a jukebox card. */
+export const RECORD_HINT_PLAY = "Tap to play";
+export const RECORD_HINT_PAUSE = "Tap to pause";
+export const MUSIC_PLAYER_LABEL = "Now playing";
+export const MUSIC_PLAYER_CLOSE_LABEL = "Close the music player";
+
 /** Alt text for the couple photograph on the Polaroid card, verbatim from the design. */
 export const PHOTO_ALT =
   "The couple smiling together outdoors among green trees, " +

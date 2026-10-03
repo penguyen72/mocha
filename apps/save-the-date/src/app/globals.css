@@ -72,6 +72,10 @@
   /* Sage line work: the Trenton ridgeline */
   --std-sage-line: #9fb08f;
 
+  /* The record on the date card, which plays the couple's song */
+  --std-record-label: #f1d5d3;
+  --std-record-button: rgba(255, 255, 255, 0.88);
+
   /* Seal sparkles */
   --std-sparkle-pink: #f6c9cb;
   --std-sparkle-white: #ffffff;
@@ -113,6 +117,20 @@
 
   /* The ink-wipe that writes a line on from left to right. */
   --std-write-mask: linear-gradient(90deg, #000 40%, transparent 60%);
+
+  /* Vinyl: fine grooves in a warm near-black, with two soft highlights catching the light. */
+  --std-record-vinyl:
+    conic-gradient(
+      from 20deg,
+      transparent 0 8%,
+      rgba(255, 255, 255, 0.13) 13%,
+      transparent 18% 58%,
+      rgba(255, 255, 255, 0.09) 63%,
+      transparent 68%
+    ),
+    repeating-radial-gradient(circle, #2f2427 0 calc(0.8 * var(--std-u)), #3c2e32 calc(0.8 * var(--std-u)) calc(1.6 * var(--std-u)));
+  --std-record-shadow: 0 calc(1.5 * var(--std-u)) calc(4 * var(--std-u)) rgba(61, 44, 47, 0.3);
+  --std-player-shadow: 0 10px 30px rgba(61, 44, 47, 0.18);
 
   --std-liner-pattern:
     radial-gradient(
@@ -253,6 +271,10 @@
   --std-anim-drift: std-petal-drift 2600ms ease-in-out infinite alternate;
   --std-anim-drift-b: std-petal-drift 3400ms ease-in-out -1.3s infinite alternate-reverse;
 
+  /* The record and its player, once a guest taps it */
+  --std-anim-record-spin: std-record-spin 3200ms linear infinite;
+  --std-anim-player-in: std-player-in 360ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+
   /* Pointer parallax: how far each card follows the pointer, in design units. */
   --std-parallax-transition: translate 500ms cubic-bezier(0.2, 0.8, 0.3, 1);
 }
@@ -310,6 +332,8 @@
     --std-anim-fall-11: none;
     --std-anim-drift: none;
     --std-anim-drift-b: none;
+    --std-anim-record-spin: none;
+    --std-anim-player-in: none;
     --std-parallax-transition: none;
   }
 }
@@ -335,6 +359,8 @@
   --color-std-sage-line: var(--std-sage-line);
   --color-std-sparkle-pink: var(--std-sparkle-pink);
   --color-std-sparkle-white: var(--std-sparkle-white);
+  --color-std-record-label: var(--std-record-label);
+  --color-std-record-button: var(--std-record-button);
 }
 
 @keyframes std-stage-in {
@@ -648,4 +674,17 @@ a {
 
 a:hover {
   color: var(--std-link-hover);
+}
+
+@keyframes std-record-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@keyframes std-player-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
 }
