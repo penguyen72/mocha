@@ -18,7 +18,8 @@ export const POSTMARK_DATE = "10.16.27";
 export const ANNOUNCEMENT_LINE_1 = "Peyton";
 export const ANNOUNCEMENT_LINE_2 = "&";
 export const ANNOUNCEMENT_LINE_3 = "Liane";
-export const ANNOUNCEMENT_LINE_4 = "are getting married!";
+/** Set in small spaced capitals on the card, like "October 2027" on the date card. */
+export const ANNOUNCEMENT_LINE_4 = "are getting married";
 
 /** The four announcement lines in reading order, for tests and for iteration. */
 export const ANNOUNCEMENT_LINES = [

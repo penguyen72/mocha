@@ -19,17 +19,18 @@ const CARD_ANIMATION = "[animation:var(--std-anim-card-a),var(--std-anim-card-a-
 
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
 
-const NAME = `font-script text-[calc(31*var(--std-u))] leading-none ${FOIL}`;
+const NAME = `font-script text-[calc(33*var(--std-u))] leading-[1.05] ${FOIL}`;
 
 const AMPERSAND =
   "my-[calc(1*var(--std-u))] font-serif text-[calc(21*var(--std-u))] font-medium leading-none text-std-accent-ink";
 
 const ANNOUNCEMENT =
-  "font-serif text-[calc(14.5*var(--std-u))] font-semibold leading-none tracking-[0.03em] text-std-announce-ink";
+  "font-sans text-[calc(8.5*var(--std-u))] font-medium uppercase leading-none tracking-[0.16em] text-std-accent-ink";
 
 /**
  * Centred stationery: a small sprig, the couple's names in rose-pearl foil joined by a
- * serif ampersand, a sage divider, and the announcement in serif. Everything sits in the
+ * serif ampersand, and the announcement in small spaced capitals that echo "October 2027"
+ * on the date card. Everything sits in the
  * card's upper two-thirds, the part the Polaroid does not cover. While the card is being
  * delivered, each line writes itself on in turn; at rest the names keep a slow sheen.
  */
@@ -40,7 +41,7 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
       <div className="absolute inset-[calc(5*var(--std-u))] [background:var(--std-lace-pattern)]" />
       <div className="absolute inset-[calc(14*var(--std-u))] border border-std-lace-line bg-std-blush-card" />
 
-      <div aria-hidden className="absolute inset-x-0 top-[9%] flex flex-col items-center">
+      <div aria-hidden className="absolute inset-x-[calc(16*var(--std-u))] top-[8%] flex flex-col items-center">
         <svg viewBox="0 0 60 16" className="w-[calc(50*var(--std-u))] overflow-visible">
           <path d="M8 10 Q30 3 52 10" fill="none" strokeWidth="0.8" className="stroke-std-sage-line" />
           <g className="fill-std-sage-line">
@@ -81,16 +82,11 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
           {ANNOUNCEMENT_LINE_3}
         </span>
 
-        <svg viewBox="0 0 60 6" className="mt-[calc(10*var(--std-u))] w-[calc(46*var(--std-u))]">
-          <path d="M4 3 H25 M35 3 H56" strokeWidth="0.7" className="stroke-std-sage-line" />
-          <circle cx="30" cy="3" r="1.7" className="fill-std-postmark-ink" opacity="0.6" />
-        </svg>
-
         <span
           className={
             animated
-              ? `mt-[calc(9*var(--std-u))] ${ANNOUNCEMENT} ${WRITE_ON} [animation:var(--std-anim-write-4)]`
-              : `mt-[calc(9*var(--std-u))] ${ANNOUNCEMENT}`
+              ? `mt-[calc(8*var(--std-u))] ${ANNOUNCEMENT} ${WRITE_ON} [animation:var(--std-anim-write-4)]`
+              : `mt-[calc(8*var(--std-u))] ${ANNOUNCEMENT}`
           }
         >
           {ANNOUNCEMENT_LINE_4}
