@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type PointerEvent,
+} from "react";
 
 import { AnnouncementCard } from "./announcement-card";
 import { DateCard } from "./date-card";
@@ -36,6 +43,27 @@ function readServerHash() {
   return "";
 }
 
+/** Tells the hash store the hash changed; replaceState alone does not fire hashchange. */
+function notifyHashChange() {
+  window.dispatchEvent(new Event("hashchange"));
+}
+
+/** Feeds the cards' parallax: the pointer's position over the stage, from -1 to 1. */
+function tiltTowards(event: PointerEvent<HTMLDivElement>) {
+  if (prefersReducedMotion()) return;
+  const frame = event.currentTarget;
+  const bounds = frame.getBoundingClientRect();
+  const x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+  const y = ((event.clientY - bounds.top) / bounds.height) * 2 - 1;
+  frame.style.setProperty("--std-tilt-x", Math.max(-1, Math.min(1, x)).toFixed(3));
+  frame.style.setProperty("--std-tilt-y", Math.max(-1, Math.min(1, y)).toFixed(3));
+}
+
+function settleTilt(event: PointerEvent<HTMLDivElement>) {
+  event.currentTarget.style.setProperty("--std-tilt-x", "0");
+  event.currentTarget.style.setProperty("--std-tilt-y", "0");
+}
+
 function prefersReducedMotion() {
   return (
     typeof window.matchMedia === "function" &&
@@ -49,6 +77,8 @@ export function InvitationStage() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const previousPhaseRef = useRef<InvitationPhase>("closed");
+  const envelopeButtonRef = useRef<HTMLButtonElement>(null);
+  const resealedRef = useRef(false);
 
   // Arriving at /#open shows the opened invitation straight away. Deriving that from
   // useSyncExternalStore rather than an effect is what keeps the server render, the
@@ -92,10 +122,15 @@ export function InvitationStage() {
     };
   }, []);
 
-  // Announce the invitation once it has finished opening.
+  // Announce the invitation once it has finished opening, and hand focus back to the
+  // envelope once it has been resealed.
   useEffect(() => {
     if (previousPhaseRef.current === "opening" && effectivePhase === "open") {
       headingRef.current?.focus({ preventScroll: true });
+    }
+    if (effectivePhase === "closed" && resealedRef.current) {
+      resealedRef.current = false;
+      envelopeButtonRef.current?.focus({ preventScroll: true });
     }
     previousPhaseRef.current = effectivePhase;
   }, [effectivePhase]);
@@ -114,12 +149,23 @@ export function InvitationStage() {
     timerRef.current = setTimeout(() => setPhase("open"), OPENING_DURATION_MS);
   }, [phase]);
 
+  const replay = useCallback(() => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    resealedRef.current = true;
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    setPhase("closed");
+    notifyHashChange();
+  }, []);
+
   const opening = effectivePhase === "opening";
   const revealed = effectivePhase !== "closed";
 
   return (
-    <div className={STAGE_FRAME}>
-      <Envelope phase={effectivePhase} onOpen={open} />
+    <div className={STAGE_FRAME} onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
+      <Envelope phase={effectivePhase} onOpen={open} buttonRef={envelopeButtonRef} />
 
       {revealed && (
         <>
@@ -131,7 +177,7 @@ export function InvitationStage() {
           <AnnouncementCard animated={opening} />
           <DateCard animated={opening} />
           <PhotoCard animated={opening} />
-          <InvitationNote animated={opening} />
+          <InvitationNote animated={opening} onReplay={replay} />
         </>
       )}
     </div>

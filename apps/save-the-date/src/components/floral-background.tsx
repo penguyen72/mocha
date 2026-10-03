@@ -9,7 +9,7 @@ export function FloralBackground() {
       loading="eager"
       fetchPriority="high"
       sizes="(max-width: 560px) 100vw, 560px"
-      className="pointer-events-none object-cover object-center"
+      className="pointer-events-none object-cover object-center [filter:var(--std-floral-filter)]"
     />
   );
 }

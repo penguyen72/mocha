@@ -28,7 +28,8 @@ const parisienne = Parisienne({
 
 export const metadata: Metadata = {
   title: "Save the Date — Peyton & Liane",
-  description: "Peyton and Liane are getting married. October 16, 2027, in Trenton, Georgia.",
+  description:
+    "Peyton and Liane are getting married. October 16, 2027, in Trenton, Georgia. Formal invitation to follow.",
 };
 
 export default function RootLayout({

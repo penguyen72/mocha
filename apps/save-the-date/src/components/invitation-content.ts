@@ -12,6 +12,10 @@ export const ENVELOPE_PROMPT = "CLICK TO OPEN";
 export const ENVELOPE_BUTTON_LABEL = "You’ve been invited. Open the envelope.";
 export const SEAL_MONOGRAM = "P&L";
 
+/** The postmark stamped onto the sealed envelope: the city and date, before it is even opened. */
+export const POSTMARK_CITY = "TRENTON, GA";
+export const POSTMARK_DATE = "10.16.27";
+
 export const ANNOUNCEMENT_LINE_1 = "Peyton &";
 export const ANNOUNCEMENT_LINE_2 = "Liane";
 export const ANNOUNCEMENT_LINE_3 = "are getting";
@@ -29,11 +33,24 @@ export const DATE_CARD_SAVE = "Save";
 export const DATE_CARD_THE = "the";
 export const DATE_CARD_DATE = "Date";
 export const DATE_CARD_LOCATION = "Trenton, Georgia";
-export const DATE_CARD_NUMERALS = "10.16.2027";
+export const DATE_CARD_MONTH = "October 2027";
+/** The wedding week, Sunday to Saturday; the last day is circled with a hand-drawn heart. */
+export const DATE_CARD_WEEK = [10, 11, 12, 13, 14, 15, 16] as const;
+export const DATE_CARD_DAY = 16;
 
 /** Alt text for the couple photograph on the Polaroid card, verbatim from the design. */
 export const PHOTO_ALT =
   "The couple smiling together outdoors among green trees, " +
   "with an engagement ring visible";
 
+/** Handwritten on the Polaroid's bottom strip, followed by a small drawn heart. */
+export const PHOTO_CAPTION = "just us";
+
 export const NOTE_TEXT = "Formal invitation to follow";
+
+/** The wedding day, as a local calendar date. */
+export const WEDDING_DATE = "2027-10-16";
+
+export const CALENDAR_LABEL = "Add to calendar";
+export const CALENDAR_HREF = "/peyton-and-liane.ics";
+export const REPLAY_LABEL = "Open again";

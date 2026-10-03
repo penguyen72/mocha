@@ -6,6 +6,7 @@ import {
   ENVELOPE_BUTTON_LABEL,
   INVITATION_HEADING,
   NOTE_TEXT,
+  REPLAY_LABEL,
   SEAL_MONOGRAM,
 } from "./invitation-content";
 import { OPENING_DURATION_MS } from "./invitation-phase";
@@ -51,8 +52,8 @@ describe("InvitationStage", () => {
     expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
     expect(window.location.hash).toBe("#open");
 
-    // Still mid-choreography: the seal is on its way out but has not been dropped.
-    expect(screen.getByText(SEAL_MONOGRAM)).toBeInTheDocument();
+    // Still mid-choreography: the cracked seal is on its way out but has not been dropped.
+    expect(screen.getAllByText(SEAL_MONOGRAM).length).toBeGreaterThan(0);
 
     act(() => {
       vi.advanceTimersByTime(OPENING_DURATION_MS);
@@ -104,6 +105,18 @@ describe("InvitationStage", () => {
     expect(vi.getTimerCount()).toBe(0);
     expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
     expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
+  });
+
+  it("reseals the envelope and returns focus to it when asked to open again", () => {
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+
+    const envelope = screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL });
+    expect(document.activeElement).toBe(envelope);
+    expect(window.location.hash).toBe("");
+    expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
 
   it("opens straight away when the page is entered at #open", () => {

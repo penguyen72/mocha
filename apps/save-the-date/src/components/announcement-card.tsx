@@ -1,3 +1,4 @@
+import { FOIL, PARALLAX_FAR, WRITE_ON } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import {
   ANNOUNCEMENT_LINE_1,
@@ -12,11 +13,39 @@ type AnnouncementCardProps = {
 
 const CARD =
   "absolute left-[16.81%] top-[18.87%] z-[7] h-[29.53%] w-[40.22%] bg-std-blush-card " +
-  "[box-shadow:var(--std-announce-shadow)] [transform:rotate(-9deg)]";
+  `[box-shadow:var(--std-announce-shadow)] [transform:rotate(-9deg)] ${PARALLAX_FAR}`;
 
 const CARD_ANIMATION = "[animation:var(--std-anim-card-a),var(--std-anim-card-a-z)]";
 
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
+
+/**
+ * The couple's names in rose-pearl foil, then the announcement in rose ink. While the
+ * card is being delivered, each line writes itself on in turn; at rest the foil keeps a
+ * slow sheen.
+ */
+const LINES = [
+  {
+    text: ANNOUNCEMENT_LINE_1,
+    rest: `ml-[21%] ${FOIL} [animation:var(--std-anim-foil)]`,
+    writing: `ml-[21%] ${FOIL} ${WRITE_ON} [animation:var(--std-anim-write-1),var(--std-anim-foil)]`,
+  },
+  {
+    text: ANNOUNCEMENT_LINE_2,
+    rest: `ml-[40%] ${FOIL} [animation:var(--std-anim-foil)]`,
+    writing: `ml-[40%] ${FOIL} ${WRITE_ON} [animation:var(--std-anim-write-2),var(--std-anim-foil)]`,
+  },
+  {
+    text: ANNOUNCEMENT_LINE_3,
+    rest: "ml-[27%] mt-[14%] w-fit",
+    writing: `ml-[27%] mt-[14%] w-fit ${WRITE_ON} [animation:var(--std-anim-write-3)]`,
+  },
+  {
+    text: ANNOUNCEMENT_LINE_4,
+    rest: "ml-[42%] w-fit",
+    writing: `ml-[42%] w-fit ${WRITE_ON} [animation:var(--std-anim-write-4)]`,
+  },
+] as const;
 
 export function AnnouncementCard({ animated }: AnnouncementCardProps) {
   return (
@@ -28,10 +57,11 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
         aria-hidden
         className="absolute inset-0 flex flex-col pt-[21%] font-script text-[calc(27*var(--std-u))] leading-[1.02] text-std-announce-ink"
       >
-        <span className="ml-[21%]">{ANNOUNCEMENT_LINE_1}</span>
-        <span className="ml-[40%]">{ANNOUNCEMENT_LINE_2}</span>
-        <span className="ml-[27%] mt-[14%]">{ANNOUNCEMENT_LINE_3}</span>
-        <span className="ml-[42%]">{ANNOUNCEMENT_LINE_4}</span>
+        {LINES.map((line) => (
+          <span key={line.text} className={animated ? line.writing : line.rest}>
+            {line.text}
+          </span>
+        ))}
       </div>
 
       <FloralSprig className={`${SPRIG} left-[-7%] top-[-5%] [transform:rotate(-12deg)]`} />
