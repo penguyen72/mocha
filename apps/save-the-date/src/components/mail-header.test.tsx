@@ -15,6 +15,13 @@ describe("MailHeader", () => {
     expect(screen.getByText(MAIL_EYEBROW)).toBeInTheDocument();
     expect(screen.getByText(MAIL_NAMES)).toBeInTheDocument();
   });
+
+  it("finishes the names with a decorative sprig", () => {
+    const { container } = render(<MailHeader fading={false} />);
+    const sprig = container.querySelector("[data-mail-sprig]");
+    expect(sprig).not.toBeNull();
+    expect(sprig).toHaveAttribute("aria-hidden", "true");
+  });
 });
 
 describe("OpenPrompt", () => {

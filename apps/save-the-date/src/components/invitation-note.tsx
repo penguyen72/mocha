@@ -17,7 +17,7 @@ type InvitationNoteProps = {
 
 const NOTE =
   "absolute left-0 right-0 top-[75.5%] z-[8] flex flex-col items-center " +
-  "gap-[calc(22*var(--std-u))]";
+  "gap-[calc(22*var(--std-u))] [text-shadow:var(--std-note-halo)]";
 
 const LINE = "flex items-center justify-center gap-[calc(12*var(--std-u))]";
 
