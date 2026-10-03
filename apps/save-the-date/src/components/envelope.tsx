@@ -34,7 +34,8 @@ const LAYER_BOX =
 /** While sealed, every layer floats together; they all mount at once, so they stay in step. */
 const FLOAT = "[animation:var(--std-anim-float)]";
 
-const SEAL_BOX = "absolute left-[39.1%] top-[58%] aspect-[777/800] w-[21.8%]";
+/** Centred on the flap's point (80% down), as a real seal would be pressed. */
+const SEAL_BOX = "absolute left-[40%] top-[61%] aspect-[777/800] w-[20%]";
 
 /** Two jagged halves of the same seal, for the moment it cracks. */
 const SEAL_HALVES = [
@@ -184,7 +185,7 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
           <div className="absolute inset-0 [backface-visibility:hidden] [filter:var(--std-env-flap-shadow)]">
             <div className="absolute inset-0 [background:var(--std-env-edge)] [clip-path:polygon(0_0,100%_0,50%_80%)]" />
             <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [clip-path:polygon(1.4%_0,98.6%_0,50%_77.6%)]" />
-            <div className="absolute left-0 right-0 top-[10%] whitespace-nowrap text-center font-script text-[calc(30*var(--std-u))] leading-none text-std-env-ink">
+            <div className="absolute left-0 right-0 top-[13%] whitespace-nowrap text-center font-script text-[calc(27*var(--std-u))] leading-none text-std-env-ink">
               {ENVELOPE_LETTERING}
             </div>
           </div>
@@ -232,8 +233,8 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
             viewBox="0 0 200 60"
             className={
               opening
-                ? "absolute left-[33%] top-[41%] w-[34%] overflow-visible [animation:var(--std-anim-prompt-out)]"
-                : "absolute left-[33%] top-[41%] w-[34%] overflow-visible"
+                ? "absolute left-[33%] top-[38%] w-[34%] overflow-visible [animation:var(--std-anim-prompt-out)]"
+                : "absolute left-[33%] top-[38%] w-[34%] overflow-visible"
             }
           >
             <path id="std-prompt-arc" d="M20 48 A130 130 0 0 1 180 48" fill="none" />
