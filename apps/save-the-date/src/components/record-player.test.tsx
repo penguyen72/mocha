@@ -23,6 +23,12 @@ const pause = vi.fn(function (this: HTMLMediaElement) {
   this.dispatchEvent(new Event("pause"));
 });
 
+function disc() {
+  const element = document.querySelector("button > span");
+  if (!(element instanceof HTMLElement)) throw new Error("No disc rendered");
+  return element;
+}
+
 function audio() {
   const element = document.querySelector("audio");
   if (element === null) throw new Error("No audio element rendered");
@@ -39,7 +45,7 @@ describe("RecordPlayer", () => {
   });
 
   it("waits for a tap before downloading the song", () => {
-    render(<RecordPlayer className="" />);
+    render(<RecordPlayer className="" animated={false} />);
 
     expect(screen.getByRole("button", { name: RECORD_PLAY_LABEL })).toBeInTheDocument();
     expect(screen.getByText(RECORD_HINT_PLAY)).toBeInTheDocument();
@@ -50,12 +56,12 @@ describe("RecordPlayer", () => {
   });
 
   it("loops the song", () => {
-    render(<RecordPlayer className="" />);
+    render(<RecordPlayer className="" animated={false} />);
     expect(audio().loop).toBe(true);
   });
 
   it("plays and pauses the song from the record", async () => {
-    render(<RecordPlayer className="" />);
+    render(<RecordPlayer className="" animated={false} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: RECORD_PLAY_LABEL }));
@@ -70,7 +76,7 @@ describe("RecordPlayer", () => {
 
   it("stays ready to play if the browser refuses playback", async () => {
     play.mockImplementationOnce(() => Promise.reject(new DOMException("blocked", "NotAllowedError")));
-    render(<RecordPlayer className="" />);
+    render(<RecordPlayer className="" animated={false} />);
 
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: RECORD_PLAY_LABEL }));
@@ -78,5 +84,32 @@ describe("RecordPlayer", () => {
 
     expect(screen.getByRole("button", { name: RECORD_PLAY_LABEL })).toBeInTheDocument();
     expect(screen.getByText(RECORD_HINT_PLAY)).toBeInTheDocument();
+  });
+
+  it("spins in and settles as the invitation opens", () => {
+    render(<RecordPlayer className="" animated />);
+
+    expect(disc()).toHaveClass("[animation:var(--std-anim-record-arrive)]");
+    // The arrival must run before the first tap, so nothing may pause it.
+    expect(disc().style.animationPlayState).toBe("");
+  });
+
+  it("rests without the arrival once the invitation is open", () => {
+    render(<RecordPlayer className="" animated={false} />);
+    expect(disc()).not.toHaveClass("[animation:var(--std-anim-record-arrive)]");
+  });
+
+  it("swaps the arrival for the spin once the song starts", async () => {
+    render(<RecordPlayer className="" animated />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: RECORD_PLAY_LABEL }));
+    });
+    expect(disc()).toHaveClass("[animation:var(--std-anim-record-spin)]");
+    expect(disc()).not.toHaveClass("[animation:var(--std-anim-record-arrive)]");
+    expect(disc().style.animationPlayState).toBe("running");
+
+    fireEvent.click(screen.getByRole("button", { name: RECORD_PAUSE_LABEL }));
+    expect(disc().style.animationPlayState).toBe("paused");
   });
 });
