@@ -19,7 +19,7 @@ It runs at http://localhost:3002.
 | --- | --- |
 | `/` | The sealed envelope. Opening it plays the choreography and settles on the invitation. |
 | `/#open` | The opened invitation, with no animation — so a reload or shared link stays open. |
-| `/peyton-and-liane.ics` | A static all-day calendar event, behind the invitation's "Add to calendar" link. |
+| `/peyton-and-liane.ics` | The static all-day wedding event used by the Apple subscription and calendar-file download. |
 
 ## How it is built
 
@@ -33,6 +33,24 @@ components. The countdown ticks once a second toward midnight Eastern on the wed
 (`WEDDING_START` in `src/components/invitation-content.ts` — change it to the ceremony time once
 known). It reads the visitor's clock on the client only, so it never appears in the prerendered HTML. `--std-*` is this app's local palette and is **not** part of the shared `@mocha/ui`
 token contract.
+
+## Add to calendar
+
+The invitation's **Add to calendar** button reveals Google Calendar, Apple Calendar, and a
+calendar-file download. Google opens a prefilled event in a new tab for the guest to save.
+Apple opens a `webcal:` subscription to the `.ics` file on the current host; the chooser explains
+that this adds a subscribed calendar. A device without a calendar protocol handler can use the
+download option to import the file into Apple Calendar on Mac, Outlook, or another calendar app.
+
+All options save October 16, 2027 as an all-day event in Trenton, Georgia, with a note that the
+formal invitation will follow. The exclusive end date is October 17. If these details change,
+update both `GOOGLE_CALENDAR_HREF` in `src/components/invitation-content.ts` and
+`public/peyton-and-liane.ics`; the calendar test checks that they agree. Imported files and
+Google's saved copies do not receive subsequent website updates. Apple's subscribed calendar
+can refresh the hosted file.
+
+The chooser supports Tab navigation, Escape to close and restore focus, and dismissal when
+focus moves away or the guest taps elsewhere. It uses the invitation's existing client boundary.
 
 The design this was ported from is recorded in
 [`docs/superpowers/reference/save-the-date-dc-source.md`](../../docs/superpowers/reference/save-the-date-dc-source.md),
