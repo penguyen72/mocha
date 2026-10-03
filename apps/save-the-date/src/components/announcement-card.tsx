@@ -32,8 +32,8 @@ const LINES = [
   },
   {
     text: ANNOUNCEMENT_LINE_2,
-    rest: `ml-[40%] ${FOIL} [animation:var(--std-anim-foil)]`,
-    writing: `ml-[40%] ${FOIL} ${WRITE_ON} [animation:var(--std-anim-write-2),var(--std-anim-foil)]`,
+    rest: `ml-[34%] ${FOIL} [animation:var(--std-anim-foil)]`,
+    writing: `ml-[34%] ${FOIL} ${WRITE_ON} [animation:var(--std-anim-write-2),var(--std-anim-foil)]`,
   },
   {
     text: ANNOUNCEMENT_LINE_3,

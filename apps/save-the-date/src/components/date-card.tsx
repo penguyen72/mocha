@@ -37,7 +37,7 @@ export function DateCard({ animated }: DateCardProps) {
       <div className={`${RULE} top-[calc(5*var(--std-u))]`} />
       <div className={`${RULE} bottom-[calc(5*var(--std-u))]`} />
 
-      <div aria-hidden className="absolute inset-0 flex flex-col px-[9%] pt-[13%] text-std-date-ink">
+      <div aria-hidden className="absolute inset-0 flex flex-col px-[9%] pt-[10%] text-std-date-ink">
         <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-none">
           {DATE_CARD_SAVE}
         </span>
@@ -50,17 +50,17 @@ export function DateCard({ animated }: DateCardProps) {
           </span>
         </span>
 
-        <span className="mt-[7%] text-center font-sans text-[calc(9.5*var(--std-u))] font-medium uppercase leading-none tracking-[0.22em]">
+        <span className="mt-[6%] text-center font-sans text-[calc(9.5*var(--std-u))] font-medium uppercase leading-none tracking-[0.22em]">
           {DATE_CARD_MONTH}
         </span>
-        <span className="mt-[9%] grid grid-cols-7 text-center font-sans text-[calc(10.5*var(--std-u))] font-light leading-none">
+        <span className="mt-[12%] grid grid-cols-7 text-center font-sans text-[calc(10.5*var(--std-u))] font-light leading-none">
           {DATE_CARD_WEEK.map((day) =>
             day === DATE_CARD_DAY ? (
               <span key={day} className="relative font-semibold text-std-accent-ink">
                 {day}
                 <svg
                   viewBox="0 0 40 36"
-                  className="absolute left-1/2 top-1/2 h-[250%] w-[220%] -translate-x-1/2 -translate-y-[54%] overflow-visible"
+                  className="absolute left-1/2 top-1/2 h-[250%] w-[220%] -translate-x-1/2 -translate-y-1/2 overflow-visible"
                 >
                   <path
                     d="M20 33 C 7 24, 1 16, 3 9.5 C 5 3, 14 1.5, 20 9 C 26 1.5, 35 3, 37 9.5 C 39 16, 33 24, 19 34.5"
@@ -85,15 +85,15 @@ export function DateCard({ animated }: DateCardProps) {
         <span
           className={
             animated
-              ? "relative mt-[7%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em] [animation:var(--std-anim-city)]"
-              : "relative mt-[7%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]"
+              ? "relative mt-[11%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em] [animation:var(--std-anim-city)]"
+              : "relative mt-[11%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]"
           }
         >
           {/* A faint sketch of the ridges around Trenton, drawn beneath the city. */}
           <svg
             viewBox="0 0 120 20"
             preserveAspectRatio="none"
-            className="pointer-events-none absolute bottom-[-78%] left-1/2 h-[85%] w-[96%] -translate-x-1/2 overflow-visible"
+            className="pointer-events-none absolute bottom-[-66%] left-1/2 h-[75%] w-[96%] -translate-x-1/2 overflow-visible"
           >
             <path
               d="M6 19 C 18 15, 28 13, 40 14 S 60 9, 72 10 S 94 15, 114 18"
