@@ -14,7 +14,7 @@ const STAGGER_COLUMNS = 4;
 
 export function Party() {
   return (
-    <section id="party" className="bg-bb-blush px-6 py-24 sm:px-12">
+    <section id="party" className="bg-bb-pink px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{PARTY_EYEBROW}</p>
@@ -31,7 +31,7 @@ export function Party() {
         {PARTY_MEMBERS.map((member, index) => (
           <Reveal key={member.name} delay={(index % STAGGER_COLUMNS) * STAGGER_STEP}>
             <article aria-label={member.name} className="text-center">
-              <div className="mx-auto flex aspect-[3/4] w-full max-w-[180px] items-center justify-center rounded-2xl bg-bb-pink">
+              <div className="mx-auto flex aspect-[3/4] w-full max-w-[180px] items-center justify-center rounded-2xl bg-surface">
                 <span className="font-serif text-4xl text-bb-accent">{initialsFor(member.name)}</span>
               </div>
               <p className="mt-4 font-serif text-xl">{member.name}</p>

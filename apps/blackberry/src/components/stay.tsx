@@ -16,10 +16,10 @@ function HotelGrid({ hotels }: { hotels: Hotel[] }) {
         <Reveal key={hotel.name} delay={(index % 4) * 0.085}>
           <div className="flex flex-col">
             {/* Placeholder pending real hotel photography. */}
-            <div className="aspect-square rounded-lg bg-gradient-to-br from-bb-rose/40 to-bb-pink/40" />
-            <p className="mt-4 text-xs uppercase tracking-[0.2em] text-bb-pink">{hotel.tag}</p>
+            <div className="aspect-square rounded-lg bg-gradient-to-br from-bb-blush to-bb-rose" />
+            <p className="mt-4 text-xs uppercase tracking-[0.2em] text-bb-accent">{hotel.tag}</p>
             <h3 className="mt-1 font-serif text-xl">{hotel.name}</h3>
-            <p className="mt-2 text-sm text-inverted-foreground/70">{hotel.description}</p>
+            <p className="mt-2 text-sm text-muted">{hotel.description}</p>
           </div>
         </Reveal>
       ))}
@@ -31,22 +31,21 @@ export function Stay() {
   return (
     <section
       id="stay"
-      className="bg-inverted-background px-6 py-24 text-inverted-foreground sm:px-12"
+      className="bg-bb-pink px-6 py-24 text-foreground sm:px-12"
     >
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.28em] text-bb-pink">{STAY_EYEBROW}</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{STAY_EYEBROW}</p>
         </Reveal>
         <Reveal delay={0.08}>
           <h2 className="mt-3 font-serif text-4xl sm:text-5xl">{STAY_HEADING}</h2>
         </Reveal>
         <Reveal delay={0.16}>
-          <p className="mt-4 max-w-2xl text-inverted-foreground/70">{STAY_INTRO}</p>
+          <p className="mt-4 max-w-2xl text-muted">{STAY_INTRO}</p>
         </Reveal>
 
         <div className="mt-14">
           <TabSwitch
-            triggerClassName="text-inverted-foreground"
             tabs={[
               {
                 id: "estate",

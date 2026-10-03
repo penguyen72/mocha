@@ -4,7 +4,7 @@ import { RsvpForm } from "./rsvp-form";
 
 export function RsvpSection() {
   return (
-    <section id="rsvp" className="bg-bb-blush px-6 py-24 sm:px-12">
+    <section id="rsvp" className="bg-bb-rose px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <p className="font-script text-3xl text-bb-accent">will you join us?</p>

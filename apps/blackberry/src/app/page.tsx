@@ -51,10 +51,12 @@ export default function Home() {
           backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
         />
 
-        <CountdownStrip
-          tagline="We can't wait to celebrate with you"
-          targetDate="2027-10-16T16:00:00-04:00"
-        />
+        <div className="bb-countdown">
+          <CountdownStrip
+            tagline="We can't wait to celebrate with you"
+            targetDate="2027-10-16T16:00:00-04:00"
+          />
+        </div>
 
         <Schedule />
         <Party />
@@ -70,15 +72,17 @@ export default function Home() {
         <RsvpSection />
       </main>
 
-      <SiteFooter
-        heading={
-          <>
-            Liane <span className="font-script font-normal">&amp;</span> Peyton
-          </>
-        }
-        subline="October 15–17, 2027 · Trenton, Georgia"
-        tagline="Made with love for our favorite people."
-      />
+      <div className="bb-footer">
+        <SiteFooter
+          heading={
+            <>
+              Liane <span className="font-script font-normal">&amp;</span> Peyton
+            </>
+          }
+          subline="October 15–17, 2027 · Trenton, Georgia"
+          tagline="Made with love for our favorite people."
+        />
+      </div>
     </>
   );
 }

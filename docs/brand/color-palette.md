@@ -18,8 +18,9 @@ prefer official Pantone conversions when they're available.
 
 ## Usage
 
-Blackberry uses these colors for its backgrounds, surfaces, borders, and decorative accents,
-paired with dark plum text and controls. Its values and `--site-*` overrides live in
+Blackberry uses these colors as its base, blending in Save the Date's warmer blush card,
+date card, and ribbon pinks for a more pink-forward theme. Deep rose accents and dark text
+keep content and controls readable. Its values and `--site-*` overrides live in
 `apps/blackberry/src/app/globals.css`. Each app owns its theme; adopting the palette in another
 app goes through the Superpowers design workflow in `AGENTS.md`.
 
