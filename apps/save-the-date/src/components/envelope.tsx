@@ -4,8 +4,6 @@ import type { Ref } from "react";
 
 import {
   ENVELOPE_BUTTON_LABEL,
-  ENVELOPE_LETTERING,
-  ENVELOPE_PROMPT,
   POSTMARK_CITY,
   POSTMARK_DATE,
 } from "./invitation-content";
@@ -185,9 +183,6 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
           <div className="absolute inset-0 [backface-visibility:hidden] [filter:var(--std-env-flap-shadow)]">
             <div className="absolute inset-0 [background:var(--std-env-edge)] [clip-path:polygon(0_0,100%_0,50%_80%)]" />
             <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [clip-path:polygon(1.4%_0,98.6%_0,50%_77.6%)]" />
-            <div className="absolute left-0 right-0 top-[13%] whitespace-nowrap text-center font-script text-[calc(27*var(--std-u))] leading-none text-std-env-ink">
-              {ENVELOPE_LETTERING}
-            </div>
           </div>
 
           {/* Flap back, revealed as the flap lies over. */}
@@ -216,8 +211,7 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
         <div className="absolute inset-0 border-[calc(1.6*var(--std-u))] border-transparent [border-image:var(--std-env-edge)_1]" />
       </div>
 
-      {/* Pearl sheen, postmark, prompt arc, wax seal, and the single control that opens
-          the envelope. */}
+      {/* Pearl sheen, postmark, wax seal, and the single control that opens the envelope. */}
       {showSealLayer && (
         <div className={`${box} z-[8]`}>
           {closed && (
@@ -227,23 +221,6 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
           )}
 
           <Postmark fading={opening} />
-
-          <svg
-            aria-hidden
-            viewBox="0 0 200 60"
-            className={
-              opening
-                ? "absolute left-[33%] top-[38%] w-[34%] overflow-visible [animation:var(--std-anim-prompt-out)]"
-                : "absolute left-[33%] top-[38%] w-[34%] overflow-visible"
-            }
-          >
-            <path id="std-prompt-arc" d="M20 48 A130 130 0 0 1 180 48" fill="none" />
-            <text className="fill-std-prompt-ink font-sans text-[13px] font-medium tracking-[3px]">
-              <textPath href="#std-prompt-arc" startOffset="50%" textAnchor="middle">
-                {ENVELOPE_PROMPT}
-              </textPath>
-            </text>
-          </svg>
 
           {opening ? (
             <div aria-hidden className={SEAL_BOX}>

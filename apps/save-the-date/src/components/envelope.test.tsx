@@ -4,8 +4,6 @@ import { describe, expect, it, vi } from "vitest";
 import { Envelope } from "./envelope";
 import {
   ENVELOPE_BUTTON_LABEL,
-  ENVELOPE_LETTERING,
-  ENVELOPE_PROMPT,
   POSTMARK_CITY,
   POSTMARK_DATE,
 } from "./invitation-content";
@@ -18,10 +16,9 @@ const sealImages = (container: HTMLElement) =>
 const sealSrc = (container: HTMLElement) => sealImages(container)[0];
 
 describe("Envelope", () => {
-  it("renders the lettering, the prompt, one whole seal and the open button when closed", () => {
+  it("renders one whole seal and the open button when closed, with nothing written on the flap", () => {
     const { container } = render(<Envelope phase="closed" onOpen={vi.fn()} />);
-    expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
-    expect(screen.getByText(ENVELOPE_PROMPT)).toBeInTheDocument();
+    expect(container.querySelector("svg text:not([class*=postmark])")).toBeNull();
     expect(sealImages(container)).toHaveLength(1);
     expect(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL })).toBeInTheDocument();
   });
@@ -50,9 +47,7 @@ describe("Envelope", () => {
   it("drops the seal layer entirely once open", () => {
     const { container } = render(<Envelope phase="open" onOpen={vi.fn()} />);
     expect(sealImages(container)).toHaveLength(0);
-    expect(screen.queryByText(ENVELOPE_PROMPT)).not.toBeInTheDocument();
     expect(screen.queryByText(POSTMARK_CITY)).not.toBeInTheDocument();
-    expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
   });
   it.each(["closed", "opening"] as const)("renders the wax-seal image while %s", (phase) => {
     const { container } = render(<Envelope phase={phase} onOpen={vi.fn()} />);

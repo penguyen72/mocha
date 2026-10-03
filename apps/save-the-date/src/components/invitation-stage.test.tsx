@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   ENVELOPE_BUTTON_LABEL,
+  MAIL_EYEBROW,
   INVITATION_HEADING,
   NOTE_TEXT,
   REPLAY_LABEL,
@@ -46,6 +47,7 @@ describe("InvitationStage", () => {
   it("starts closed: the envelope control is offered and the invitation is not yet shown", () => {
     render(<InvitationStage />);
     expect(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL })).toBeInTheDocument();
+    expect(screen.getByText(MAIL_EYEBROW)).toBeInTheDocument();
     expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
     expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
@@ -67,8 +69,9 @@ describe("InvitationStage", () => {
       vi.advanceTimersByTime(OPENING_DURATION_MS);
     });
 
-    // Only reaching the `open` phase unmounts the seal layer.
+    // Only reaching the `open` phase unmounts the seal layer and the "you have mail" header.
     expect(sealCount(container)).toBe(0);
+    expect(screen.queryByText(MAIL_EYEBROW)).not.toBeInTheDocument();
     expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 

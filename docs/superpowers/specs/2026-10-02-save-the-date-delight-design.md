@@ -32,7 +32,9 @@ sweeps across slowly. It is used only on the names.
 
 ## The opening, as a sequence of beats (under ~5s)
 
-1. **Sealed envelope** floats gently and a pearl sheen sweeps across it every few seconds. A round
+1. **Sealed envelope.** Above it, "YOU HAVE MAIL FROM" and **Peyton & Liane** in rose-pearl
+   script that writes on as the page loads; below it, "CLICK THE ENVELOPE TO OPEN" (or "TAP" on a
+   touch screen). The flap itself carries no writing. The envelope floats gently and a pearl sheen sweeps across it every few seconds. A round
    postmark, `TRENTON, GA · 10.16.27`, stamps onto the corner shortly after load, beside a small
    pink postage stamp — guests see the date and city before they open anything.
 2. **The seal cracks.** On tap the seal splits into two halves that tumble away, with a small burst

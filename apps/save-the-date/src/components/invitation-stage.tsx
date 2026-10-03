@@ -13,6 +13,7 @@ import { AnnouncementCard } from "./announcement-card";
 import { DateCard } from "./date-card";
 import { Envelope } from "./envelope";
 import { InvitationNote } from "./invitation-note";
+import { MailHeader, OpenPrompt } from "./mail-header";
 import { PetalScatter } from "./petal-scatter";
 import { PhotoCard } from "./photo-card";
 
@@ -164,6 +165,12 @@ export function InvitationStage() {
 
   return (
     <div className={STAGE_FRAME} onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
+      {!revealed || opening ? (
+        <>
+          <MailHeader fading={opening} />
+          <OpenPrompt fading={opening} />
+        </>
+      ) : null}
       <Envelope phase={effectivePhase} onOpen={open} buttonRef={envelopeButtonRef} />
 
       {revealed && (

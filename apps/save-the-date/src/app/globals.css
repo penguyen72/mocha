@@ -51,9 +51,7 @@
   --std-seal-filter: saturate(0.85) brightness(1.04);
 
   /* Envelope */
-  --std-env-ink: #a0646e;
   --std-liner-rule: #b5c4a5;
-  --std-prompt-ink: #8c6a70;
 
   /* Cards */
   --std-blush-card: #fbe3df;
@@ -204,6 +202,9 @@
 
   /* Sealed envelope */
   --std-anim-stage-in: std-stage-in 300ms ease-out both;
+  --std-anim-mail-in: std-note-in 500ms ease-out 150ms both;
+  --std-anim-mail-write: std-write 1100ms ease-out 400ms both;
+  --std-anim-open-prompt-in: std-note-in 500ms ease-out 1300ms both;
   --std-anim-stamp: std-stamp 460ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 700ms both;
   --std-anim-float: std-float 4200ms ease-in-out infinite;
   --std-anim-sheen: std-sheen 5600ms ease-in-out 1200ms infinite both;
@@ -269,6 +270,9 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --std-anim-stage-in: std-stage-in 120ms ease-out both;
+    --std-anim-mail-in: none;
+    --std-anim-mail-write: none;
+    --std-anim-open-prompt-in: none;
     --std-anim-stamp: none;
     --std-anim-float: none;
     --std-anim-sheen: none;
@@ -323,9 +327,7 @@
   --color-std-link: var(--std-link);
   --color-std-link-hover: var(--std-link-hover);
   --color-std-focus-ring: var(--std-focus-ring);
-  --color-std-env-ink: var(--std-env-ink);
   --color-std-liner-rule: var(--std-liner-rule);
-  --color-std-prompt-ink: var(--std-prompt-ink);
   --color-std-blush-card: var(--std-blush-card);
   --color-std-announce-ink: var(--std-announce-ink);
   --color-std-lace-line: var(--std-lace-line);

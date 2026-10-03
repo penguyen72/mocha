@@ -7,9 +7,15 @@ export const INVITATION_HEADING =
   "Peyton & Liane are getting married. " +
   "Save the date: October 16, 2027, in Trenton, Georgia.";
 
-export const ENVELOPE_LETTERING = "You’ve been invited";
-export const ENVELOPE_PROMPT = "CLICK TO OPEN";
-export const ENVELOPE_BUTTON_LABEL = "You’ve been invited. Open the envelope.";
+/** Above the sealed envelope: who the mail is from. */
+export const MAIL_EYEBROW = "You have mail from";
+export const MAIL_NAMES = "Peyton & Liane";
+
+/** Below the sealed envelope; the wording follows the visitor's pointer. */
+export const OPEN_PROMPT_CLICK = "Click the envelope to open";
+export const OPEN_PROMPT_TAP = "Tap the envelope to open";
+
+export const ENVELOPE_BUTTON_LABEL = "Open the envelope";
 
 /** The postmark stamped onto the sealed envelope: the city and date, before it is even opened. */
 export const POSTMARK_CITY = "TRENTON, GA";
