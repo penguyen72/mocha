@@ -20,7 +20,7 @@ packages/
   eslint-config/     Shared ESLint flat configs
   typescript-config/ Shared TypeScript configs
 docs/
-  brand/             Wedding color palette and other brand references
+  brand/             Wedding color palette
   superpowers/       Approved designs, plans, and reference material
 ```
 
