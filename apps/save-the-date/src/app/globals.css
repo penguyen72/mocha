@@ -194,7 +194,7 @@
      (docs/superpowers/specs/2026-10-02-save-the-date-delight-design.md) adds the
      beats after them. The last one-shot animation, --std-anim-extras-in, ends at
      4970ms, which is OPENING_DURATION_MS in src/components/invitation-phase.ts —
-     keep the two in sync. Infinite loops (float, sheen, foil, sway, falling petals)
+     keep the two in sync. Infinite loops (float, sheen, foil, falling petals)
      are not part of that count.
 
      The flap and the three cards each run two animations at once (a transform and
@@ -221,13 +221,6 @@
   --std-anim-card-d-z: std-card-d-z 2288ms linear 1248ms both;
   --std-anim-card-p: std-card-p 2384ms linear 1248ms both;
   --std-anim-card-p-z: std-card-p-z 2384ms linear 1248ms both;
-  --std-anim-petal-0: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1300ms both;
-  --std-anim-petal-1: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1350ms both;
-  --std-anim-petal-2: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1400ms both;
-  --std-anim-petal-3: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1450ms both;
-  --std-anim-petal-4: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1500ms both;
-  --std-anim-petal-5: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1550ms both;
-  --std-anim-petal-6: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1600ms both;
 
   /* The cards' floral sprigs stay hidden until every card has cleared the envelope
      (each card's z-index step lands at ~2272ms), so none peeks over the rim. */
@@ -249,15 +242,20 @@
 
   /* Ambient loops once open */
   --std-anim-foil: std-foil 7000ms ease-in-out 600ms infinite;
-  --std-anim-sway-a: std-sway 5200ms ease-in-out infinite alternate;
-  --std-anim-sway-b: std-sway 6400ms ease-in-out -2s infinite alternate-reverse;
-  --std-anim-fall-0: std-petal-fall 13s linear 2.4s infinite both;
-  --std-anim-fall-1: std-petal-fall 16s linear 5.5s infinite both;
-  --std-anim-fall-2: std-petal-fall 12s linear 8s infinite both;
-  --std-anim-fall-3: std-petal-fall 15s linear 3.6s infinite both;
-  --std-anim-fall-4: std-petal-fall 14s linear 10.5s infinite both;
-  --std-anim-fall-5: std-petal-fall 17s linear 7s infinite both;
+  --std-anim-fall-0: std-petal-fall 13s linear -4s infinite both;
+  --std-anim-fall-1: std-petal-fall 16s linear 1.2s infinite both;
+  --std-anim-fall-2: std-petal-fall 12s linear -9s infinite both;
+  --std-anim-fall-3: std-petal-fall 15s linear 2.6s infinite both;
+  --std-anim-fall-4: std-petal-fall 14s linear -2s infinite both;
+  --std-anim-fall-5: std-petal-fall 17s linear 0.4s infinite both;
+  --std-anim-fall-6: std-petal-fall 13.5s linear -11s infinite both;
+  --std-anim-fall-7: std-petal-fall 15.5s linear 4.2s infinite both;
+  --std-anim-fall-8: std-petal-fall 12.5s linear -6.5s infinite both;
+  --std-anim-fall-9: std-petal-fall 16.5s linear 6s infinite both;
+  --std-anim-fall-10: std-petal-fall 14.5s linear -13s infinite both;
+  --std-anim-fall-11: std-petal-fall 18s linear 3.4s infinite both;
   --std-anim-drift: std-petal-drift 2600ms ease-in-out infinite alternate;
+  --std-anim-drift-b: std-petal-drift 3400ms ease-in-out -1.3s infinite alternate-reverse;
 
   /* Pointer parallax: how far each card follows the pointer, in design units. */
   --std-parallax-transition: translate 500ms cubic-bezier(0.2, 0.8, 0.3, 1);
@@ -286,13 +284,6 @@
     --std-anim-card-d-z: none;
     --std-anim-card-p: none;
     --std-anim-card-p-z: none;
-    --std-anim-petal-0: none;
-    --std-anim-petal-1: none;
-    --std-anim-petal-2: none;
-    --std-anim-petal-3: none;
-    --std-anim-petal-4: none;
-    --std-anim-petal-5: none;
-    --std-anim-petal-6: none;
     --std-anim-sprig-in: none;
     --std-anim-write-1: none;
     --std-anim-write-2: none;
@@ -307,15 +298,20 @@
     --std-anim-note-in: none;
     --std-anim-extras-in: none;
     --std-anim-foil: none;
-    --std-anim-sway-a: none;
-    --std-anim-sway-b: none;
-    --std-anim-fall-0: none;
+                    --std-anim-fall-0: none;
     --std-anim-fall-1: none;
     --std-anim-fall-2: none;
     --std-anim-fall-3: none;
     --std-anim-fall-4: none;
     --std-anim-fall-5: none;
+    --std-anim-fall-6: none;
+    --std-anim-fall-7: none;
+    --std-anim-fall-8: none;
+    --std-anim-fall-9: none;
+    --std-anim-fall-10: none;
+    --std-anim-fall-11: none;
     --std-anim-drift: none;
+    --std-anim-drift-b: none;
     --std-parallax-transition: none;
   }
 }
@@ -558,31 +554,6 @@
   43.053%,
   100% {
     z-index: 7;
-  }
-}
-
-@keyframes std-petal-burst {
-  0% {
-    opacity: 0;
-    translate: var(--std-px) var(--std-py);
-    scale: 0.35;
-  }
-  25% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-    translate: 0 0;
-    scale: 1;
-  }
-}
-
-@keyframes std-sway {
-  from {
-    rotate: -7deg;
-  }
-  to {
-    rotate: 7deg;
   }
 }
 

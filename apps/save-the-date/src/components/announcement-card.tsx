@@ -17,6 +17,13 @@ const CARD =
 
 const CARD_ANIMATION = "[animation:var(--std-anim-card-a),var(--std-anim-card-a-z)]";
 
+/**
+ * "Liane" starts with a tall script L that sits right under the tail of the y in
+ * "Peyton"; a little extra room lets it clear, so the pair reads with the same gap as
+ * "are getting" / "married!". (FOIL's own negative margin is overridden here.)
+ */
+const CLEAR_Y = "!mt-[calc(-0.4em+0.22em)]";
+
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
 
 /**
@@ -32,8 +39,8 @@ const LINES = [
   },
   {
     text: ANNOUNCEMENT_LINE_2,
-    rest: `ml-[34%] ${FOIL} [animation:var(--std-anim-foil)]`,
-    writing: `ml-[34%] ${FOIL} ${WRITE_ON} [animation:var(--std-anim-write-2),var(--std-anim-foil)]`,
+    rest: `ml-[34%] ${FOIL} ${CLEAR_Y} [animation:var(--std-anim-foil)]`,
+    writing: `ml-[34%] ${FOIL} ${CLEAR_Y} ${WRITE_ON} [animation:var(--std-anim-write-2),var(--std-anim-foil)]`,
   },
   {
     text: ANNOUNCEMENT_LINE_3,

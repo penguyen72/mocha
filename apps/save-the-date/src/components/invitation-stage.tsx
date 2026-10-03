@@ -171,7 +171,7 @@ export function InvitationStage() {
           <h1 ref={headingRef} tabIndex={-1} className="sr-only">
             {INVITATION_HEADING}
           </h1>
-          <PetalScatter animated={opening} />
+          <PetalScatter />
           <AnnouncementCard animated={opening} />
           <DateCard animated={opening} />
           <PhotoCard animated={opening} />

@@ -37,8 +37,9 @@ sweeps across slowly. It is used only on the names.
    pink postage stamp — guests see the date and city before they open anything.
 2. **The seal cracks.** On tap the seal splits into two halves that tumble away, with a small burst
    of pink and white sparkles, then the flap opens (existing choreography).
-3. **Cards fly out** as before, landing with a slight springy overshoot. Petals burst outward from
-   the envelope rather than fading in place.
+3. **Cards fly out** as before, landing with a slight springy overshoot. (An earlier petal
+   burst that left petals lying still on the page was dropped: still petals pulled attention
+   from the falling ones.)
 4. **Names write on** — each announcement line is revealed left-to-right with a soft ink-wipe mask
    (a masked reveal of the real font, not a stroke-by-stroke tracing), in rose-pearl foil.
 5. **The date**: the date card shows a week strip, `OCTOBER 2027 / 10 11 12 13 14 15 16`, and a
@@ -50,8 +51,9 @@ sweeps across slowly. It is used only on the names.
 8. **"Formal invitation to follow"** fades in last, then a small `N days to go` countdown and two
    quiet links: **Add to calendar** and **Open again**.
 
-After the sequence, petals keep drifting down slowly, and the cards shift subtly with the pointer
-for depth (pointer only — no device-orientation permission prompt).
+Throughout, a dozen petals drift down slowly on staggered loops — some already mid-fall when
+the invitation opens — and the cards shift subtly with the pointer for depth (pointer only — no
+device-orientation permission prompt).
 
 ## Extras
 
