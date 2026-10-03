@@ -38,7 +38,6 @@
   --std-link: #9e3d53;
   --std-link-hover: #7a2a3e;
   --std-focus-ring: #9e3d53;
-  --std-focus-glow: rgba(178, 71, 94, 0.25);
 
   /* Envelope */
   --std-env-ink: #6f6869;
@@ -56,27 +55,8 @@
   /* Ribbon */
   --std-ribbon-loop: #edb2c0;
 
-  /* Note and CTA */
+  /* Note */
   --std-note-ink: #2a2426;
-  --std-cta-fill: #f3c9d3;
-  --std-cta-ink: #1e1a1b;
-  --std-heading-ink: #1e1a1b;
-
-  /* Address page */
-  --std-form-heading: #be5168;
-  --std-label: #9e3d53;
-  --std-field-border: #edb8c4;
-  --std-field-border-error: #b2334f;
-  --std-field-ink: #2a2426;
-  --std-help-ink: #6f6264;
-  --std-error-ink: #a3304a;
-  --std-alert-fill: #fbeff2;
-  --std-alert-ink: #8e2a42;
-  --std-submit-fill: #f6c8d0;
-  --std-submit-fill-hover: #f2b9c4;
-  --std-submit-ink: #8e3348;
-  --std-check-ring: #edb8c4;
-  --std-check-stroke: #b2475e;
 
   /* ---------------------------------------------------------------------------
      Composed ornaments. Every decoration in this design is a multi-layer gradient
@@ -197,7 +177,6 @@
   --std-anim-ribbon: std-ribbon 2192ms linear 1248ms both;
   --std-anim-ribbon-z: std-ribbon-z 2192ms linear 1248ms both;
   --std-anim-note-in: std-note-in 416ms ease-out 3200ms both;
-  --std-anim-check-draw: std-check-draw 340ms ease-out both;
   --std-anim-petal-0: std-petal-in 832ms ease-out 3120ms both;
   --std-anim-petal-1: std-petal-in 832ms ease-out 3232ms both;
   --std-anim-petal-2: std-petal-in 832ms ease-out 3344ms both;
@@ -227,7 +206,6 @@
     --std-anim-ribbon: none;
     --std-anim-ribbon-z: none;
     --std-anim-note-in: none;
-    --std-anim-check-draw: none;
     --std-anim-petal-0: none;
     --std-anim-petal-1: none;
     --std-anim-petal-2: none;
@@ -256,23 +234,6 @@
   --color-std-date-ink: var(--std-date-ink);
   --color-std-ribbon-loop: var(--std-ribbon-loop);
   --color-std-note-ink: var(--std-note-ink);
-  --color-std-cta-fill: var(--std-cta-fill);
-  --color-std-cta-ink: var(--std-cta-ink);
-  --color-std-heading-ink: var(--std-heading-ink);
-  --color-std-form-heading: var(--std-form-heading);
-  --color-std-label: var(--std-label);
-  --color-std-field-border: var(--std-field-border);
-  --color-std-field-border-error: var(--std-field-border-error);
-  --color-std-field-ink: var(--std-field-ink);
-  --color-std-help-ink: var(--std-help-ink);
-  --color-std-error-ink: var(--std-error-ink);
-  --color-std-alert-fill: var(--std-alert-fill);
-  --color-std-alert-ink: var(--std-alert-ink);
-  --color-std-submit-fill: var(--std-submit-fill);
-  --color-std-submit-fill-hover: var(--std-submit-fill-hover);
-  --color-std-submit-ink: var(--std-submit-ink);
-  --color-std-check-ring: var(--std-check-ring);
-  --color-std-check-stroke: var(--std-check-stroke);
 }
 
 @keyframes std-stage-in {
@@ -469,14 +430,6 @@
   }
 }
 
-@keyframes std-check-draw {
-  from {
-    stroke-dashoffset: 40;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
 
 @keyframes std-note-in {
   from {

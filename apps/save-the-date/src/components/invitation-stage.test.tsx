@@ -5,8 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ENVELOPE_BUTTON_LABEL,
   INVITATION_HEADING,
-  NOTE_CTA_HREF,
-  NOTE_CTA_LABEL,
+  NOTE_TEXT,
   SEAL_MONOGRAM,
 } from "./invitation-content";
 import { OPENING_DURATION_MS } from "./invitation-phase";
@@ -39,7 +38,7 @@ describe("InvitationStage", () => {
     render(<InvitationStage />);
     expect(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: NOTE_CTA_LABEL })).not.toBeInTheDocument();
+    expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
 
   it("reveals the invitation when the envelope is opened, and settles after the choreography", () => {
@@ -61,10 +60,7 @@ describe("InvitationStage", () => {
 
     // Only reaching the `open` phase unmounts the seal layer.
     expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toHaveAttribute(
-      "href",
-      NOTE_CTA_HREF,
-    );
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
   it("moves focus to the invitation heading once the choreography completes", () => {
@@ -107,7 +103,7 @@ describe("InvitationStage", () => {
     // No pending timer means the stage went straight to the open phase.
     expect(vi.getTimerCount()).toBe(0);
     expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toBeInTheDocument();
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
   it("opens straight away when the page is entered at #open", () => {

@@ -2,20 +2,16 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { InvitationNote } from "./invitation-note";
-import { NOTE_CTA_HREF, NOTE_CTA_LABEL, NOTE_LINE_1, NOTE_LINE_2 } from "./invitation-content";
+import { NOTE_TEXT } from "./invitation-content";
 
 describe("InvitationNote", () => {
-  it("renders both lines of the note", () => {
+  it("says a formal invitation will follow", () => {
     render(<InvitationNote animated={false} />);
-    expect(screen.getByText(NOTE_LINE_1)).toBeInTheDocument();
-    expect(screen.getByText(NOTE_LINE_2)).toBeInTheDocument();
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
-  it("links to the address page", () => {
+  it("offers no links now that guests are not asked for an address", () => {
     render(<InvitationNote animated={false} />);
-    expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toHaveAttribute(
-      "href",
-      NOTE_CTA_HREF,
-    );
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 });

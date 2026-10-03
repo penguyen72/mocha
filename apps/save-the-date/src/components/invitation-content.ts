@@ -36,7 +36,4 @@ export const PHOTO_ALT =
   "The couple smiling together outdoors among green trees, " +
   "with an engagement ring visible";
 
-export const NOTE_LINE_1 = "formal invitation to follow, please";
-export const NOTE_LINE_2 = "share your address with us";
-export const NOTE_CTA_LABEL = "SHARE YOUR ADDRESS";
-export const NOTE_CTA_HREF = "/share-your-address";
+export const NOTE_TEXT = "Formal invitation to follow";

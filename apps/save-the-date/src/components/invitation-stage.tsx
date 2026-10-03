@@ -13,7 +13,7 @@ import { Ribbon } from "./ribbon";
 import { INVITATION_HEADING } from "./invitation-content";
 import { OPENING_DURATION_MS, type InvitationPhase } from "./invitation-phase";
 
-/** Addressable state for the opened invitation, so "back to invitation" can return to it. */
+/** Addressable state for the opened invitation, so a reload or shared link stays open. */
 const OPEN_HASH = "#open";
 
 const STAGE_FRAME =
@@ -57,9 +57,7 @@ export function InvitationStage() {
   // the real hash.
   //
   // On a hard load of /#open the prerendered sealed envelope does paint first; the
-  // stage's 300ms fade-in runs over that swap rather than hiding it outright. On a
-  // client navigation back from /share-your-address the hash is already applied by the
-  // time this subscription is read, so the invitation renders open immediately.
+  // stage's 300ms fade-in runs over that swap rather than hiding it outright.
   const effectivePhase: InvitationPhase =
     phase === "closed" && entryHash === OPEN_HASH ? "open" : phase;
 
