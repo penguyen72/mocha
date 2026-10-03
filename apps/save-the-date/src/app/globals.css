@@ -270,7 +270,11 @@
   --std-anim-drift: std-petal-drift 2600ms ease-in-out infinite alternate;
   --std-anim-drift-b: std-petal-drift 3400ms ease-in-out -1.3s infinite alternate-reverse;
 
-  /* The record, once a guest taps it */
+  /* The record waits for the date card to land (~3540ms), then sets down with a soft settle
+     while the vinyl turns to rest — both done before OPENING_DURATION_MS. It spins again
+     once a guest taps it. */
+  --std-anim-record-in: std-record-in 700ms ease-out 3700ms both;
+  --std-anim-record-arrive: std-record-arrive 1200ms cubic-bezier(0.2, 0.7, 0.3, 1) 3700ms both;
   --std-anim-record-spin: std-record-spin 3200ms linear infinite;
 
   /* Pointer parallax: how far each card follows the pointer, in design units. */
@@ -330,6 +334,8 @@
     --std-anim-fall-11: none;
     --std-anim-drift: none;
     --std-anim-drift-b: none;
+    --std-anim-record-in: none;
+    --std-anim-record-arrive: none;
     --std-anim-record-spin: none;
     --std-parallax-transition: none;
   }
@@ -671,6 +677,30 @@ a {
 
 a:hover {
   color: var(--std-link-hover);
+}
+
+@keyframes std-record-in {
+  from {
+    opacity: 0;
+    scale: 0.7;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.04;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes std-record-arrive {
+  from {
+    rotate: -1.5turn;
+  }
+  to {
+    rotate: 0turn;
+  }
 }
 
 @keyframes std-record-spin {

@@ -18,7 +18,7 @@ const CARD_ANIMATION = "[animation:var(--std-anim-card-p),var(--std-anim-card-p-
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
 
 const CAPTION =
-  "absolute inset-x-0 top-[79%] flex items-center justify-center gap-[calc(4*var(--std-u))] " +
+  "absolute inset-x-0 top-[79%] flex items-center justify-center " +
   "font-script text-[calc(20*var(--std-u))] leading-none text-std-announce-ink";
 
 export function PhotoCard({ animated }: PhotoCardProps) {
@@ -42,10 +42,16 @@ export function PhotoCard({ animated }: PhotoCardProps) {
       </div>
 
       <div aria-hidden className={animated ? `${CAPTION} ${WRITE_ON} [animation:var(--std-anim-caption)]` : CAPTION}>
-        <span>{PHOTO_CAPTION}</span>
-        <svg viewBox="0 0 20 18" className="h-[0.5em] w-[0.55em] fill-std-postmark-ink">
-          <path d="M10 17 C 3 12, 0 8, 1 4.5 C 2 1.5, 6.5 0.5, 10 4.5 C 13.5 0.5, 18 1.5, 19 4.5 C 20 8, 17 12, 10 17 Z" />
-        </svg>
+        {/* The heart hangs off the caption's right edge so the words alone sit on the centre line. */}
+        <span className="relative">
+          {PHOTO_CAPTION}
+          <svg
+            viewBox="0 0 20 18"
+            className="absolute left-full top-1/2 ml-[calc(4*var(--std-u))] h-[0.5em] w-[0.55em] -translate-y-1/2 fill-std-postmark-ink"
+          >
+            <path d="M10 17 C 3 12, 0 8, 1 4.5 C 2 1.5, 6.5 0.5, 10 4.5 C 13.5 0.5, 18 1.5, 19 4.5 C 20 8, 17 12, 10 17 Z" />
+          </svg>
+        </span>
       </div>
 
       <FloralSprig

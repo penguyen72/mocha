@@ -13,6 +13,8 @@ import {
 type RecordPlayerProps = {
   /** Complete positioning and entrance animation for the record, as a literal class string. */
   className: string;
+  /** The invitation is opening: the record spins in and settles as it lands on the card. */
+  animated: boolean;
 };
 
 const RECORD_BUTTON =
@@ -25,11 +27,14 @@ const DISC = "absolute inset-0 rounded-full [background:var(--std-record-vinyl)]
 /** The disc spins only once the song has started, and holds its angle while paused. */
 const DISC_SPIN = "[animation:var(--std-anim-record-spin)]";
 
+/** As the invitation opens, the disc arrives turning and slows to rest, as if just set down. */
+const DISC_ARRIVE = "[animation:var(--std-anim-record-arrive)]";
+
 /**
  * A vinyl record on the date card that plays the couple's song on a loop. The record is the
  * only control: the audio element has no controls of its own and follows the record's taps.
  */
-export function RecordPlayer({ className }: RecordPlayerProps) {
+export function RecordPlayer({ className, animated }: RecordPlayerProps) {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -53,14 +58,15 @@ export function RecordPlayer({ className }: RecordPlayerProps) {
       >
         <span
           aria-hidden
-          className={started ? `${DISC} ${DISC_SPIN}` : DISC}
-          style={{ animationPlayState: playing ? "running" : "paused" }}
+          className={started ? `${DISC} ${DISC_SPIN}` : animated ? `${DISC} ${DISC_ARRIVE}` : DISC}
+          // Only the spin follows the song; pausing before the first tap would freeze the arrival.
+          style={started ? { animationPlayState: playing ? "running" : "paused" } : undefined}
         >
           <span className="absolute inset-[26%] rounded-full border-[calc(0.6*var(--std-u))] border-std-accent-ink/35 bg-std-record-label" />
         </span>
         <span
           aria-hidden
-          className="absolute left-1/2 top-1/2 grid size-[30%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-std-record-button"
+          className="absolute inset-[35%] grid place-items-center rounded-full bg-std-record-button"
         >
           <svg viewBox="0 0 12 12" className="size-[46%] fill-std-date-ink">
             {playing ? (

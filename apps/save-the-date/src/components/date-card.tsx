@@ -27,8 +27,15 @@ const SPRIG =
   "pointer-events-none absolute bottom-[-6%] right-[-7%] h-[calc(22*var(--std-u))] " +
   "w-[calc(22*var(--std-u))] [transform:rotate(35deg)]";
 
-/** The song's record, in the open corner beside "Save"; arrives with the sprig. */
-const RECORD = "absolute right-[11%] top-[6%] w-[calc(38*var(--std-u))]";
+/**
+ * The song's record, in the open corner beside "Save". It keeps its own compositing layer at
+ * rest, as it has during its intro, so the play icon does not snap to new pixels on the tilted
+ * card when the intro ends.
+ */
+const RECORD = "absolute right-[11%] top-[6%] w-[calc(38*var(--std-u))] [will-change:scale]";
+
+/** Once the card has landed, the record sets down with a soft settle (its vinyl turns to rest). */
+const RECORD_IN = "[animation:var(--std-anim-record-in)]";
 
 /** Hand-drawn strokes: pathLength 1 lets one dash animation draw any path. */
 const STROKE = "[stroke-dasharray:1] [stroke-dashoffset:0]";
@@ -132,7 +139,7 @@ export function DateCard({ animated }: DateCardProps) {
         </span>
       </div>
 
-      <RecordPlayer className={animated ? `${RECORD} ${SPRIG_IN}` : RECORD} />
+      <RecordPlayer animated={animated} className={animated ? `${RECORD} ${RECORD_IN}` : RECORD} />
       <FloralSprig className={animated ? `${SPRIG} ${SPRIG_IN}` : SPRIG} />
     </div>
   );

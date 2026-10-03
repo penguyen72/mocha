@@ -23,17 +23,14 @@ import { OPENING_DURATION_MS, type InvitationPhase } from "./invitation-phase";
 /** Addressable state for the opened invitation, so a reload or shared link stays open. */
 const OPEN_HASH = "#open";
 
-const STAGE_FRAME =
-  "group relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
-  "[animation:var(--std-anim-stage-in)] @container";
-
 /**
  * The opened invitation's cards and note sit lower in the frame than the sealed envelope
- * does, so once the cards are out the whole stage glides up to centre them vertically.
+ * does, so the whole stage sits 3.5% higher to centre them vertically. It sits there while
+ * sealed too, so the envelope does not move when it opens.
  */
-const STAGE_SETTLED =
-  "[translate:0_-3.5%] [transition:translate_1200ms_cubic-bezier(0.4,0,0.2,1)_1400ms] " +
-  "motion-reduce:[transition:none]";
+const STAGE_FRAME =
+  "group relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
+  "[translate:0_-3.5%] [animation:var(--std-anim-stage-in)] @container";
 
 function subscribeToHash(onStoreChange: () => void) {
   window.addEventListener("hashchange", onStoreChange);
@@ -173,7 +170,7 @@ export function InvitationStage() {
 
   return (
     <div
-      className={revealed ? `${STAGE_FRAME} ${STAGE_SETTLED}` : STAGE_FRAME}
+      className={STAGE_FRAME}
       onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
       {!revealed || opening ? (
         <>
