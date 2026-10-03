@@ -63,7 +63,6 @@ describe("InvitationNote", () => {
     expect(url.protocol).toBe("webcal:");
     expect(url.host).toBe(window.location.host);
     expect(url.pathname).toBe("/peyton-and-liane.ics");
-    expect(apple).toHaveAccessibleDescription("Adds a subscribed calendar with the wedding date.");
   });
 
   it("provides a direct calendar-file download as a fallback", async () => {

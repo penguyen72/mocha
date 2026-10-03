@@ -38,8 +38,8 @@ token contract.
 
 The invitation's **Add to calendar** button reveals Google Calendar, Apple Calendar, and a
 calendar-file download. Google opens a prefilled event in a new tab for the guest to save.
-Apple opens a `webcal:` subscription to the `.ics` file on the current host; the chooser explains
-that this adds a subscribed calendar. A device without a calendar protocol handler can use the
+Apple opens a `webcal:` subscription to the `.ics` file on the current host.
+A device without a calendar protocol handler can use the
 download option to import the file into Apple Calendar on Mac, Outlook, or another calendar app.
 
 All options save October 16, 2027 as an all-day event in Trenton, Georgia, with a note that the

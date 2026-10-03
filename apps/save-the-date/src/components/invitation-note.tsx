@@ -44,7 +44,6 @@ export function InvitationNote({ animated, onReplay }: InvitationNoteProps) {
   const calendarRef = useRef<HTMLDivElement>(null);
   const calendarButtonRef = useRef<HTMLButtonElement>(null);
   const calendarId = useId();
-  const appleDescriptionId = useId();
   const calendarOpen = appleHref !== null;
 
   useEffect(() => {
@@ -117,12 +116,9 @@ export function InvitationNote({ animated, onReplay }: InvitationNoteProps) {
                 >
                   Google Calendar
                 </a>
-                <a href={appleHref} aria-describedby={appleDescriptionId} className={CALENDAR_OPTION}>
+                <a href={appleHref} className={CALENDAR_OPTION}>
                   Apple Calendar
                 </a>
-                <p id={appleDescriptionId} className="m-0 px-3 pb-2 font-sans text-xs leading-relaxed text-std-note-ink">
-                  Adds a subscribed calendar with the wedding date.
-                </p>
                 <a href={CALENDAR_HREF} download="peyton-and-liane.ics" className={CALENDAR_OPTION}>
                   Download calendar file
                 </a>
