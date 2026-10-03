@@ -48,7 +48,7 @@ sweeps across slowly. It is used only on the names.
    nod to the Lookout Mountain ridges around Trenton.
 7. **The photo develops** from a pale blank into full colour, with a handwritten caption on the
    Polaroid's strip.
-8. **"Formal invitation to follow"** fades in last, then a small `N days to go` countdown and two
+8. **"Formal invitation to follow"** fades in last, then a live `DAYS : HOURS : MINUTES : SECONDS` countdown under "The countdown is on!" and two
    quiet links: **Add to calendar** and **Open again**.
 
 Throughout, a dozen petals drift down slowly on staggered loops — some already mid-fall when
@@ -59,8 +59,10 @@ device-orientation permission prompt).
 
 - **Add to calendar** links a static all-day `.ics` file in `public/` (no server code).
 - **Open again** reseals the envelope and returns focus to it.
-- **Countdown** is computed on the client only (the opened invitation is never in the
-  prerendered HTML), hides itself after the day, and says "Today's the day!" on the day.
+- **Countdown** ticks every second to midnight Eastern on 16 October 2027 (to be moved to the
+  ceremony time once known). It is computed on the client only, says "Today's the day!" on the
+  day, and disappears afterwards. The ticking digits are hidden from assistive technology, which
+  gets one plain sentence instead of a live region that would interrupt every second.
 - **Link preview**: a designed 1200×630 `opengraph-image.png` / `twitter-image.png` with alt text,
   rendered once from an HTML mock-up with the real fonts and assets and committed as static files.
 

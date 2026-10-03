@@ -13,12 +13,12 @@ type InvitationNoteProps = {
 };
 
 const NOTE =
-  "absolute left-0 right-0 top-[78%] z-[6] flex flex-col items-center " +
-  "gap-[calc(10*var(--std-u))]";
+  "absolute left-0 right-0 top-[76%] z-[6] flex flex-col items-center " +
+  "gap-[calc(12*var(--std-u))]";
 
 const LINE = "flex items-center justify-center gap-[calc(12*var(--std-u))]";
 
-const EXTRAS = "flex flex-col items-center gap-[calc(4*var(--std-u))]";
+const EXTRAS = "flex flex-col items-center gap-[calc(8*var(--std-u))]";
 
 const RULE = "h-px w-[calc(28*var(--std-u))] bg-std-liner-rule";
 
@@ -41,7 +41,7 @@ export function InvitationNote({ animated, onReplay }: InvitationNoteProps) {
       </div>
 
       <div className={animated ? `${EXTRAS} [animation:var(--std-anim-extras-in)]` : EXTRAS}>
-        <Countdown className="m-0 font-sans text-[calc(11*var(--std-u))] font-medium uppercase tracking-[0.2em] text-std-postmark-ink" />
+        <Countdown />
         <div className="flex items-center gap-[calc(6*var(--std-u))]">
           <a href={CALENDAR_HREF} className={ACTION}>
             {CALENDAR_LABEL}

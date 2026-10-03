@@ -48,8 +48,14 @@ export const PHOTO_CAPTION = "just us";
 
 export const NOTE_TEXT = "Formal invitation to follow";
 
-/** The wedding day, as a local calendar date. */
-export const WEDDING_DATE = "2027-10-16";
+/**
+ * The moment the countdown runs to: midnight in Trenton, Georgia (Eastern Daylight Time)
+ * as the wedding day begins. Set this to the ceremony time once it is known.
+ */
+export const WEDDING_START = "2027-10-16T00:00:00-04:00";
+
+export const COUNTDOWN_EYEBROW = "The countdown is on!";
+export const COUNTDOWN_TODAY = "Today’s the day!";
 
 export const CALENDAR_LABEL = "Add to calendar";
 export const CALENDAR_HREF = "/peyton-and-liane.ics";

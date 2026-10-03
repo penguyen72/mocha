@@ -1,27 +1,25 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { Countdown, countdownLabel, daysBetween } from "./countdown";
+import { Countdown, splitCountdown } from "./countdown";
 
-describe("daysBetween", () => {
-  it("counts whole calendar days between two local dates", () => {
-    expect(daysBetween("2026-10-02", "2027-10-16")).toBe(379);
-    expect(daysBetween("2027-10-15", "2027-10-16")).toBe(1);
-    expect(daysBetween("2027-10-16", "2027-10-16")).toBe(0);
-    expect(daysBetween("2027-10-17", "2027-10-16")).toBe(-1);
+const SECOND = 1000;
+const MINUTE = 60 * SECOND;
+const HOUR = 60 * MINUTE;
+const DAY = 24 * HOUR;
+
+describe("splitCountdown", () => {
+  it("splits the time left into days, hours, minutes and seconds", () => {
+    expect(splitCountdown(378 * DAY + 2 * HOUR + 30 * MINUTE + 7 * SECOND)).toEqual({
+      days: 378,
+      hours: 2,
+      minutes: 30,
+      seconds: 7,
+    });
   });
 
-  it("is not thrown off by a daylight-saving change in between", () => {
-    expect(daysBetween("2027-03-13", "2027-03-15")).toBe(2);
-  });
-});
-
-describe("countdownLabel", () => {
-  it("counts down in days, then celebrates on the day, then says nothing", () => {
-    expect(countdownLabel(379)).toBe("379 days to go");
-    expect(countdownLabel(1)).toBe("1 day to go");
-    expect(countdownLabel(0)).toBe("Today’s the day!");
-    expect(countdownLabel(-1)).toBeNull();
+  it("rounds partial seconds down", () => {
+    expect(splitCountdown(59.9 * SECOND)).toEqual({ days: 0, hours: 0, minutes: 0, seconds: 59 });
   });
 });
 
@@ -30,17 +28,35 @@ describe("Countdown", () => {
     vi.useRealTimers();
   });
 
-  it("shows the days left from today's local date", () => {
-    vi.useFakeTimers({ toFake: ["Date"] });
-    vi.setSystemTime(new Date(2026, 9, 2, 21, 30));
-    render(<Countdown className="" />);
-    expect(screen.getByText("379 days to go")).toBeInTheDocument();
+  it("counts down to midnight Eastern on the wedding day, and ticks every second", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-10-02T21:30:00-04:00"));
+    render(<Countdown />);
+
+    expect(screen.getByText("378")).toBeInTheDocument();
+    expect(screen.getByText("02")).toBeInTheDocument();
+    expect(screen.getByText("30")).toBeInTheDocument();
+    expect(screen.getByText("00")).toBeInTheDocument();
+    expect(screen.getByText(/378 days, 2 hours, 30 minutes and 0 seconds to go/)).toBeInTheDocument();
+
+    act(() => {
+      vi.advanceTimersByTime(SECOND);
+    });
+    expect(screen.getByText("29")).toBeInTheDocument();
+    expect(screen.getByText("59")).toBeInTheDocument();
   });
 
-  it("renders nothing once the wedding has passed", () => {
-    vi.useFakeTimers({ toFake: ["Date"] });
-    vi.setSystemTime(new Date(2027, 9, 18, 9, 0));
-    const { container } = render(<Countdown className="" />);
+  it("celebrates on the day itself", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2027-10-16T15:00:00-04:00"));
+    render(<Countdown />);
+    expect(screen.getByText("Today’s the day!")).toBeInTheDocument();
+  });
+
+  it("renders nothing once the wedding day has passed", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2027-10-18T09:00:00-04:00"));
+    const { container } = render(<Countdown />);
     expect(container).toBeEmptyDOMElement();
   });
 });

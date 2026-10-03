@@ -29,8 +29,9 @@ choreography a static number, so the whole sequence is CSS `@keyframes` in `src/
 rather than JavaScript — no measurement, no resize listener, no animation library in this app.
 
 `src/components/invitation-stage.tsx` and `src/components/countdown.tsx` are the only client
-components. The countdown reads the visitor's local date on the client only, so it never appears in
-the prerendered HTML. `--std-*` is this app's local palette and is **not** part of the shared `@mocha/ui`
+components. The countdown ticks once a second toward midnight Eastern on the wedding day
+(`WEDDING_START` in `src/components/invitation-content.ts` — change it to the ceremony time once
+known). It reads the visitor's clock on the client only, so it never appears in the prerendered HTML. `--std-*` is this app's local palette and is **not** part of the shared `@mocha/ui`
 token contract.
 
 The design this was ported from is recorded in

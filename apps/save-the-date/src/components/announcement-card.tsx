@@ -41,7 +41,7 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
       <div className="absolute inset-[calc(5*var(--std-u))] [background:var(--std-lace-pattern)]" />
       <div className="absolute inset-[calc(14*var(--std-u))] border border-std-lace-line bg-std-blush-card" />
 
-      <div aria-hidden className="absolute inset-x-[calc(16*var(--std-u))] top-[8%] flex flex-col items-center">
+      <div aria-hidden className="absolute inset-x-[calc(16*var(--std-u))] top-[13%] flex flex-col items-center">
         <svg viewBox="0 0 60 16" className="w-[calc(50*var(--std-u))] overflow-visible">
           <path d="M8 10 Q30 3 52 10" fill="none" strokeWidth="0.8" className="stroke-std-sage-line" />
           <g className="fill-std-sage-line">
@@ -57,8 +57,8 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
         <span
           className={
             animated
-              ? `mt-[calc(4*var(--std-u))] ${NAME} ${WRITE_ON} [animation:var(--std-anim-write-1),var(--std-anim-foil)]`
-              : `mt-[calc(4*var(--std-u))] ${NAME} [animation:var(--std-anim-foil)]`
+              ? `mt-[calc(9*var(--std-u)-0.4em)] ${NAME} ${WRITE_ON} [animation:var(--std-anim-write-1),var(--std-anim-foil)]`
+              : `mt-[calc(9*var(--std-u)-0.4em)] ${NAME} [animation:var(--std-anim-foil)]`
           }
         >
           {ANNOUNCEMENT_LINE_1}
@@ -85,8 +85,8 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
         <span
           className={
             animated
-              ? `mt-[calc(8*var(--std-u))] ${ANNOUNCEMENT} ${WRITE_ON} [animation:var(--std-anim-write-4)]`
-              : `mt-[calc(8*var(--std-u))] ${ANNOUNCEMENT}`
+              ? `mt-[calc(9*var(--std-u))] ${ANNOUNCEMENT} ${WRITE_ON} [animation:var(--std-anim-write-4)]`
+              : `mt-[calc(9*var(--std-u))] ${ANNOUNCEMENT}`
           }
         >
           {ANNOUNCEMENT_LINE_4}

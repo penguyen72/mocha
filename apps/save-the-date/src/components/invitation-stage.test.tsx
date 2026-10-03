@@ -11,6 +11,10 @@ import {
 import { OPENING_DURATION_MS } from "./invitation-phase";
 import { InvitationStage } from "./invitation-stage";
 
+// The live countdown runs its own one-second clock; these tests are about the opening
+// choreography's timer, so the countdown is stubbed out (it has its own tests).
+vi.mock("./countdown", () => ({ Countdown: () => null }));
+
 const sealCount = (container: HTMLElement) =>
   Array.from(container.querySelectorAll("img")).filter((img) =>
     decodeURIComponent(img.getAttribute("src") ?? "").includes("/images/wax-seal.png"),
