@@ -7,10 +7,14 @@ import {
   INVITATION_HEADING,
   NOTE_TEXT,
   REPLAY_LABEL,
-  SEAL_MONOGRAM,
 } from "./invitation-content";
 import { OPENING_DURATION_MS } from "./invitation-phase";
 import { InvitationStage } from "./invitation-stage";
+
+const sealCount = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll("img")).filter((img) =>
+    decodeURIComponent(img.getAttribute("src") ?? "").includes("/images/wax-seal.png"),
+  ).length;
 
 function setReducedMotion(reduce: boolean) {
   window.matchMedia = ((query: string) => ({
@@ -44,7 +48,7 @@ describe("InvitationStage", () => {
 
   it("reveals the invitation when the envelope is opened, and settles after the choreography", () => {
     vi.useFakeTimers();
-    render(<InvitationStage />);
+    const { container } = render(<InvitationStage />);
 
     fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
 
@@ -53,14 +57,14 @@ describe("InvitationStage", () => {
     expect(window.location.hash).toBe("#open");
 
     // Still mid-choreography: the cracked seal is on its way out but has not been dropped.
-    expect(screen.getAllByText(SEAL_MONOGRAM).length).toBeGreaterThan(0);
+    expect(sealCount(container)).toBe(2);
 
     act(() => {
       vi.advanceTimersByTime(OPENING_DURATION_MS);
     });
 
     // Only reaching the `open` phase unmounts the seal layer.
-    expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
+    expect(sealCount(container)).toBe(0);
     expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 

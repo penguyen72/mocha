@@ -54,7 +54,6 @@
   --std-env-ink: #a0646e;
   --std-liner-rule: #b5c4a5;
   --std-prompt-ink: #8c6a70;
-  --std-seal-ink: #8a3f4c;
 
   /* Cards */
   --std-blush-card: #fbe3df;
@@ -62,9 +61,6 @@
   --std-lace-line: rgba(255, 255, 255, 0.95);
   --std-date-card: #f6cfcc;
   --std-date-ink: #3d2c2f;
-
-  /* Ribbon */
-  --std-ribbon-loop: #f0bcc0;
 
   /* Note */
   --std-note-ink: #3d2c2f;
@@ -176,8 +172,6 @@
     radial-gradient(circle at 35% 73%, #f2c0c4 0 21%, transparent 22%),
     radial-gradient(circle at 25% 42%, #f8d4d6 0 21%, transparent 22%);
   --std-petal-fill: radial-gradient(ellipse at 32% 30%, #fdeeee, #f2c4c8 68%, #e6aab0);
-  --std-ribbon-fill: linear-gradient(90deg, #efb9bf, #fbe1e2 45%, #f0bfc4);
-  --std-ribbon-knot-fill: linear-gradient(90deg, #eab0b7, #f8d6d9, #ecb5bb);
 
   /* Shadows */
   --std-env-back-shadow:
@@ -192,12 +186,9 @@
   --std-photo-shadow: 0 2px 6px rgba(150, 95, 100, 0.2);
   --std-date-shadow: drop-shadow(0 1px 3px rgba(150, 95, 100, 0.2));
   --std-petal-shadow: 0 1px 1.5px rgba(150, 95, 100, 0.16);
-  --std-ribbon-shadow: 0 1px 2px rgba(150, 95, 100, 0.18);
-  --std-seal-monogram-shadow:
-    0 1px 0 rgba(255, 220, 225, 0.45), 0 -1px 0 rgba(90, 20, 35, 0.25);
 
   /* ---------------------------------------------------------------------------
-     The opening choreography. The envelope, flap, card and ribbon timings are the
+     The opening choreography. The envelope, flap and card timings are the
      design values from docs/superpowers/reference/save-the-date-dc-source.md
      multiplied by the prototype's default animSpeed of 1.6; the delight pass
      (docs/superpowers/specs/2026-10-02-save-the-date-delight-design.md) adds the
@@ -230,8 +221,6 @@
   --std-anim-card-d-z: std-card-d-z 2288ms linear 1248ms both;
   --std-anim-card-p: std-card-p 2384ms linear 1248ms both;
   --std-anim-card-p-z: std-card-p-z 2384ms linear 1248ms both;
-  --std-anim-ribbon: std-ribbon 2192ms linear 1248ms both;
-  --std-anim-ribbon-z: std-ribbon-z 2192ms linear 1248ms both;
   --std-anim-petal-0: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1300ms both;
   --std-anim-petal-1: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1350ms both;
   --std-anim-petal-2: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1400ms both;
@@ -239,6 +228,10 @@
   --std-anim-petal-4: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1500ms both;
   --std-anim-petal-5: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1550ms both;
   --std-anim-petal-6: std-petal-burst 1100ms cubic-bezier(0.2, 0.8, 0.3, 1) 1600ms both;
+
+  /* The cards' floral sprigs stay hidden until every card has cleared the envelope
+     (each card's z-index step lands at ~2272ms), so none peeks over the rim. */
+  --std-anim-sprig-in: std-stage-in 300ms ease-out 2250ms both;
 
   /* The four facts, one beat at a time: names, date, city, invitation to follow */
   --std-anim-write-1: std-write 650ms ease-out 2300ms both;
@@ -293,8 +286,6 @@
     --std-anim-card-d-z: none;
     --std-anim-card-p: none;
     --std-anim-card-p-z: none;
-    --std-anim-ribbon: none;
-    --std-anim-ribbon-z: none;
     --std-anim-petal-0: none;
     --std-anim-petal-1: none;
     --std-anim-petal-2: none;
@@ -302,6 +293,7 @@
     --std-anim-petal-4: none;
     --std-anim-petal-5: none;
     --std-anim-petal-6: none;
+    --std-anim-sprig-in: none;
     --std-anim-write-1: none;
     --std-anim-write-2: none;
     --std-anim-write-3: none;
@@ -338,13 +330,11 @@
   --color-std-env-ink: var(--std-env-ink);
   --color-std-liner-rule: var(--std-liner-rule);
   --color-std-prompt-ink: var(--std-prompt-ink);
-  --color-std-seal-ink: var(--std-seal-ink);
   --color-std-blush-card: var(--std-blush-card);
   --color-std-announce-ink: var(--std-announce-ink);
   --color-std-lace-line: var(--std-lace-line);
   --color-std-date-card: var(--std-date-card);
   --color-std-date-ink: var(--std-date-ink);
-  --color-std-ribbon-loop: var(--std-ribbon-loop);
   --color-std-note-ink: var(--std-note-ink);
   --color-std-accent-ink: var(--std-accent-ink);
   --color-std-postmark-ink: var(--std-postmark-ink);
@@ -478,9 +468,11 @@
   }
 }
 
+/* Each card starts tucked inside the envelope, high enough that neither it nor its
+   floral sprigs hang below the envelope's bottom edge before it rises out of the top. */
 @keyframes std-card-a {
   0% {
-    transform: translate(calc(59.5 * var(--std-u)), calc(191.4425 * var(--std-u))) rotate(0deg)
+    transform: translate(calc(59.5 * var(--std-u)), calc(161 * var(--std-u))) rotate(0deg)
       scale(0.82);
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -507,7 +499,7 @@
 
 @keyframes std-card-d {
   0% {
-    transform: translate(calc(-85.5 * var(--std-u)), calc(78.4425 * var(--std-u))) rotate(0deg)
+    transform: translate(calc(-85.5 * var(--std-u)), calc(64 * var(--std-u))) rotate(0deg)
       scale(0.82);
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -539,7 +531,7 @@
 
 @keyframes std-card-p {
   0% {
-    transform: translate(calc(77.5 * var(--std-u)), calc(6.4425 * var(--std-u))) rotate(0deg)
+    transform: translate(calc(77.5 * var(--std-u)), calc(-22 * var(--std-u))) rotate(0deg)
       scale(0.82);
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -566,39 +558,6 @@
   43.053%,
   100% {
     z-index: 7;
-  }
-}
-
-@keyframes std-ribbon {
-  0% {
-    transform: translateY(calc(236.2625 * var(--std-u))) scale(0.91);
-    opacity: 1;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  46.715% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  51.095% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-    animation-timing-function: ease-in;
-  }
-  74.453%,
-  100% {
-    transform: translateY(calc(18 * var(--std-u))) scale(1);
-    opacity: 0;
-  }
-}
-
-@keyframes std-ribbon-z {
-  0%,
-  46.715% {
-    z-index: 3;
-  }
-  46.815%,
-  100% {
-    z-index: 8;
   }
 }
 

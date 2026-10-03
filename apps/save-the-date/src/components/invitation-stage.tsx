@@ -15,7 +15,6 @@ import { Envelope } from "./envelope";
 import { InvitationNote } from "./invitation-note";
 import { PetalScatter } from "./petal-scatter";
 import { PhotoCard } from "./photo-card";
-import { Ribbon } from "./ribbon";
 
 import { INVITATION_HEADING } from "./invitation-content";
 import { OPENING_DURATION_MS, type InvitationPhase } from "./invitation-phase";
@@ -101,8 +100,8 @@ export function InvitationStage() {
   );
 
   // Turning reduced motion on mid-choreography stops every animation in CSS, but the
-  // ribbon has keyframes and no resting state, so it would hang around until the timer
-  // fired. Settle immediately instead, as the design prototype does.
+  // cracked seal halves have keyframes and no resting state, so they would hang around
+  // until the timer fired. Settle immediately instead, as the design prototype does.
   useEffect(() => {
     if (typeof window.matchMedia !== "function") return;
 
@@ -173,7 +172,6 @@ export function InvitationStage() {
             {INVITATION_HEADING}
           </h1>
           <PetalScatter animated={opening} />
-          {opening && <Ribbon />}
           <AnnouncementCard animated={opening} />
           <DateCard animated={opening} />
           <PhotoCard animated={opening} />

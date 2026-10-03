@@ -1,4 +1,4 @@
-import { PARALLAX_NEAR } from "./card-motion";
+import { PARALLAX_NEAR, SPRIG_IN } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import {
   DATE_CARD_DATE,
@@ -21,6 +21,10 @@ const CARD =
 const CARD_ANIMATION = "[animation:var(--std-anim-card-d),var(--std-anim-card-d-z)]";
 
 const RULE = "absolute left-[3%] right-[3%] border-t-[1.5px] border-dotted border-std-lace-line";
+
+const SPRIG =
+  "pointer-events-none absolute bottom-[-6%] right-[-7%] h-[calc(22*var(--std-u))] " +
+  "w-[calc(22*var(--std-u))] [transform:rotate(35deg)]";
 
 /** Hand-drawn strokes: pathLength 1 lets one dash animation draw any path. */
 const STROKE = "[stroke-dasharray:1] [stroke-dashoffset:0]";
@@ -49,7 +53,7 @@ export function DateCard({ animated }: DateCardProps) {
         <span className="mt-[7%] text-center font-sans text-[calc(9.5*var(--std-u))] font-medium uppercase leading-none tracking-[0.22em]">
           {DATE_CARD_MONTH}
         </span>
-        <span className="mt-[5%] grid grid-cols-7 text-center font-sans text-[calc(10.5*var(--std-u))] font-light leading-none">
+        <span className="mt-[9%] grid grid-cols-7 text-center font-sans text-[calc(10.5*var(--std-u))] font-light leading-none">
           {DATE_CARD_WEEK.map((day) =>
             day === DATE_CARD_DAY ? (
               <span key={day} className="relative font-semibold text-std-accent-ink">
@@ -81,8 +85,8 @@ export function DateCard({ animated }: DateCardProps) {
         <span
           className={
             animated
-              ? "relative mt-[11%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em] [animation:var(--std-anim-city)]"
-              : "relative mt-[9%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]"
+              ? "relative mt-[7%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em] [animation:var(--std-anim-city)]"
+              : "relative mt-[7%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]"
           }
         >
           {/* A faint sketch of the ridges around Trenton, drawn beneath the city. */}
@@ -121,9 +125,7 @@ export function DateCard({ animated }: DateCardProps) {
         </span>
       </div>
 
-      <FloralSprig
-        className="pointer-events-none absolute bottom-[-6%] right-[-7%] h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))] [transform:rotate(35deg)]"
-      />
+      <FloralSprig className={animated ? `${SPRIG} ${SPRIG_IN}` : SPRIG} />
     </div>
   );
 }

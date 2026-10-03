@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { PARALLAX_MID, WRITE_ON } from "./card-motion";
+import { PARALLAX_MID, SPRIG_IN, WRITE_ON } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import { PHOTO_ALT, PHOTO_CAPTION } from "./invitation-content";
 
@@ -48,7 +48,13 @@ export function PhotoCard({ animated }: PhotoCardProps) {
         </svg>
       </div>
 
-      <FloralSprig className={`${SPRIG} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`} />
+      <FloralSprig
+        className={
+          animated
+            ? `${SPRIG} ${SPRIG_IN} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
+            : `${SPRIG} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
+        }
+      />
     </div>
   );
 }

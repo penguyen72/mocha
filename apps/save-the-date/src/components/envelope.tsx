@@ -8,7 +8,6 @@ import {
   ENVELOPE_PROMPT,
   POSTMARK_CITY,
   POSTMARK_DATE,
-  SEAL_MONOGRAM,
 } from "./invitation-content";
 import type { InvitationPhase } from "./invitation-phase";
 
@@ -59,11 +58,13 @@ const SPARKLES = [
   "h-[calc(6*var(--std-u))] w-[calc(6*var(--std-u))] bg-std-sparkle-white [--std-sx:calc(-28*var(--std-u))] [--std-sy:calc(-28*var(--std-u))]",
 ] as const;
 
-/** The wax seal itself: the photographed wax, quieted to the palette, and the monogram. */
+/**
+ * The wax seal itself, softened to the palette. Its pressed laurel and interlocking rings
+ * are the whole design; no lettering is printed over them.
+ */
 function SealFace() {
   return (
-    <>
-      <Image
+    <Image
         src="/images/wax-seal.png"
         alt=""
         fill
@@ -71,13 +72,6 @@ function SealFace() {
         sizes="(max-width: 560px) 22vw, 123px"
         className="object-contain [filter:var(--std-seal-filter)]"
       />
-      <span
-        aria-hidden
-        className="absolute inset-0 flex items-center justify-center font-script text-[calc(20*var(--std-u))] leading-none text-std-seal-ink opacity-[0.82] [text-shadow:var(--std-seal-monogram-shadow)]"
-      >
-        {SEAL_MONOGRAM}
-      </span>
-    </>
   );
 }
 

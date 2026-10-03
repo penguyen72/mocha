@@ -8,20 +8,21 @@ import {
   ENVELOPE_PROMPT,
   POSTMARK_CITY,
   POSTMARK_DATE,
-  SEAL_MONOGRAM,
 } from "./invitation-content";
 
-const sealSrc = (container: HTMLElement) =>
+const sealImages = (container: HTMLElement) =>
   Array.from(container.querySelectorAll("img"))
     .map((img) => decodeURIComponent(img.getAttribute("src") ?? ""))
-    .find((src) => src.includes("/images/wax-seal.png"));
+    .filter((src) => src.includes("/images/wax-seal.png"));
+
+const sealSrc = (container: HTMLElement) => sealImages(container)[0];
 
 describe("Envelope", () => {
-  it("renders the lettering, the prompt, the monogram and the open button when closed", () => {
-    render(<Envelope phase="closed" onOpen={vi.fn()} />);
+  it("renders the lettering, the prompt, one whole seal and the open button when closed", () => {
+    const { container } = render(<Envelope phase="closed" onOpen={vi.fn()} />);
     expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
     expect(screen.getByText(ENVELOPE_PROMPT)).toBeInTheDocument();
-    expect(screen.getByText(SEAL_MONOGRAM)).toBeInTheDocument();
+    expect(sealImages(container)).toHaveLength(1);
     expect(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL })).toBeInTheDocument();
   });
 
@@ -40,15 +41,15 @@ describe("Envelope", () => {
   });
 
   it("keeps the cracking seal visible but removes the button while opening", () => {
-    render(<Envelope phase="opening" onOpen={vi.fn()} />);
-    // The seal cracks into two halves, each carrying its half of the monogram.
-    expect(screen.getAllByText(SEAL_MONOGRAM)).toHaveLength(2);
+    const { container } = render(<Envelope phase="opening" onOpen={vi.fn()} />);
+    // The seal cracks into two halves, each a clipped copy of the whole seal.
+    expect(sealImages(container)).toHaveLength(2);
     expect(screen.queryByRole("button", { name: ENVELOPE_BUTTON_LABEL })).not.toBeInTheDocument();
   });
 
   it("drops the seal layer entirely once open", () => {
-    render(<Envelope phase="open" onOpen={vi.fn()} />);
-    expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
+    const { container } = render(<Envelope phase="open" onOpen={vi.fn()} />);
+    expect(sealImages(container)).toHaveLength(0);
     expect(screen.queryByText(ENVELOPE_PROMPT)).not.toBeInTheDocument();
     expect(screen.queryByText(POSTMARK_CITY)).not.toBeInTheDocument();
     expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
