@@ -1,7 +1,8 @@
 import Image from "next/image";
 
+import { PARALLAX_MID, SPRIG_IN, WRITE_ON } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
-import { PHOTO_ALT } from "./invitation-content";
+import { PHOTO_ALT, PHOTO_CAPTION } from "./invitation-content";
 
 type PhotoCardProps = {
   animated: boolean;
@@ -10,11 +11,15 @@ type PhotoCardProps = {
 const CARD =
   "absolute left-[12.31%] top-[42.49%] z-[7] h-[29.78%] w-[41.32%] " +
   "[background:var(--std-photo-mat-fill)] [box-shadow:var(--std-photo-shadow)] " +
-  "[transform:rotate(-7deg)]";
+  `[transform:rotate(-7deg)] ${PARALLAX_MID}`;
 
 const CARD_ANIMATION = "[animation:var(--std-anim-card-p),var(--std-anim-card-p-z)]";
 
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
+
+const CAPTION =
+  "absolute inset-x-0 top-[79%] flex items-center justify-center gap-[calc(4*var(--std-u))] " +
+  "font-script text-[calc(20*var(--std-u))] leading-none text-std-announce-ink";
 
 export function PhotoCard({ animated }: PhotoCardProps) {
   return (
@@ -25,10 +30,31 @@ export function PhotoCard({ animated }: PhotoCardProps) {
           alt={PHOTO_ALT}
           fill
           sizes="(max-width: 560px) 37vw, 207px"
-          className="object-cover"
+          className={animated ? "object-cover [animation:var(--std-anim-develop-img)]" : "object-cover"}
         />
+        {/* The Polaroid develops: a pale blank that clears to reveal the photograph. */}
+        {animated && (
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-std-photo-well opacity-0 [animation:var(--std-anim-develop)]"
+          />
+        )}
       </div>
-      <FloralSprig className={`${SPRIG} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`} />
+
+      <div aria-hidden className={animated ? `${CAPTION} ${WRITE_ON} [animation:var(--std-anim-caption)]` : CAPTION}>
+        <span>{PHOTO_CAPTION}</span>
+        <svg viewBox="0 0 20 18" className="h-[0.5em] w-[0.55em] fill-std-postmark-ink">
+          <path d="M10 17 C 3 12, 0 8, 1 4.5 C 2 1.5, 6.5 0.5, 10 4.5 C 13.5 0.5, 18 1.5, 19 4.5 C 20 8, 17 12, 10 17 Z" />
+        </svg>
+      </div>
+
+      <FloralSprig
+        className={
+          animated
+            ? `${SPRIG} ${SPRIG_IN} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
+            : `${SPRIG} bottom-[-5%] left-[-7%] [transform:rotate(200deg)]`
+        }
+      />
     </div>
   );
 }

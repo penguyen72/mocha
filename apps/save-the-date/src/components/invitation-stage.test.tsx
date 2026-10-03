@@ -4,13 +4,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   ENVELOPE_BUTTON_LABEL,
+  MAIL_EYEBROW,
   INVITATION_HEADING,
-  NOTE_CTA_HREF,
-  NOTE_CTA_LABEL,
-  SEAL_MONOGRAM,
+  NOTE_TEXT,
+  REPLAY_LABEL,
 } from "./invitation-content";
 import { OPENING_DURATION_MS } from "./invitation-phase";
 import { InvitationStage } from "./invitation-stage";
+
+// The live countdown runs its own one-second clock; these tests are about the opening
+// choreography's timer, so the countdown is stubbed out (it has its own tests).
+vi.mock("./countdown", () => ({ Countdown: () => null }));
+
+const sealCount = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll("img")).filter((img) =>
+    decodeURIComponent(img.getAttribute("src") ?? "").includes("/images/wax-seal.png"),
+  ).length;
 
 function setReducedMotion(reduce: boolean) {
   window.matchMedia = ((query: string) => ({
@@ -38,13 +47,14 @@ describe("InvitationStage", () => {
   it("starts closed: the envelope control is offered and the invitation is not yet shown", () => {
     render(<InvitationStage />);
     expect(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL })).toBeInTheDocument();
+    expect(screen.getByText(MAIL_EYEBROW)).toBeInTheDocument();
     expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: NOTE_CTA_LABEL })).not.toBeInTheDocument();
+    expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
 
   it("reveals the invitation when the envelope is opened, and settles after the choreography", () => {
     vi.useFakeTimers();
-    render(<InvitationStage />);
+    const { container } = render(<InvitationStage />);
 
     fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
 
@@ -52,19 +62,17 @@ describe("InvitationStage", () => {
     expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
     expect(window.location.hash).toBe("#open");
 
-    // Still mid-choreography: the seal is on its way out but has not been dropped.
-    expect(screen.getByText(SEAL_MONOGRAM)).toBeInTheDocument();
+    // Still mid-choreography: the cracked seal is on its way out but has not been dropped.
+    expect(sealCount(container)).toBe(2);
 
     act(() => {
       vi.advanceTimersByTime(OPENING_DURATION_MS);
     });
 
-    // Only reaching the `open` phase unmounts the seal layer.
-    expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toHaveAttribute(
-      "href",
-      NOTE_CTA_HREF,
-    );
+    // Only reaching the `open` phase unmounts the seal layer and the "you have mail" header.
+    expect(sealCount(container)).toBe(0);
+    expect(screen.queryByText(MAIL_EYEBROW)).not.toBeInTheDocument();
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
   it("moves focus to the invitation heading once the choreography completes", () => {
@@ -107,7 +115,19 @@ describe("InvitationStage", () => {
     // No pending timer means the stage went straight to the open phase.
     expect(vi.getTimerCount()).toBe(0);
     expect(screen.getByRole("heading", { level: 1, name: INVITATION_HEADING })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toBeInTheDocument();
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
+  });
+
+  it("reseals the envelope and returns focus to it when asked to open again", () => {
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+
+    const envelope = screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL });
+    expect(document.activeElement).toBe(envelope);
+    expect(window.location.hash).toBe("");
+    expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
 
   it("opens straight away when the page is entered at #open", () => {

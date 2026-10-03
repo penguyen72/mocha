@@ -1,7 +1,8 @@
 # Save the Date
 
 Save the Date is Peyton and Liane's save-the-date card: a sealed envelope that opens into the
-announcement, and a page for guests to send their mailing address. See the
+announcement: the couple, the date, the city, and a note that the formal invitation will follow.
+See the
 [repository guide](../../README.md) for workspace commands, verification, and deployment.
 
 Run this app with pnpm:
@@ -17,8 +18,8 @@ It runs at http://localhost:3002.
 | Route | What it shows |
 | --- | --- |
 | `/` | The sealed envelope. Opening it plays the choreography and settles on the invitation. |
-| `/#open` | The opened invitation, with no animation — where both back controls return to. |
-| `/share-your-address` | The address form. |
+| `/#open` | The opened invitation, with no animation — so a reload or shared link stays open. |
+| `/peyton-and-liane.ics` | A static all-day calendar event, behind the invitation's "Add to calendar" link. |
 
 ## How it is built
 
@@ -27,8 +28,10 @@ stage frame, so `--std-u` (`0.2198cqw`) is one design pixel. That makes every va
 choreography a static number, so the whole sequence is CSS `@keyframes` in `src/app/globals.css`
 rather than JavaScript — no measurement, no resize listener, no animation library in this app.
 
-`src/components/invitation-stage.tsx` and `src/components/address-form.tsx` are the only client
-components. `--std-*` is this app's local palette and is **not** part of the shared `@mocha/ui`
+`src/components/invitation-stage.tsx` and `src/components/countdown.tsx` are the only client
+components. The countdown ticks once a second toward midnight Eastern on the wedding day
+(`WEDDING_START` in `src/components/invitation-content.ts` — change it to the ceremony time once
+known). It reads the visitor's clock on the client only, so it never appears in the prerendered HTML. `--std-*` is this app's local palette and is **not** part of the shared `@mocha/ui`
 token contract.
 
 The design this was ported from is recorded in
@@ -36,41 +39,18 @@ The design this was ported from is recorded in
 with the approved design in
 [`docs/superpowers/specs/2026-09-23-save-the-date-design.md`](../../docs/superpowers/specs/2026-09-23-save-the-date-design.md).
 
-## Address form submission
+The palette is built from the couple's Pantone swatches (listed at the top of `src/app/globals.css`):
+near-whites and dusty pinks, with deeper dusty-rose inks for text and a hint of pastel sage. There
+is deliberately no gold. The opening's beats, and the reasoning behind them, are in
+[`docs/superpowers/specs/2026-10-02-save-the-date-delight-design.md`](../../docs/superpowers/specs/2026-10-02-save-the-date-delight-design.md).
 
-The address form posts to a [Formspree](https://formspree.io) form from the browser. There is no
-server code and no secret: the endpoint is public by necessity, since the browser posts to it.
+## Link preview
 
-Set `NEXT_PUBLIC_FORMSPREE_ENDPOINT` to `https://formspree.io/f/<form id>`:
-
-- **Vercel** — add it to the Save the Date project for both Production and Preview, then
-  **redeploy**. `NEXT_PUBLIC_*` values are inlined into the client bundle at build time, so an
-  already-deployed build will not pick up a variable you add or change afterwards. Skipping the
-  redeploy produces a confusing symptom: the form still errors, and the console still says the
-  variable "is not set", even though you have set it.
-- **Locally** — put it in `apps/save-the-date/.env.local`, which is gitignored, and **restart the
-  dev server**; the same build-time inlining applies. Point it at a throwaway Formspree form
-  rather than the real one, so development submissions do not land in the guest list.
-
-If the variable is unset, submitting fails into the form's error state and logs the reason. That is
-deliberate: falling back to a fake success would tell a guest their address arrived when nothing
-was sent.
-
-Failure is detected from the response body as well as the HTTP status, because Formspree reports
-validation errors in the body with a `200` — its own client never checks `response.ok`. See
-`src/components/address-submit.ts` and the design at
-[`docs/superpowers/specs/2026-09-23-save-the-date-address-submission-design.md`](../../docs/superpowers/specs/2026-09-23-save-the-date-address-submission-design.md).
-
-**Before relying on it, submit the live form once** and confirm the address arrives, as an email
-and in the Formspree dashboard. No test can verify that a real form id points at a real inbox — and
-if that live test fails, check the form's own settings in Formspree first (captcha or verification
-options can reject a plain JSON POST) before suspecting this code.
-
-Two things worth watching once it is live. The endpoint is public and has no honeypot, by design —
-Formspree's own spam filtering is the defence, so turn it on. And on a metered plan a spam flood
-can exhaust the submission quota, after which real guest submissions start failing; they fail
-honestly into the error state rather than silently, but nobody will tell you, so glance at the
-quota occasionally.
+`src/app/opengraph-image.jpg` and `src/app/twitter-image.jpg` are the card shown when the link is
+texted or posted. They are static files rendered from `design/link-preview.html`; to change the
+preview, edit that page, open it in Chrome at 1200 × 630, and replace both images with a new
+screenshot. In production Vercel supplies the absolute URL these tags need; if the app is ever
+hosted elsewhere, set `metadataBase` in `src/app/layout.tsx`.
 
 ## Known gaps
 

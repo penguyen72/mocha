@@ -4,22 +4,22 @@ import { describe, expect, it, vi } from "vitest";
 import { Envelope } from "./envelope";
 import {
   ENVELOPE_BUTTON_LABEL,
-  ENVELOPE_LETTERING,
-  ENVELOPE_PROMPT,
-  SEAL_MONOGRAM,
+  POSTMARK_CITY,
+  POSTMARK_DATE,
 } from "./invitation-content";
 
-const sealSrc = (container: HTMLElement) =>
+const sealImages = (container: HTMLElement) =>
   Array.from(container.querySelectorAll("img"))
     .map((img) => decodeURIComponent(img.getAttribute("src") ?? ""))
-    .find((src) => src.includes("/images/wax-seal.png"));
+    .filter((src) => src.includes("/images/wax-seal.png"));
+
+const sealSrc = (container: HTMLElement) => sealImages(container)[0];
 
 describe("Envelope", () => {
-  it("renders the lettering, the prompt, the monogram and the open button when closed", () => {
-    render(<Envelope phase="closed" onOpen={vi.fn()} />);
-    expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
-    expect(screen.getByText(ENVELOPE_PROMPT)).toBeInTheDocument();
-    expect(screen.getByText(SEAL_MONOGRAM)).toBeInTheDocument();
+  it("renders one whole seal and the open button when closed, with nothing written on the flap", () => {
+    const { container } = render(<Envelope phase="closed" onOpen={vi.fn()} />);
+    expect(container.querySelector("svg text:not([class*=postmark])")).toBeNull();
+    expect(sealImages(container)).toHaveLength(1);
     expect(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL })).toBeInTheDocument();
   });
 
@@ -31,17 +31,23 @@ describe("Envelope", () => {
     expect(onOpen).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps the seal visible but removes the button while opening", () => {
-    render(<Envelope phase="opening" onOpen={vi.fn()} />);
-    expect(screen.getByText(SEAL_MONOGRAM)).toBeInTheDocument();
+  it("stamps the city and date on the sealed envelope", () => {
+    render(<Envelope phase="closed" onOpen={vi.fn()} />);
+    expect(screen.getByText(POSTMARK_CITY)).toBeInTheDocument();
+    expect(screen.getByText(POSTMARK_DATE)).toBeInTheDocument();
+  });
+
+  it("keeps the cracking seal visible but removes the button while opening", () => {
+    const { container } = render(<Envelope phase="opening" onOpen={vi.fn()} />);
+    // The seal cracks into two halves, each a clipped copy of the whole seal.
+    expect(sealImages(container)).toHaveLength(2);
     expect(screen.queryByRole("button", { name: ENVELOPE_BUTTON_LABEL })).not.toBeInTheDocument();
   });
 
   it("drops the seal layer entirely once open", () => {
-    render(<Envelope phase="open" onOpen={vi.fn()} />);
-    expect(screen.queryByText(SEAL_MONOGRAM)).not.toBeInTheDocument();
-    expect(screen.queryByText(ENVELOPE_PROMPT)).not.toBeInTheDocument();
-    expect(screen.getByText(ENVELOPE_LETTERING)).toBeInTheDocument();
+    const { container } = render(<Envelope phase="open" onOpen={vi.fn()} />);
+    expect(sealImages(container)).toHaveLength(0);
+    expect(screen.queryByText(POSTMARK_CITY)).not.toBeInTheDocument();
   });
   it.each(["closed", "opening"] as const)("renders the wax-seal image while %s", (phase) => {
     const { container } = render(<Envelope phase={phase} onOpen={vi.fn()} />);

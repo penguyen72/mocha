@@ -155,22 +155,20 @@ referenced from JSX as a single-token arbitrary property:
 
 ### Type
 
-Five Google faces via `next/font/google` in `layout.tsx`, each with `variable` and
-`display: "swap"`, composed onto `<html className={...}>` exactly as Blackberry does. Three fill the
-shared contract's slots; two are app-local because the contract has only three.
+Three Google faces via `next/font/google` in `layout.tsx`, each with `variable` and
+`display: "swap"`, composed onto `<html className={...}>` exactly as Blackberry does. They fill the
+shared contract's three slots, so the app needs no local font tokens.
 
 | Face | Weights | CSS variable | Wired to | Role |
 | --- | --- | --- | --- | --- |
-| Josefin Sans | 300, 400 | `--font-josefin-sans` | `--site-font-sans` | "Save", "Date", `10.16.2027` |
-| Lora | 400, 500 | `--font-lora` | `--site-font-serif` | Body, labels, form, controls |
-| Parisienne | 400 | `--font-parisienne` | `--site-font-script` | Couple names, page headings |
-| Pinyon Script | 400 | `--font-pinyon-script` | `--std-font-flourish` | "the", the "P&L" monogram |
-| Allura | 400 | `--font-allura` | `--std-font-envelope` | "You've been invited" |
+| Montserrat | 300, 400, 500 | `--font-montserrat` | `--site-font-sans` | `10.16.2027`, small caps controls, form inputs and help text |
+| Cormorant Garamond | 500, 600 | `--font-cormorant-garamond` | `--site-font-serif` | "Save", "Date", location, note, form headings and labels |
+| Parisienne | 400 | `--font-parisienne` | `--site-font-script` | Every script flourish: envelope lettering, monogram, names, "the", page headings |
 
-The two app-local faces are exposed through `@theme inline` as `--font-std-flourish` and
-`--font-std-envelope`, giving `font-std-flourish` and `font-std-envelope`.
+The source design used five faces (Josefin Sans, Lora, Parisienne, Pinyon Script, Allura); they
+were consolidated to three for a consistent, more legible card.
 
-`body` sets `font-family: var(--site-font-serif)` — Lora is this design's workhorse body face.
+`body` sets `font-family: var(--site-font-serif)` — Cormorant Garamond is this design's body face.
 Blackberry uses `--site-font-sans` there; the deviation is deliberate and carries a comment.
 
 ### Components

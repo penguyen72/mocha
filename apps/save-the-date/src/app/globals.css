@@ -5,24 +5,30 @@
 :root {
   /* The shared @mocha/ui contract, overridden for the save-the-date palette.
      packages/ui/src/styles.css is never edited. */
-  --site-background: #fdf7f5;
+  --site-background: #fdf7f4;
   --site-surface: #ffffff;
-  --site-foreground: #2a2426;
-  --site-muted: #6f6264;
-  --site-border: #f3d3da;
-  --site-primary: #9e3d53;
+  --site-foreground: #3d2c2f;
+  --site-muted: #7c6266;
+  --site-border: #f2d6d4;
+  --site-primary: #9a5560;
   --site-primary-foreground: #ffffff;
-  --site-inverted-background: #2a2426;
+  --site-inverted-background: #3d2c2f;
   --site-inverted-foreground: #ffffff;
   --site-destructive: #b2334f;
 
-  --site-font-sans: var(--font-josefin-sans), sans-serif;
-  --site-font-serif: var(--font-lora), Georgia, serif;
+  --site-font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
+  --site-font-serif: var(--font-cormorant-garamond), Garamond, Georgia, serif;
   --site-font-script: var(--font-parisienne), cursive;
 
   /* ---------------------------------------------------------------------------
      Save the Date's local palette — app-local, and NOT part of the shared
      @mocha/ui token contract. Blackberry's analogue is --bb-*.
+
+     Warm pastel blush, from the couple's mood board: blush and peach-pink roses,
+     ivory linen, candlelight and soft greenery. It starts from their Pantone
+     swatches (P 75-1 C, P 75-9 C, Intimate Pink, Raindrops on Roses, Sugar
+     Swizzle) and warms them toward rose. Text uses deeper rose inks of the same
+     hue to stay legible, and the greenery is a hint of pastel sage. No gold.
      --------------------------------------------------------------------------- */
 
   /* One design pixel. The invitation is drawn in a fixed 455x779 space and scaled
@@ -31,56 +37,44 @@
      the stage container. */
   --std-u: 0.2198cqw;
 
-  /* Two app-local faces; the shared contract has only three font slots. */
-  --std-font-flourish: var(--font-pinyon-script), cursive;
-  --std-font-envelope: var(--font-allura), cursive;
-
   /* Shell */
-  --std-page: #fdf7f5;
-  --std-stage: #fcf5f2;
-  --std-photo-well: #dcd6c4;
-  --std-link: #9e3d53;
-  --std-link-hover: #7a2a3e;
-  --std-focus-ring: #9e3d53;
-  --std-focus-glow: rgba(178, 71, 94, 0.25);
+  --std-page: #fbf3f0;
+  --std-stage: #fdf8f5;
+  --std-photo-well: #f6ece8;
+  --std-link: #9a5560;
+  --std-link-hover: #7d3f4a;
+  --std-focus-ring: #9a5560;
+
+  /* The floral background art and the wax seal are photographic assets in a
+     brighter pink; these filters quiet them to the palette. */
+  --std-floral-filter: sepia(0.12) saturate(0.8) brightness(1.03);
+  --std-seal-filter: saturate(0.85) brightness(1.04);
 
   /* Envelope */
-  --std-env-ink: #6f6869;
-  --std-liner-rule: #d9be7e;
-  --std-prompt-ink: #5f5859;
-  --std-seal-ink: #7a2839;
+  --std-liner-rule: #b5c4a5;
 
   /* Cards */
-  --std-blush-card: #f8e3e8;
-  --std-announce-ink: #6b6264;
+  --std-blush-card: #fbe3df;
+  --std-announce-ink: #94505b;
   --std-lace-line: rgba(255, 255, 255, 0.95);
-  --std-date-card: #f2c8d2;
-  --std-date-ink: #2d2628;
+  --std-date-card: #f6cfcc;
+  --std-date-ink: #3d2c2f;
 
-  /* Ribbon */
-  --std-ribbon-loop: #edb2c0;
+  /* Note */
+  --std-note-ink: #3d2c2f;
+  --std-accent-ink: #9a5560;
 
-  /* Note and CTA */
-  --std-note-ink: #2a2426;
-  --std-cta-fill: #f3c9d3;
-  --std-cta-ink: #1e1a1b;
-  --std-heading-ink: #1e1a1b;
+  /* Postmark and stamp */
+  --std-postmark-ink: #c27a84;
+  --std-stamp-fill: #f8d7d5;
+  --std-stamp-perforation: #ffffff;
 
-  /* Address page */
-  --std-form-heading: #be5168;
-  --std-label: #9e3d53;
-  --std-field-border: #edb8c4;
-  --std-field-border-error: #b2334f;
-  --std-field-ink: #2a2426;
-  --std-help-ink: #6f6264;
-  --std-error-ink: #a3304a;
-  --std-alert-fill: #fbeff2;
-  --std-alert-ink: #8e2a42;
-  --std-submit-fill: #f6c8d0;
-  --std-submit-fill-hover: #f2b9c4;
-  --std-submit-ink: #8e3348;
-  --std-check-ring: #edb8c4;
-  --std-check-stroke: #b2475e;
+  /* Sage line work: the Trenton ridgeline */
+  --std-sage-line: #9fb08f;
+
+  /* Seal sparkles */
+  --std-sparkle-pink: #f6c9cb;
+  --std-sparkle-white: #ffffff;
 
   /* ---------------------------------------------------------------------------
      Composed ornaments. Every decoration in this design is a multi-layer gradient
@@ -89,36 +83,52 @@
        className="[background:var(--std-liner-pattern)]"
      --------------------------------------------------------------------------- */
 
-  --std-gold-edge: linear-gradient(
-    135deg,
-    #b38a45 0%,
-    #e9d295 35%,
-    #b8914c 60%,
-    #e2c987 85%,
-    #b08642 100%
+  /* A faint paper grain, layered over every envelope surface so it reads as stock rather
+     than flat colour. */
+  --std-paper-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .28 0 0 0 0 .3 0 0 0 .1 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  --std-env-back-fill: var(--std-paper-grain), linear-gradient(180deg, #f5e3df 0%, #f9ece9 55%, #fbf1ee 100%);
+  --std-env-left-fill: var(--std-paper-grain), linear-gradient(90deg, #fcf2ef, #fef8f6 70%, #fbf0ed);
+  --std-env-right-fill: var(--std-paper-grain), linear-gradient(270deg, #faefec, #fdf6f4 70%, #f9ede9);
+  --std-env-bottom-fill: var(--std-paper-grain), linear-gradient(0deg, #fffbfa 0%, #fdf4f1 60%, #f9ebe7 100%);
+  --std-env-flap-fill: var(--std-paper-grain), linear-gradient(180deg, #fffaf8 0%, #fcf1ee 70%, #f8e8e4 100%);
+
+  /* The flap's outline: a V with a softly rounded point, as die-cut envelopes have. The
+     SVG is stretched to the envelope, so the shape follows its proportions. */
+  --std-flap-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 0 H100 V3 L58 50 Q50 64 42 50 L0 3 Z'/></svg>")
+    0 0 / 100% 100% no-repeat;
+  --std-flap-back-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 100 H100 V97 L58 50 Q50 36 42 50 L0 97 Z'/></svg>")
+    0 0 / 100% 100% no-repeat;
+  --std-env-flap-back-fill: var(--std-paper-grain), #faebe7;
+
+  /* Rose-pearl foil for the names and the circled date: flat dusty rose at both ends
+     so the sweep can loop without a seam, with a narrow pearl highlight between. */
+  --std-foil: linear-gradient(
+    100deg,
+    #9a5560 0%,
+    #9a5560 42%,
+    #fde4e4 50%,
+    #9a5560 58%,
+    #9a5560 100%
   );
-  --std-env-back-fill: linear-gradient(180deg, #e3d1ac 0%, #ecdec1 55%, #f0e4ca 100%);
-  --std-env-left-fill: linear-gradient(90deg, #f1e5cb, #f6ecd8);
-  --std-env-right-fill: linear-gradient(270deg, #efe2c6, #f5ead5);
-  --std-env-bottom-fill: linear-gradient(0deg, #f7eedb, #f3e7cf);
-  --std-env-flap-fill: linear-gradient(180deg, #f4e9d2, #f2e5cb);
-  --std-env-flap-back-fill: #f1e4c9;
+
+  /* The ink-wipe that writes a line on from left to right. */
+  --std-write-mask: linear-gradient(90deg, #000 40%, transparent 60%);
 
   --std-liner-pattern:
     radial-gradient(
         circle,
-        #dfa7b5 0 calc(1.3 * var(--std-u)),
+        #f0bfc2 0 calc(1.3 * var(--std-u)),
         transparent calc(1.7 * var(--std-u))
       )
       0 0 / calc(11 * var(--std-u)) calc(11 * var(--std-u)),
     radial-gradient(
         circle,
-        #ebc3cd 0 calc(0.9 * var(--std-u)),
+        #f6d6d6 0 calc(0.9 * var(--std-u)),
         transparent calc(1.3 * var(--std-u))
       )
       calc(5.5 * var(--std-u)) calc(5.5 * var(--std-u)) / calc(11 * var(--std-u))
       calc(11 * var(--std-u)),
-    #f7e6ea;
+    #fcebe8;
 
   --std-lace-pattern: radial-gradient(
       circle,
@@ -143,53 +153,62 @@
       )
       bottom / calc(8 * var(--std-u)) 51% repeat-x;
 
-  --std-photo-mat-fill: linear-gradient(160deg, #f8f4e4, #eee8d1);
-  --std-leaf-a-fill: linear-gradient(135deg, #afc098, #7f9a6e);
-  --std-leaf-b-fill: linear-gradient(135deg, #a3b78e, #7a9468);
-  --std-bud-fill: radial-gradient(circle at 35% 35%, #f7d2da, #e3a3b2);
+  --std-photo-mat-fill: linear-gradient(160deg, #fffdfb, #f9f1ec);
+  --std-leaf-a-fill: linear-gradient(135deg, #c3cfb2, #a2b38f);
+  --std-leaf-b-fill: linear-gradient(135deg, #b9c8a7, #9aac88);
+  --std-bud-fill: radial-gradient(circle at 35% 35%, #fbe3e3, #eeb5ba);
   --std-bloom-fill:
-    radial-gradient(circle at 50% 50%, #d6a84e 0 11%, transparent 12%),
-    radial-gradient(circle at 50% 24%, #f4c2cd 0 21%, transparent 22%),
-    radial-gradient(circle at 75% 42%, #f4c2cd 0 21%, transparent 22%),
-    radial-gradient(circle at 65% 73%, #edb0bf 0 21%, transparent 22%),
-    radial-gradient(circle at 35% 73%, #edb0bf 0 21%, transparent 22%),
-    radial-gradient(circle at 25% 42%, #f4c2cd 0 21%, transparent 22%);
-  --std-petal-fill: radial-gradient(ellipse at 32% 30%, #f8d6dd, #ebaaba 68%, #d98c9e);
-  --std-ribbon-fill: linear-gradient(90deg, #e4a3b2, #f7d3db 45%, #e8adbb);
-  --std-ribbon-knot-fill: linear-gradient(90deg, #de98a9, #f2c4ce, #e1a0b0);
+    radial-gradient(circle at 50% 50%, #f6e3b5 0 11%, transparent 12%),
+    radial-gradient(circle at 50% 24%, #f8d4d6 0 21%, transparent 22%),
+    radial-gradient(circle at 75% 42%, #f8d4d6 0 21%, transparent 22%),
+    radial-gradient(circle at 65% 73%, #f2c0c4 0 21%, transparent 22%),
+    radial-gradient(circle at 35% 73%, #f2c0c4 0 21%, transparent 22%),
+    radial-gradient(circle at 25% 42%, #f8d4d6 0 21%, transparent 22%);
+  --std-petal-fill: radial-gradient(ellipse at 32% 30%, #fdeeee, #f2c4c8 68%, #e6aab0);
 
   /* Shadows */
   --std-env-back-shadow:
-    0 14px 26px -10px rgba(110, 80, 50, 0.3), 0 2px 5px rgba(110, 80, 50, 0.12);
-  --std-env-left-shadow: drop-shadow(1px 0 1.5px rgba(110, 80, 50, 0.16));
-  --std-env-right-shadow: drop-shadow(-1px 0 1.5px rgba(110, 80, 50, 0.16));
-  --std-env-bottom-shadow: drop-shadow(0 -1px 2px rgba(110, 80, 50, 0.2));
-  --std-env-flap-shadow: drop-shadow(0 1.5px 2px rgba(110, 80, 50, 0.22));
-  --std-env-lift-shadow: drop-shadow(0 8px 10px rgba(110, 70, 50, 0.16));
+    0 1px 2px rgba(150, 95, 100, 0.14), 0 10px 18px -8px rgba(150, 95, 100, 0.24),
+    0 30px 44px -22px rgba(150, 95, 100, 0.3);
+  --std-env-left-shadow: drop-shadow(0.5px 0 0.5px rgba(255, 255, 255, 0.5)) drop-shadow(1px 0 1.5px rgba(150, 80, 90, 0.12));
+  --std-env-right-shadow: drop-shadow(-0.5px 0 0.5px rgba(255, 255, 255, 0.5)) drop-shadow(-1px 0 1.5px rgba(150, 80, 90, 0.12));
+  --std-env-bottom-shadow: drop-shadow(0 -0.5px 0.5px rgba(255, 255, 255, 0.55)) drop-shadow(0 -1px 1.5px rgba(150, 80, 90, 0.12));
+  --std-env-flap-shadow: drop-shadow(0 1.5px 2.5px rgba(150, 95, 100, 0.2));
+  --std-env-lift-shadow: drop-shadow(0 8px 10px rgba(150, 95, 100, 0.14));
   --std-env-lift-transition: translate 180ms ease, scale 120ms ease;
-  --std-announce-shadow: 0 1px 4px rgba(120, 70, 85, 0.16);
-  --std-photo-shadow: 0 2px 6px rgba(90, 70, 40, 0.2);
-  --std-date-shadow: drop-shadow(0 1px 3px rgba(120, 60, 80, 0.2));
-  --std-petal-shadow: 0 1px 1.5px rgba(120, 60, 70, 0.18);
-  --std-ribbon-shadow: 0 1px 2px rgba(120, 60, 70, 0.2);
-  --std-seal-monogram-shadow:
-    0 1px 0 rgba(255, 220, 225, 0.45), 0 -1px 0 rgba(90, 20, 35, 0.25);
+  --std-announce-shadow: 0 1px 4px rgba(150, 95, 100, 0.16);
+  --std-photo-shadow: 0 2px 6px rgba(150, 95, 100, 0.2);
+  --std-date-shadow: drop-shadow(0 1px 3px rgba(150, 95, 100, 0.2));
+  --std-petal-shadow: 0 1px 1.5px rgba(150, 95, 100, 0.16);
 
   /* ---------------------------------------------------------------------------
-     The opening choreography. Every delay and duration is the design value from
-     docs/superpowers/reference/save-the-date-dc-source.md multiplied by the
-     prototype's default animSpeed of 1.6. The last petal ends at 4624ms, which is
-     OPENING_DURATION_MS in src/components/invitation-phase.ts — keep the two in
-     sync.
+     The opening choreography. The envelope, flap and card timings are the
+     design values from docs/superpowers/reference/save-the-date-dc-source.md
+     multiplied by the prototype's default animSpeed of 1.6; the delight pass
+     (docs/superpowers/specs/2026-10-02-save-the-date-delight-design.md) adds the
+     beats after them. The last one-shot animation, --std-anim-extras-in, ends at
+     4970ms, which is OPENING_DURATION_MS in src/components/invitation-phase.ts —
+     keep the two in sync. Infinite loops (float, foil, falling petals)
+     are not part of that count.
 
      The flap and the three cards each run two animations at once (a transform and
      a discrete z-index step), composed in one arbitrary property:
        [animation:var(--std-anim-card-a),var(--std-anim-card-a-z)]
      --------------------------------------------------------------------------- */
 
+  /* Sealed envelope */
   --std-anim-stage-in: std-stage-in 300ms ease-out both;
+  --std-anim-mail-in: std-note-in 500ms ease-out 150ms both;
+  --std-anim-mail-write: std-write 1100ms ease-out 400ms both;
+  --std-anim-open-prompt-in: std-note-in 500ms ease-out 1300ms both;
+  --std-anim-stamp: std-stamp 460ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 700ms both;
+  --std-anim-float: std-float 4200ms ease-in-out infinite;
+
+  /* Opening: the seal cracks, the flap lifts, the cards and petals fly */
   --std-anim-prompt-out: std-prompt-out 224ms linear both;
-  --std-anim-seal-out: std-seal-out 416ms ease-out 160ms both;
+  --std-anim-seal-left: std-seal-left 620ms cubic-bezier(0.45, 0, 0.75, 0.4) 120ms both;
+  --std-anim-seal-right: std-seal-right 620ms cubic-bezier(0.45, 0, 0.75, 0.4) 120ms both;
+  --std-anim-sparkle: std-sparkle 700ms ease-out 180ms both;
   --std-anim-flap: std-flap-open 1152ms cubic-bezier(0.5, 0, 0.3, 1) 384ms both;
   --std-anim-flap-z: std-flap-z 1152ms cubic-bezier(0.5, 0, 0.3, 1) 384ms both;
   --std-anim-card-a: std-card-a 2192ms linear 1248ms both;
@@ -198,28 +217,63 @@
   --std-anim-card-d-z: std-card-d-z 2288ms linear 1248ms both;
   --std-anim-card-p: std-card-p 2384ms linear 1248ms both;
   --std-anim-card-p-z: std-card-p-z 2384ms linear 1248ms both;
-  --std-anim-ribbon: std-ribbon 2192ms linear 1248ms both;
-  --std-anim-ribbon-z: std-ribbon-z 2192ms linear 1248ms both;
-  --std-anim-note-in: std-note-in 416ms ease-out 3200ms both;
-  --std-anim-check-draw: std-check-draw 340ms ease-out both;
-  --std-anim-petal-0: std-petal-in 832ms ease-out 3120ms both;
-  --std-anim-petal-1: std-petal-in 832ms ease-out 3232ms both;
-  --std-anim-petal-2: std-petal-in 832ms ease-out 3344ms both;
-  --std-anim-petal-3: std-petal-in 832ms ease-out 3456ms both;
-  --std-anim-petal-4: std-petal-in 832ms ease-out 3568ms both;
-  --std-anim-petal-5: std-petal-in 832ms ease-out 3680ms both;
-  --std-anim-petal-6: std-petal-in 832ms ease-out 3792ms both;
+
+  /* The cards' floral sprigs stay hidden until every card has cleared the envelope
+     (each card's z-index step lands at ~2272ms), so none peeks over the rim. */
+  --std-anim-sprig-in: std-stage-in 300ms ease-out 2250ms both;
+
+  /* The four facts, one beat at a time: names, date, city, invitation to follow */
+  --std-anim-write-1: std-write 650ms ease-out 2300ms both;
+  --std-anim-write-2: std-write 550ms ease-out 2650ms both;
+  --std-anim-write-3: std-write 550ms ease-out 3050ms both;
+  --std-anim-write-4: std-write 500ms ease-out 3350ms both;
+  --std-anim-develop: std-develop 1700ms ease-out 2900ms both;
+  --std-anim-develop-img: std-develop-img 1700ms ease-out 2900ms both;
+  --std-anim-heart: std-draw 650ms ease-in-out 3550ms both;
+  --std-anim-ridge: std-draw 800ms ease-out 3700ms both;
+  --std-anim-city: std-note-in 420ms ease-out 3900ms both;
+  --std-anim-caption: std-write 600ms ease-out 4100ms both;
+  --std-anim-note-in: std-note-in 420ms ease-out 4300ms both;
+  --std-anim-extras-in: std-note-in 420ms ease-out 4550ms both;
+
+  /* Ambient loops once open */
+  --std-anim-foil: std-foil 7000ms ease-in-out 600ms infinite;
+  --std-anim-fall-0: std-petal-fall 13s linear -4s infinite both;
+  --std-anim-fall-1: std-petal-fall 16s linear 1.2s infinite both;
+  --std-anim-fall-2: std-petal-fall 12s linear -9s infinite both;
+  --std-anim-fall-3: std-petal-fall 15s linear 2.6s infinite both;
+  --std-anim-fall-4: std-petal-fall 14s linear -2s infinite both;
+  --std-anim-fall-5: std-petal-fall 17s linear 0.4s infinite both;
+  --std-anim-fall-6: std-petal-fall 13.5s linear -11s infinite both;
+  --std-anim-fall-7: std-petal-fall 15.5s linear 4.2s infinite both;
+  --std-anim-fall-8: std-petal-fall 12.5s linear -6.5s infinite both;
+  --std-anim-fall-9: std-petal-fall 16.5s linear 6s infinite both;
+  --std-anim-fall-10: std-petal-fall 14.5s linear -13s infinite both;
+  --std-anim-fall-11: std-petal-fall 18s linear 3.4s infinite both;
+  --std-anim-drift: std-petal-drift 2600ms ease-in-out infinite alternate;
+  --std-anim-drift-b: std-petal-drift 3400ms ease-in-out -1.3s infinite alternate-reverse;
+
+  /* Pointer parallax: how far each card follows the pointer, in design units. */
+  --std-parallax-transition: translate 500ms cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
 /* The phase machine in invitation-stage.tsx already skips the whole `opening`
    phase under reduced motion. Switching every shorthand off here is the second
    line of defence: each element's static classes are its resting state, so with
-   the animations gone everything simply appears in place. */
+   the animations gone everything simply appears in place. The ambient loops go
+   too, and invitation-stage.tsx skips the pointer parallax. */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --std-anim-stage-in: std-stage-in 120ms ease-out both;
-    --std-anim-prompt-out: none;
-    --std-anim-seal-out: none;
+    --std-anim-mail-in: none;
+    --std-anim-mail-write: none;
+    --std-anim-open-prompt-in: none;
+    --std-anim-stamp: none;
+    --std-anim-float: none;
+      --std-anim-prompt-out: none;
+    --std-anim-seal-left: none;
+    --std-anim-seal-right: none;
+    --std-anim-sparkle: none;
     --std-anim-flap: none;
     --std-anim-flap-z: none;
     --std-anim-card-a: none;
@@ -228,17 +282,35 @@
     --std-anim-card-d-z: none;
     --std-anim-card-p: none;
     --std-anim-card-p-z: none;
-    --std-anim-ribbon: none;
-    --std-anim-ribbon-z: none;
+    --std-anim-sprig-in: none;
+    --std-anim-write-1: none;
+    --std-anim-write-2: none;
+    --std-anim-write-3: none;
+    --std-anim-write-4: none;
+    --std-anim-develop: none;
+    --std-anim-develop-img: none;
+    --std-anim-heart: none;
+    --std-anim-ridge: none;
+    --std-anim-city: none;
+    --std-anim-caption: none;
     --std-anim-note-in: none;
-    --std-anim-check-draw: none;
-    --std-anim-petal-0: none;
-    --std-anim-petal-1: none;
-    --std-anim-petal-2: none;
-    --std-anim-petal-3: none;
-    --std-anim-petal-4: none;
-    --std-anim-petal-5: none;
-    --std-anim-petal-6: none;
+    --std-anim-extras-in: none;
+    --std-anim-foil: none;
+                    --std-anim-fall-0: none;
+    --std-anim-fall-1: none;
+    --std-anim-fall-2: none;
+    --std-anim-fall-3: none;
+    --std-anim-fall-4: none;
+    --std-anim-fall-5: none;
+    --std-anim-fall-6: none;
+    --std-anim-fall-7: none;
+    --std-anim-fall-8: none;
+    --std-anim-fall-9: none;
+    --std-anim-fall-10: none;
+    --std-anim-fall-11: none;
+    --std-anim-drift: none;
+    --std-anim-drift-b: none;
+    --std-parallax-transition: none;
   }
 }
 
@@ -249,37 +321,20 @@
   --color-std-link: var(--std-link);
   --color-std-link-hover: var(--std-link-hover);
   --color-std-focus-ring: var(--std-focus-ring);
-  --color-std-env-ink: var(--std-env-ink);
   --color-std-liner-rule: var(--std-liner-rule);
-  --color-std-prompt-ink: var(--std-prompt-ink);
-  --color-std-seal-ink: var(--std-seal-ink);
   --color-std-blush-card: var(--std-blush-card);
   --color-std-announce-ink: var(--std-announce-ink);
   --color-std-lace-line: var(--std-lace-line);
   --color-std-date-card: var(--std-date-card);
   --color-std-date-ink: var(--std-date-ink);
-  --color-std-ribbon-loop: var(--std-ribbon-loop);
   --color-std-note-ink: var(--std-note-ink);
-  --color-std-cta-fill: var(--std-cta-fill);
-  --color-std-cta-ink: var(--std-cta-ink);
-  --color-std-heading-ink: var(--std-heading-ink);
-  --color-std-form-heading: var(--std-form-heading);
-  --color-std-label: var(--std-label);
-  --color-std-field-border: var(--std-field-border);
-  --color-std-field-border-error: var(--std-field-border-error);
-  --color-std-field-ink: var(--std-field-ink);
-  --color-std-help-ink: var(--std-help-ink);
-  --color-std-error-ink: var(--std-error-ink);
-  --color-std-alert-fill: var(--std-alert-fill);
-  --color-std-alert-ink: var(--std-alert-ink);
-  --color-std-submit-fill: var(--std-submit-fill);
-  --color-std-submit-fill-hover: var(--std-submit-fill-hover);
-  --color-std-submit-ink: var(--std-submit-ink);
-  --color-std-check-ring: var(--std-check-ring);
-  --color-std-check-stroke: var(--std-check-stroke);
-
-  --font-std-flourish: var(--std-font-flourish);
-  --font-std-envelope: var(--std-font-envelope);
+  --color-std-accent-ink: var(--std-accent-ink);
+  --color-std-postmark-ink: var(--std-postmark-ink);
+  --color-std-stamp-fill: var(--std-stamp-fill);
+  --color-std-stamp-perforation: var(--std-stamp-perforation);
+  --color-std-sage-line: var(--std-sage-line);
+  --color-std-sparkle-pink: var(--std-sparkle-pink);
+  --color-std-sparkle-white: var(--std-sparkle-white);
 }
 
 @keyframes std-stage-in {
@@ -300,17 +355,71 @@
   }
 }
 
-@keyframes std-seal-out {
+@keyframes std-stamp {
   0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
+    opacity: 0;
+    transform: scale(1.4) rotate(-16deg);
   }
   55% {
-    transform: translateY(calc(-10 * var(--std-u))) rotate(-3deg);
+    opacity: 1;
+    transform: scale(0.94) rotate(-7deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-8deg);
+  }
+}
+
+@keyframes std-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(calc(-3 * var(--std-u)));
+  }
+}
+
+@keyframes std-seal-left {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  18% {
+    transform: translate(calc(-1.5 * var(--std-u)), 0) rotate(-4deg);
     opacity: 1;
   }
   100% {
-    transform: translateY(calc(-12 * var(--std-u))) rotate(-3deg);
+    transform: translate(calc(-26 * var(--std-u)), calc(34 * var(--std-u))) rotate(-32deg);
+    opacity: 0;
+  }
+}
+
+@keyframes std-seal-right {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  18% {
+    transform: translate(calc(1.5 * var(--std-u)), 0) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(26 * var(--std-u)), calc(34 * var(--std-u))) rotate(32deg);
+    opacity: 0;
+  }
+}
+
+@keyframes std-sparkle {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--std-sx)), calc(-50% + var(--std-sy))) scale(1);
     opacity: 0;
   }
 }
@@ -341,16 +450,18 @@
   }
 }
 
+/* Each card starts tucked inside the envelope, high enough that neither it nor its
+   floral sprigs hang below the envelope's bottom edge before it rises out of the top. */
 @keyframes std-card-a {
   0% {
-    transform: translate(calc(59.5 * var(--std-u)), calc(191.4425 * var(--std-u))) rotate(0deg)
+    transform: translate(calc(59.5 * var(--std-u)), calc(161 * var(--std-u))) rotate(0deg)
       scale(0.82);
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
   46.715% {
     transform: translate(calc(59.5 * var(--std-u)), calc(-44.82 * var(--std-u))) rotate(0deg)
       scale(0.9);
-    animation-timing-function: cubic-bezier(0.25, 1, 0.3, 1);
+    animation-timing-function: cubic-bezier(0.34, 1.32, 0.64, 1);
   }
   100% {
     transform: translate(0, 0) rotate(-9deg) scale(1);
@@ -370,7 +481,7 @@
 
 @keyframes std-card-d {
   0% {
-    transform: translate(calc(-85.5 * var(--std-u)), calc(78.4425 * var(--std-u))) rotate(0deg)
+    transform: translate(calc(-85.5 * var(--std-u)), calc(64 * var(--std-u))) rotate(0deg)
       scale(0.82);
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -382,7 +493,7 @@
   51.049% {
     transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg)
       scale(0.9);
-    animation-timing-function: cubic-bezier(0.25, 1, 0.3, 1);
+    animation-timing-function: cubic-bezier(0.34, 1.32, 0.64, 1);
   }
   100% {
     transform: translate(0, 0) rotate(9.5deg) scale(1);
@@ -402,7 +513,7 @@
 
 @keyframes std-card-p {
   0% {
-    transform: translate(calc(77.5 * var(--std-u)), calc(6.4425 * var(--std-u))) rotate(0deg)
+    transform: translate(calc(77.5 * var(--std-u)), calc(-22 * var(--std-u))) rotate(0deg)
       scale(0.82);
     animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -414,7 +525,7 @@
   55.034% {
     transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg)
       scale(0.9);
-    animation-timing-function: cubic-bezier(0.25, 1, 0.3, 1);
+    animation-timing-function: cubic-bezier(0.34, 1.32, 0.64, 1);
   }
   100% {
     transform: translate(0, 0) rotate(-7deg) scale(1);
@@ -432,58 +543,76 @@
   }
 }
 
-@keyframes std-ribbon {
+@keyframes std-petal-fall {
   0% {
-    transform: translateY(calc(236.2625 * var(--std-u))) scale(0.91);
-    opacity: 1;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  46.715% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  51.095% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-    animation-timing-function: ease-in;
-  }
-  74.453%,
-  100% {
-    transform: translateY(calc(18 * var(--std-u))) scale(1);
     opacity: 0;
+    transform: translateY(0);
   }
-}
-
-@keyframes std-ribbon-z {
-  0%,
-  46.715% {
-    z-index: 3;
+  8%,
+  90% {
+    opacity: 0.8;
   }
-  46.815%,
   100% {
-    z-index: 8;
+    opacity: 0;
+    transform: translateY(calc(860 * var(--std-u)));
   }
 }
 
-@keyframes std-petal-in {
+@keyframes std-petal-drift {
   from {
-    opacity: 0;
-    translate: 0 calc(-8 * var(--std-u));
+    transform: translateX(calc(-9 * var(--std-u))) rotate(-25deg);
   }
   to {
-    opacity: 1;
-    translate: 0 0;
+    transform: translateX(calc(9 * var(--std-u))) rotate(35deg);
   }
 }
 
-@keyframes std-check-draw {
+@keyframes std-write {
   from {
-    stroke-dashoffset: 40;
+    mask-position: 100% 0;
+  }
+  to {
+    mask-position: 0 0;
+  }
+}
+
+@keyframes std-foil {
+  0%,
+  62% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@keyframes std-draw {
+  from {
+    stroke-dashoffset: 1;
   }
   to {
     stroke-dashoffset: 0;
   }
 }
+
+@keyframes std-develop {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes std-develop-img {
+  from {
+    filter: saturate(0.2) brightness(1.15);
+  }
+  to {
+    filter: none;
+  }
+}
+
 
 @keyframes std-note-in {
   from {
@@ -505,9 +634,9 @@ html {
   background: var(--site-background);
 }
 
-/* Lora is this design's body face, so `body` takes --site-font-serif rather than
-   --site-font-sans as Blackberry does. Josefin Sans is reserved for the display
-   numerals on the date card. */
+/* Cormorant Garamond is this design's body face, so `body` takes --site-font-serif
+   rather than --site-font-sans as Blackberry does. Montserrat carries the small caps
+   controls, the date numerals and the form text, where legibility matters most. */
 body {
   margin: 0;
   font-family: var(--site-font-serif);

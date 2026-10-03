@@ -1,33 +1,59 @@
-import Link from "next/link";
-
-import { NOTE_CTA_HREF, NOTE_CTA_LABEL, NOTE_LINE_1, NOTE_LINE_2 } from "./invitation-content";
+import { Countdown } from "./countdown";
+import {
+  CALENDAR_HREF,
+  CALENDAR_LABEL,
+  NOTE_TEXT,
+  REPLAY_LABEL,
+} from "./invitation-content";
 
 type InvitationNoteProps = {
   animated: boolean;
+  /** Reseals the envelope so the invitation can be opened again. */
+  onReplay: () => void;
 };
 
 const NOTE =
-  "absolute left-0 right-0 top-[75.6%] z-[6] flex flex-col items-center " +
-  "gap-[calc(36*var(--std-u))]";
+  "absolute left-0 right-0 top-[75.5%] z-[6] flex flex-col items-center " +
+  "gap-[calc(22*var(--std-u))]";
 
-const NOTE_ANIMATION = "[animation:var(--std-anim-note-in)]";
+const LINE = "flex items-center justify-center gap-[calc(12*var(--std-u))]";
 
-export function InvitationNote({ animated }: InvitationNoteProps) {
+const EXTRAS = "flex flex-col items-center gap-[calc(15*var(--std-u))]";
+
+const RULE = "h-px w-[calc(28*var(--std-u))] bg-std-liner-rule";
+
+const ACTION =
+  "inline-flex min-h-11 cursor-pointer items-center border-none bg-transparent px-2 py-0 " +
+  "font-sans text-[calc(9.5*var(--std-u))] font-medium uppercase tracking-[0.2em] text-std-accent-ink " +
+  "underline decoration-std-liner-rule decoration-1 underline-offset-[6px] " +
+  "hover:text-std-link-hover focus-visible:outline-2 focus-visible:outline-offset-2 " +
+  "focus-visible:outline-std-focus-ring";
+
+export function InvitationNote({ animated, onReplay }: InvitationNoteProps) {
   return (
-    <div className={animated ? `${NOTE} ${NOTE_ANIMATION}` : NOTE}>
-      <p className="m-0 text-center font-serif text-[calc(12.5*var(--std-u))] leading-[1.35] tracking-[0.09em] text-std-note-ink">
-        <span className="block">{NOTE_LINE_1}</span>
-        <span className="block">{NOTE_LINE_2}</span>
-      </p>
+    <div className={NOTE}>
+      <div className={animated ? `${LINE} [animation:var(--std-anim-note-in)]` : LINE}>
+        <span aria-hidden className={RULE} />
+        <p className="m-0 text-center font-serif text-[calc(17*var(--std-u))] font-medium tracking-[0.06em] text-std-note-ink">
+          {NOTE_TEXT}
+        </p>
+        <span aria-hidden className={RULE} />
+      </div>
 
-      <Link
-        href={NOTE_CTA_HREF}
-        className="flex min-h-11 min-w-11 items-center rounded-[4px] px-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-std-focus-ring"
-      >
-        <span className="bg-std-cta-fill px-[calc(13*var(--std-u))] py-[calc(5*var(--std-u))] font-serif text-[calc(12*var(--std-u))] tracking-[0.04em] text-std-cta-ink underline underline-offset-2">
-          {NOTE_CTA_LABEL}
-        </span>
-      </Link>
+      <div className={animated ? `${EXTRAS} [animation:var(--std-anim-extras-in)]` : EXTRAS}>
+        <Countdown />
+        <div className="flex items-center gap-[calc(10*var(--std-u))]">
+          <a href={CALENDAR_HREF} className={ACTION}>
+            {CALENDAR_LABEL}
+          </a>
+          <span aria-hidden className="text-std-liner-rule">
+            ·
+          </span>
+          <button type="button" onClick={onReplay} className={ACTION}>
+            {REPLAY_LABEL}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
