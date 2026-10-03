@@ -80,4 +80,14 @@ export const COUNTDOWN_TODAY = "Today’s the day!";
 
 export const CALENDAR_LABEL = "Add to calendar";
 export const CALENDAR_HREF = "/peyton-and-liane.ics";
+/** An all-day event uses an exclusive end date, matching the static .ics file. */
+export const GOOGLE_CALENDAR_HREF =
+  "https://calendar.google.com/calendar/r/eventedit?" +
+  new URLSearchParams({
+    action: "TEMPLATE",
+    dates: "20271016/20271017",
+    text: "Peyton & Liane's Wedding",
+    location: "Trenton, Georgia",
+    details: "Save the date! Formal invitation to follow.",
+  }).toString();
 export const REPLAY_LABEL = "Open again";
