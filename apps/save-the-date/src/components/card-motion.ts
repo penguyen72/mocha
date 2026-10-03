@@ -8,11 +8,12 @@ export const WRITE_ON =
   "[mask-image:var(--std-write-mask)] [mask-size:250%_100%] [mask-repeat:no-repeat] [mask-position:0_0]";
 
 /**
- * Rose-pearl foil text. The padding gives script swashes room inside the painted box —
- * background-clip: text only paints glyphs that fall within the element's box.
+ * Rose-pearl foil text. background-clip: text only paints the parts of a glyph inside the
+ * element's box, and script descenders (the tail of a "y") drop well below it — so the box
+ * gets generous padding, cancelled by negative margins so the layout does not move.
  */
 export const FOIL =
-  "w-fit px-[0.2em] py-[0.12em] -my-[0.12em] bg-clip-text text-transparent " +
+  "w-fit px-[0.25em] py-[0.4em] -my-[0.4em] bg-clip-text text-transparent " +
   "[background-image:var(--std-foil)] [background-size:300%_100%] [background-position:100%_0]";
 
 /** Holds a card's floral sprig back until the card is out of the envelope. */

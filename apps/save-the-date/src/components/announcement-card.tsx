@@ -37,8 +37,8 @@ const LINES = [
   },
   {
     text: ANNOUNCEMENT_LINE_3,
-    rest: "ml-[22%] mt-[7%] w-fit",
-    writing: `ml-[22%] mt-[7%] w-fit ${WRITE_ON} [animation:var(--std-anim-write-3)]`,
+    rest: "ml-[22%] mt-[11%] w-fit",
+    writing: `ml-[22%] mt-[11%] w-fit ${WRITE_ON} [animation:var(--std-anim-write-3)]`,
   },
   {
     text: ANNOUNCEMENT_LINE_4,
@@ -56,7 +56,7 @@ export function AnnouncementCard({ animated }: AnnouncementCardProps) {
 
       <div
         aria-hidden
-        className="absolute inset-0 flex flex-col pt-[25%] font-script text-[calc(27*var(--std-u))] leading-[1.02] text-std-announce-ink"
+        className="absolute inset-0 flex flex-col pt-[21%] font-script text-[calc(27*var(--std-u))] leading-[1.02] text-std-announce-ink"
       >
         {LINES.map((line) => (
           <span key={line.text} className={animated ? line.writing : line.rest}>
