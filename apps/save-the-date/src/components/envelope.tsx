@@ -64,7 +64,7 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
           <div className="absolute inset-0 [backface-visibility:hidden] [filter:var(--std-env-flap-shadow)]">
             <div className="absolute inset-0 [background:var(--std-gold-edge)] [clip-path:polygon(0_0,100%_0,50%_80%)]" />
             <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [clip-path:polygon(1.4%_0,98.6%_0,50%_77.6%)]" />
-            <div className="absolute left-0 right-0 top-[10%] whitespace-nowrap text-center font-std-envelope text-[calc(36*var(--std-u))] leading-none text-std-env-ink">
+            <div className="absolute left-0 right-0 top-[10%] whitespace-nowrap text-center font-script text-[calc(30*var(--std-u))] leading-none text-std-env-ink">
               {ENVELOPE_LETTERING}
             </div>
           </div>
@@ -108,7 +108,7 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
             }
           >
             <path id="std-prompt-arc" d="M20 48 A130 130 0 0 1 180 48" fill="none" />
-            <text className="fill-std-prompt-ink font-serif text-[17px] tracking-[1.5px]">
+            <text className="fill-std-prompt-ink font-sans text-[13px] font-medium tracking-[3px]">
               <textPath href="#std-prompt-arc" startOffset="50%" textAnchor="middle">
                 {ENVELOPE_PROMPT}
               </textPath>
@@ -132,7 +132,7 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
             />
             <span
               aria-hidden
-              className="absolute inset-0 flex items-center justify-center font-std-flourish text-[calc(19*var(--std-u))] leading-none text-std-seal-ink opacity-[0.82] [text-shadow:var(--std-seal-monogram-shadow)]"
+              className="absolute inset-0 flex items-center justify-center font-script text-[calc(20*var(--std-u))] leading-none text-std-seal-ink opacity-[0.82] [text-shadow:var(--std-seal-monogram-shadow)]"
             >
               {SEAL_MONOGRAM}
             </span>

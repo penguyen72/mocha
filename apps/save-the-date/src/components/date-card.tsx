@@ -28,21 +28,21 @@ export function DateCard({ animated }: DateCardProps) {
       <div className={`${RULE} bottom-[calc(5*var(--std-u))]`} />
 
       <div aria-hidden className="absolute inset-0 flex flex-col px-[9%] pt-[13%] text-std-date-ink">
-        <span className="font-sans text-[calc(31*var(--std-u))] font-light leading-none">
+        <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-none">
           {DATE_CARD_SAVE}
         </span>
         <span className="ml-[2%] flex items-baseline gap-[calc(4*var(--std-u))]">
-          <span className="font-std-flourish text-[calc(21*var(--std-u))] leading-none">
+          <span className="font-script text-[calc(22*var(--std-u))] leading-none">
             {DATE_CARD_THE}
           </span>
-          <span className="font-sans text-[calc(31*var(--std-u))] font-light leading-[1.05]">
+          <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-[1.05]">
             {DATE_CARD_DATE}
           </span>
         </span>
-        <span className="mt-[11%] text-center font-serif text-[calc(12.5*var(--std-u))]">
+        <span className="mt-[11%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]">
           {DATE_CARD_LOCATION}
         </span>
-        <span className="mt-[6%] text-center font-sans text-[calc(27*var(--std-u))] font-light tracking-[0.02em]">
+        <span className="mt-[6%] text-center font-sans text-[calc(19*var(--std-u))] font-light tracking-[0.12em]">
           {DATE_CARD_NUMERALS}
         </span>
       </div>

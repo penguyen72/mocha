@@ -42,19 +42,19 @@ type AddressStatus = "idle" | "sending" | "success" | "error";
 
 const DEFAULT_VALUES: AddressFormValues = { name: "", email: "", address: "" };
 
-const LABEL = "font-serif text-[15px] font-normal normal-case tracking-normal text-std-label";
+const LABEL = "font-serif text-[18px] font-semibold normal-case tracking-normal text-std-label";
 
 const FIELD =
   "h-auto min-h-11 w-full rounded-lg border-[1.5px] border-std-field-border bg-surface " +
-  "px-3 py-2.5 font-serif text-base text-std-field-ink " +
+  "px-3 py-2.5 font-sans text-base text-std-field-ink " +
   "aria-[invalid=true]:border-std-field-border-error " +
   "focus-visible:ring-0 focus-visible:[box-shadow:0_0_0_3px_var(--std-focus-glow)]";
 
-const MESSAGE = "font-serif text-[14px] leading-[1.4] text-std-error-ink";
+const MESSAGE = "font-sans text-[13.5px] leading-[1.4] text-std-error-ink";
 
 const BACK_LINK =
-  "inline-flex min-h-11 items-center bg-std-cta-fill px-3 py-1.5 font-serif " +
-  "text-[19px] text-std-cta-ink underline " +
+  "inline-flex min-h-11 items-center bg-std-cta-fill px-3 py-1.5 font-sans " +
+  "text-[13px] font-medium tracking-[0.16em] text-std-cta-ink underline underline-offset-4 " +
   "focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring";
 
 export function AddressForm() {
@@ -115,12 +115,12 @@ export function AddressForm() {
             >
               {ADDRESS_SUCCESS_HEADING}
             </h2>
-            <p className="m-0 text-pretty font-serif text-base leading-[1.55] text-std-field-ink">
+            <p className="m-0 text-pretty font-sans text-[15px] leading-[1.65] text-std-field-ink">
               {ADDRESS_SUCCESS_BODY}
             </p>
             <Link
               href={INVITATION_HREF}
-              className="mt-2 inline-flex min-h-11 items-center bg-std-cta-fill px-4 py-2 font-serif text-base text-std-cta-ink underline focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring"
+              className="mt-2 inline-flex min-h-11 items-center bg-std-cta-fill px-4 py-2 font-sans text-[14px] font-medium tracking-[0.04em] text-std-cta-ink underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring"
             >
               {ADDRESS_SUCCESS_BACK_LABEL}
             </Link>
@@ -128,7 +128,7 @@ export function AddressForm() {
         ) : (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="flex flex-col gap-[18px]">
-              <h2 className="m-0 mb-0.5 font-serif text-[23px] font-normal text-std-form-heading">
+              <h2 className="m-0 mb-0.5 font-serif text-[28px] font-semibold leading-tight text-std-form-heading">
                 {ADDRESS_FORM_HEADING}
               </h2>
 
@@ -153,7 +153,7 @@ export function AddressForm() {
                   <FormItem className="gap-1.5">
                     <FormLabel className={`${LABEL} flex items-baseline gap-1.5`}>
                       {ADDRESS_EMAIL_LABEL}
-                      <span className="text-[13px] text-std-help-ink">
+                      <span className="font-sans text-[12px] font-normal text-std-help-ink">
                         {ADDRESS_EMAIL_OPTIONAL_TAG}
                       </span>
                     </FormLabel>
@@ -177,7 +177,7 @@ export function AddressForm() {
                 render={({ field }) => (
                   <FormItem className="gap-1.5">
                     <FormLabel className={LABEL}>{ADDRESS_FIELD_LABEL}</FormLabel>
-                    <FormDescription className="font-serif text-[13.5px] leading-[1.45] text-std-help-ink">
+                    <FormDescription className="font-sans text-[13px] leading-[1.55] text-std-help-ink">
                       {ADDRESS_FIELD_HELP}
                     </FormDescription>
                     <FormControl>
@@ -197,7 +197,7 @@ export function AddressForm() {
               {status === "error" && (
                 <p
                   role="alert"
-                  className="m-0 rounded-lg bg-std-alert-fill px-3 py-2.5 font-serif text-[14.5px] leading-[1.45] text-std-alert-ink"
+                  className="m-0 rounded-lg bg-std-alert-fill px-3 py-2.5 font-sans text-[14px] leading-[1.5] text-std-alert-ink"
                 >
                   {ADDRESS_SUBMIT_ERROR}
                 </p>
@@ -207,7 +207,7 @@ export function AddressForm() {
                 type="submit"
                 disabled={sending}
                 aria-disabled={sending}
-                className="mt-1.5 h-auto min-h-[46px] w-full rounded-full bg-std-submit-fill font-serif text-[15px] font-normal uppercase tracking-[0.12em] text-std-submit-ink hover:bg-std-submit-fill-hover hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring"
+                className="mt-1.5 h-auto min-h-[46px] w-full rounded-full bg-std-submit-fill font-sans text-[13px] font-medium uppercase tracking-[0.18em] text-std-submit-ink hover:bg-std-submit-fill-hover hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-std-focus-ring"
               >
                 {sending ? ADDRESS_SENDING_LABEL : ADDRESS_SUBMIT_LABEL}
               </Button>
@@ -221,7 +221,7 @@ export function AddressForm() {
           {ADDRESS_BACK_LABEL}
         </Link>
         {!succeeded && (
-          <p className="m-0 text-right font-script text-[26px] leading-[1.15] text-std-heading-ink">
+          <p className="m-0 text-right font-script text-[28px] leading-[1.15] text-std-heading-ink">
             <span className="block">{ADDRESS_CLOSING_LINE_1}</span>
             <span className="block">{ADDRESS_CLOSING_LINE_2}</span>
           </p>

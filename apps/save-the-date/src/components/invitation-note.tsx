@@ -15,7 +15,7 @@ const NOTE_ANIMATION = "[animation:var(--std-anim-note-in)]";
 export function InvitationNote({ animated }: InvitationNoteProps) {
   return (
     <div className={animated ? `${NOTE} ${NOTE_ANIMATION}` : NOTE}>
-      <p className="m-0 text-center font-serif text-[calc(12.5*var(--std-u))] leading-[1.35] tracking-[0.09em] text-std-note-ink">
+      <p className="m-0 text-center font-serif text-[calc(15*var(--std-u))] font-medium leading-[1.4] tracking-[0.04em] text-std-note-ink">
         <span className="block">{NOTE_LINE_1}</span>
         <span className="block">{NOTE_LINE_2}</span>
       </p>
@@ -24,7 +24,7 @@ export function InvitationNote({ animated }: InvitationNoteProps) {
         href={NOTE_CTA_HREF}
         className="flex min-h-11 min-w-11 items-center rounded-[4px] px-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-std-focus-ring"
       >
-        <span className="bg-std-cta-fill px-[calc(13*var(--std-u))] py-[calc(5*var(--std-u))] font-serif text-[calc(12*var(--std-u))] tracking-[0.04em] text-std-cta-ink underline underline-offset-2">
+        <span className="bg-std-cta-fill px-[calc(13*var(--std-u))] py-[calc(5*var(--std-u))] font-sans text-[calc(10.5*var(--std-u))] font-medium tracking-[0.16em] text-std-cta-ink underline underline-offset-4">
           {NOTE_CTA_LABEL}
         </span>
       </Link>

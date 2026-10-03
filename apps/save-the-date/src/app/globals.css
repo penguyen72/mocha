@@ -16,8 +16,8 @@
   --site-inverted-foreground: #ffffff;
   --site-destructive: #b2334f;
 
-  --site-font-sans: var(--font-josefin-sans), sans-serif;
-  --site-font-serif: var(--font-lora), Georgia, serif;
+  --site-font-sans: var(--font-montserrat), "Helvetica Neue", Arial, sans-serif;
+  --site-font-serif: var(--font-cormorant-garamond), Garamond, Georgia, serif;
   --site-font-script: var(--font-parisienne), cursive;
 
   /* ---------------------------------------------------------------------------
@@ -30,10 +30,6 @@
      Custom properties resolve where they are used, so this is always relative to
      the stage container. */
   --std-u: 0.2198cqw;
-
-  /* Two app-local faces; the shared contract has only three font slots. */
-  --std-font-flourish: var(--font-pinyon-script), cursive;
-  --std-font-envelope: var(--font-allura), cursive;
 
   /* Shell */
   --std-page: #fdf7f5;
@@ -277,9 +273,6 @@
   --color-std-submit-ink: var(--std-submit-ink);
   --color-std-check-ring: var(--std-check-ring);
   --color-std-check-stroke: var(--std-check-stroke);
-
-  --font-std-flourish: var(--std-font-flourish);
-  --font-std-envelope: var(--std-font-envelope);
 }
 
 @keyframes std-stage-in {
@@ -505,9 +498,9 @@ html {
   background: var(--site-background);
 }
 
-/* Lora is this design's body face, so `body` takes --site-font-serif rather than
-   --site-font-sans as Blackberry does. Josefin Sans is reserved for the display
-   numerals on the date card. */
+/* Cormorant Garamond is this design's body face, so `body` takes --site-font-serif
+   rather than --site-font-sans as Blackberry does. Montserrat carries the small caps
+   controls, the date numerals and the form text, where legibility matters most. */
 body {
   margin: 0;
   font-family: var(--site-font-serif);

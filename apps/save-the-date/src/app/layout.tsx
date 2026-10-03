@@ -1,19 +1,21 @@
 import type { Metadata } from "next";
-import { Allura, Josefin_Sans, Lora, Parisienne, Pinyon_Script } from "next/font/google";
+import { Cormorant_Garamond, Montserrat, Parisienne } from "next/font/google";
 
 import "./globals.css";
 
-const josefinSans = Josefin_Sans({
+// Three faces, one per role: Parisienne for every script flourish, Cormorant Garamond for the
+// elegant serif display and labels, Montserrat for small caps controls, numerals and form text.
+const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["300", "400"],
-  variable: "--font-josefin-sans",
+  weight: ["300", "400", "500"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 
-const lora = Lora({
+const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-lora",
+  weight: ["500", "600"],
+  variable: "--font-cormorant-garamond",
   display: "swap",
 });
 
@@ -21,20 +23,6 @@ const parisienne = Parisienne({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-parisienne",
-  display: "swap",
-});
-
-const pinyonScript = Pinyon_Script({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-pinyon-script",
-  display: "swap",
-});
-
-const allura = Allura({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-allura",
   display: "swap",
 });
 
@@ -51,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${josefinSans.variable} ${lora.variable} ${parisienne.variable} ${pinyonScript.variable} ${allura.variable}`}
+      className={`${montserrat.variable} ${cormorantGaramond.variable} ${parisienne.variable}`}
     >
       <body>{children}</body>
     </html>
