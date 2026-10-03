@@ -18,9 +18,12 @@ prefer official Pantone conversions when they're available.
 
 ## Usage
 
-This palette isn't wired into any app's `--site-*` tokens yet. Each app sets its own tokens in
-`src/app/globals.css`. Adopting the palette there changes how the site looks, so it goes through
-the Superpowers design workflow in `AGENTS.md`.
+Blackberry uses these colors as its base, with a lightly tinted white page background and
+a small touch of Save the Date's date-card and ribbon pinks in the section fills. Muted rose
+accents and soft charcoal text keep the theme subtle and readable. Its values and `--site-*`
+overrides live in
+`apps/blackberry/src/app/globals.css`. Each app owns its theme; adopting the palette in another
+app goes through the Superpowers design workflow in `AGENTS.md`.
 
 Every color here is very light, so none of them gives readable contrast for body text on
 another. Use them for backgrounds, surfaces, and borders, and pair them with a darker foreground

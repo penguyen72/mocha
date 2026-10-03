@@ -82,7 +82,7 @@ export function RsvpForm() {
           name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-bb-clay">Full name(s)</FormLabel>
+              <FormLabel className="text-bb-accent">Full name(s)</FormLabel>
               <FormControl>
                 <Input placeholder="Jordan & Alex Rivera" {...field} />
               </FormControl>
@@ -96,7 +96,7 @@ export function RsvpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-bb-clay">Email</FormLabel>
+              <FormLabel className="text-bb-accent">Email</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="you@email.com" {...field} />
               </FormControl>
@@ -110,7 +110,7 @@ export function RsvpForm() {
           name="attending"
           render={({ field }) => (
             <FormItem>
-              <FormLabel id="attending-label" className="text-bb-clay">
+              <FormLabel id="attending-label" className="text-bb-accent">
                 Will you be attending?
               </FormLabel>
               <FormControl>
@@ -135,7 +135,7 @@ export function RsvpForm() {
               name="guestCount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel id="guest-count-label" className="text-bb-clay">
+                  <FormLabel id="guest-count-label" className="text-bb-accent">
                     Number of guests
                   </FormLabel>
                   <Select onValueChange={field.onChange} value={field.value ?? ""}>
@@ -162,7 +162,7 @@ export function RsvpForm() {
               name="events"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel id="events-label" className="text-bb-clay">
+                  <FormLabel id="events-label" className="text-bb-accent">
                     Which events will you join?
                   </FormLabel>
                   <div role="group" aria-labelledby="events-label" className="flex flex-col gap-3">
@@ -196,7 +196,7 @@ export function RsvpForm() {
               name="mealPreference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel id="meal-preference-label" className="text-bb-clay">
+                  <FormLabel id="meal-preference-label" className="text-bb-accent">
                     Meal preference
                   </FormLabel>
                   <FormControl>
@@ -222,7 +222,7 @@ export function RsvpForm() {
               name="dietaryRestrictions"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-bb-clay">Dietary restrictions or allergies</FormLabel>
+                  <FormLabel className="text-bb-accent">Dietary restrictions or allergies</FormLabel>
                   <FormControl>
                     <Input placeholder="Nut allergy, gluten-free, none…" {...field} />
                   </FormControl>
@@ -236,7 +236,7 @@ export function RsvpForm() {
               name="lodgingPreference"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel id="lodging-preference-label" className="text-bb-clay">
+                  <FormLabel id="lodging-preference-label" className="text-bb-accent">
                     Lodging preference
                   </FormLabel>
                   <FormControl>
@@ -262,7 +262,7 @@ export function RsvpForm() {
               name="songRequest"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-bb-clay">Song request</FormLabel>
+                  <FormLabel className="text-bb-accent">Song request</FormLabel>
                   <FormControl>
                     <Input placeholder="Artist – Song" {...field} />
                   </FormControl>
@@ -278,7 +278,7 @@ export function RsvpForm() {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-bb-clay">A note for the couple (optional)</FormLabel>
+              <FormLabel className="text-bb-accent">A note for the couple (optional)</FormLabel>
               <FormControl>
                 <Textarea placeholder="Can't wait to celebrate with you both!" {...field} />
               </FormControl>

@@ -18,7 +18,7 @@ export const FAQ_ITEMS: FaqItem[] = [
       "We love your little ones! This is a family-friendly weekend. Let us know how many children to expect on your RSVP so we can plan.",
   },
   {
-    question: "What's the weather like in early October?",
+    question: "What's the weather like in mid-October?",
     answer:
       "North Georgia falls are gorgeous — sunny days around 70°F and cool evenings in the 50s. Bring a layer for the outdoor ceremony and reception patio.",
   },
