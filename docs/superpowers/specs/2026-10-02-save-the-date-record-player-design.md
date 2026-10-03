@@ -5,46 +5,45 @@ Status: approved by the couple on 2026-10-02.
 ## Goal
 
 The opened date card gets a small vinyl record in its open top-right corner. Tapping it plays the
-couple's song, **"Dream" by Suzy & Baekhyun** (2016), from its official YouTube video
-(`WfYgbFBFe1E`). The same pass lines the "Save / the Date" lockup up with the first date of the
+couple's song, **"Dream" by Suzy & Baekhyun** (2016), from an audio file served by the app. The
+same pass lines the "Save / the Date" lockup up with the first date of the
 week below it.
 
-## Why a visible player
+## Why a self-hosted file
 
-The couple chose the official YouTube video over self-hosting an audio file, so the site never
-hosts a copy of the song. YouTube's API policies then set the shape of the feature:
+The first version played the official YouTube video (`WfYgbFBFe1E`) in a visible mini player,
+which YouTube's API policies require: they forbid playing from "a player that is not displayed in
+the page", and require a player viewport of at least 200 x 200 px. On 2026-10-02 the couple
+decided the popup got in the way of the card.
 
-- [Developer Policies](https://developers.google.com/youtube/terms/developer-policies) forbid
-  separating a video's audio from its video and playing from "a player that is not displayed in
-  the page".
-- [Required Minimum Functionality](https://developers.google.com/youtube/terms/required-minimum-functionality)
-  requires an embedded player viewport of at least 200 x 200 px with nothing drawn over it.
+Hiding the YouTube player would have broken those policies, and it played unreliably on phones,
+where browsers block sound that starts after the API loads. So the couple bought the song on the
+iTunes Store, and the app serves that file itself from `public/dream.m4a`.
 
-So the record is the control, and a visible mini player carries the video.
+A store purchase is a personal-use licence. Serving the file on a public site is a copy the
+licence does not cover; the couple accepted that risk for a small personal site. The file is
+re-encoded before it is committed so that the purchaser details iTunes embeds in it are not
+published.
 
 ## Behaviour
 
-| Moment | Record | Mini player |
-| --- | --- | --- |
-| Card opened | Still, play icon, "tap to play" label | Not rendered; nothing from YouTube is loaded |
-| First tap | Spins once YouTube reports playback | Slides up in the bottom-left corner of the screen and starts the video |
-| Tap while playing | Stops spinning, play icon, "tap to play" | Video pauses |
-| Tap while paused | Spins, pause icon, "tap to pause" | Video resumes |
-| Song ends | Keeps spinning | Video restarts from the top (loops) |
-| Close (x) | Still, play icon | Player destroyed and removed |
+| Moment | Record |
+| --- | --- |
+| Card opened | Still, play icon, "tap to play" label; the song is not downloaded (`preload="none"`) |
+| First tap | Song starts; the record spins and shows a pause icon, "tap to pause" |
+| Tap while playing | Song pauses; the record holds its angle, play icon, "tap to play" |
+| Tap while paused | Song resumes from where it stopped |
+| Song ends | Loops from the top |
+| Browser refuses playback | Record stays on its play icon; another tap tries again |
 
-- The record follows YouTube's own state events, so using the player's controls directly keeps
-  the record in sync.
-- Some browsers block playback started after the API finishes loading. The player is visible, so
-  the guest can press play in it; the record then follows.
-- Reduced motion: the record does not spin and the player does not slide.
+- The record is the only control. The `<audio>` element has no controls and is not visible.
+- Playback is started directly in the tap handler, so it stays inside the user gesture browsers
+  require for sound.
+- Reduced motion: the record does not spin.
 
 ## Privacy and loading
 
-- The IFrame API script (`https://www.youtube.com/iframe_api`) is injected only on the first tap,
-  once per page.
-- The player uses `https://www.youtube-nocookie.com` as its host.
-- No other third-party code is added.
+- No third-party code or requests. The song is the only extra download, and only after a tap.
 
 ## Layout
 
@@ -52,13 +51,9 @@ So the record is the control, and a visible mini player carries the video.
   with the card. It replaces no existing ornament.
 - "Tap to play" / "Tap to pause" is set in small spaced capitals on an arc just outside the rim,
   centred on the record's south-east side, with a small gap between the letters and the vinyl.
-- The mini player is portaled to `<body>`. The date card and the stage frame are both transformed,
-  and a transformed ancestor would otherwise trap a `position: fixed` element.
-- The panel is ivory with a song title and a close button in a header above the video, never on
-  top of it. The video is 200 px tall and at least 200 px wide.
 
 ## Accessibility
 
 - The record is a real `<button>`, outside the card's `aria-hidden` typography, labelled "Play
   Dream by Suzy & Baekhyun" or "Pause Dream by Suzy & Baekhyun".
-- The panel is a labelled `region`; its close button is labelled "Close the music player".
+- The `<audio>` element has no controls, so it adds nothing to the tab order.
