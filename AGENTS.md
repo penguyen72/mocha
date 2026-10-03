@@ -10,6 +10,8 @@ This pnpm/Turborepo contains three independently deployed Next.js applications:
 
 Shared packages live in `packages/`. Read the approved design and current implementation plan under `docs/superpowers/` before architectural work.
 
+The wedding color palette (Pantone codes plus approximate hex values) lives in `docs/brand/color-palette.md`. Check it before choosing colors for any app.
+
 ## Required workflow
 
 Never push or commit directly to `main`. Every change — docs included — lands through a pull

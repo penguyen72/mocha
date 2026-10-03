@@ -19,6 +19,9 @@ packages/
   ui/                Shared visual primitives and design tokens
   eslint-config/     Shared ESLint flat configs
   typescript-config/ Shared TypeScript configs
+docs/
+  brand/             Wedding color palette
+  superpowers/       Approved designs, plans, and reference material
 ```
 
 This is a multi-app Turborepo, not a runtime-composed Module Federation system. Each app builds and deploys independently.
