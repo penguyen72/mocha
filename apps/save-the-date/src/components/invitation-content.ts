@@ -15,10 +15,10 @@ export const ENVELOPE_BUTTON_LABEL = "You’ve been invited. Open the envelope."
 export const POSTMARK_CITY = "TRENTON, GA";
 export const POSTMARK_DATE = "10.16.27";
 
-export const ANNOUNCEMENT_LINE_1 = "Peyton &";
-export const ANNOUNCEMENT_LINE_2 = "Liane";
-export const ANNOUNCEMENT_LINE_3 = "are getting";
-export const ANNOUNCEMENT_LINE_4 = "married!";
+export const ANNOUNCEMENT_LINE_1 = "Peyton";
+export const ANNOUNCEMENT_LINE_2 = "&";
+export const ANNOUNCEMENT_LINE_3 = "Liane";
+export const ANNOUNCEMENT_LINE_4 = "are getting married!";
 
 /** The four announcement lines in reading order, for tests and for iteration. */
 export const ANNOUNCEMENT_LINES = [
