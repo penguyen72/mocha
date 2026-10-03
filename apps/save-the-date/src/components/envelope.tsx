@@ -147,7 +147,7 @@ function Postmark({ fading }: { fading: boolean }) {
           </text>
           <text
             x="108"
-            y="49"
+            y="51.5"
             textAnchor="middle"
             className="fill-std-postmark-ink stroke-none font-serif text-[11px] font-semibold tracking-[0.6px] lining-nums"
           >
