@@ -25,12 +25,17 @@ const OPEN_HASH = "#open";
 
 /**
  * The opened invitation's cards and note sit lower in the frame than the sealed envelope
- * does, so the whole stage sits 3.5% higher to centre them vertically. It sits there while
- * sealed too, so the envelope does not move when it opens.
+ * does, so the whole stage sits 3.5% higher, sealed or open. Once open it rises a further
+ * 2.5% so the cards, note and links sit centred in the floral frame; while opening, it
+ * drifts up as the cards rise rather than jumping.
  */
 const STAGE_FRAME =
-  "group relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
-  "[translate:0_-3.5%] [animation:var(--std-anim-stage-in)] @container";
+  "group relative aspect-[455/779] w-[var(--std-stage-width)] flex-none " +
+  "[animation:var(--std-anim-stage-in)] @container";
+
+const STAGE_SEALED = "[translate:0_-3.5%]";
+const STAGE_OPEN = "[translate:0_-6%]";
+const STAGE_RISING = "[translate:0_-6%] [transition:var(--std-stage-rise-transition)]";
 
 function subscribeToHash(onStoreChange: () => void) {
   window.addEventListener("hashchange", onStoreChange);
@@ -170,8 +175,11 @@ export function InvitationStage() {
 
   return (
     <div
-      className={STAGE_FRAME}
+      className={`${STAGE_FRAME} ${opening ? STAGE_RISING : revealed ? STAGE_OPEN : STAGE_SEALED}`}
       onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
+      {/* Candlelight: an ivory glow behind the names and envelope that pushes the floral
+          watercolour back. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 [background:var(--std-candlelight)]" />
       {!revealed || opening ? (
         <>
           <MailHeader fading={opening} />

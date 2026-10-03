@@ -99,15 +99,17 @@ export function DateCard({ animated }: DateCardProps) {
         <span
           className={
             animated
-              ? "relative mt-[11%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em] [animation:var(--std-anim-city)]"
-              : "relative mt-[11%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]"
+              ? "relative mt-[8.5%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em] [animation:var(--std-anim-city)]"
+              : "relative mt-[8.5%] text-center font-serif text-[calc(15*var(--std-u))] font-semibold tracking-[0.02em]"
           }
         >
-          {/* A faint sketch of the ridges around Trenton, drawn beneath the city. */}
+          {/* A faint sketch of the ridges around Trenton, drawn beneath the city. It is
+              nudged down 4 units (2.5% of the card's width) to stay where it was when the
+              city line moved up by that much. */}
           <svg
             viewBox="0 0 120 20"
             preserveAspectRatio="none"
-            className="pointer-events-none absolute bottom-[-66%] left-1/2 h-[75%] w-[96%] -translate-x-1/2 overflow-visible"
+            className="pointer-events-none absolute bottom-[-66%] left-1/2 h-[75%] w-[96%] -translate-x-1/2 translate-y-[calc(4*var(--std-u))] overflow-visible"
           >
             <path
               d="M6 19 C 18 15, 28 13, 40 14 S 60 9, 72 10 S 94 15, 114 18"

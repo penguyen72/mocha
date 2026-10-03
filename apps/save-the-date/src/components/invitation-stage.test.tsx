@@ -52,6 +52,15 @@ describe("InvitationStage", () => {
     expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
 
+  it("saves the falling petals as a surprise for when the envelope opens", () => {
+    const { container } = render(<InvitationStage />);
+    expect(container.querySelectorAll("[data-petal]")).toHaveLength(0);
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+
+    expect(container.querySelectorAll("[data-petal]").length).toBeGreaterThan(0);
+  });
+
   it("reveals the invitation when the envelope is opened, and settles after the choreography", () => {
     vi.useFakeTimers();
     const { container } = render(<InvitationStage />);

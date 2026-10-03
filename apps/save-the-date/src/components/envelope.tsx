@@ -32,14 +32,28 @@ const LAYER_BOX =
 /** While sealed, every layer floats together; they all mount at once, so they stay in step. */
 const FLOAT = "[animation:var(--std-anim-float)]";
 
-/** Pressed on the flap's point, which sits just below the envelope's middle. */
-const SEAL_BOX = "absolute left-[39.5%] top-[39%] aspect-[777/800] w-[21%]";
+/**
+ * Centred on the envelope. The seal is 34.6% of the envelope's height (21% of its width at
+ * the art's 777:800 ratio, on an 8:5 envelope), so a 32.7% top puts its middle at exactly
+ * 50%, still covering the flap's point just below.
+ */
+const SEAL_BOX = "absolute left-[39.5%] top-[32.7%] aspect-[777/800] w-[21%]";
 
 /** Two jagged halves of the same seal, for the moment it cracks. */
 const SEAL_HALVES = [
   "[clip-path:polygon(0_0,52%_0,46%_18%,55%_34%,45%_52%,54%_70%,47%_86%,51%_100%,0_100%)] [animation:var(--std-anim-seal-left)]",
   "[clip-path:polygon(52%_0,100%_0,100%_100%,51%_100%,47%_86%,54%_70%,45%_52%,55%_34%,46%_18%)] [animation:var(--std-anim-seal-right)]",
 ] as const;
+
+/** The whole seal swells a little while the envelope is hovered; the press still shrinks it. */
+const SEAL_SWELL =
+  "absolute inset-0 [transition:scale_250ms_ease] motion-reduce:[transition:none] " +
+  "group-has-[button:hover]:[scale:1.04]";
+
+/** A band of light that passes over the wax every few seconds, kept inside the seal's round. */
+const SEAL_SHIMMER =
+  "pointer-events-none absolute inset-0 mix-blend-screen [background:var(--std-seal-shimmer)] " +
+  "[mask-image:var(--std-seal-shimmer-mask)] [animation:var(--std-anim-seal-shimmer)]";
 
 const SPARKLE_BASE =
   "absolute left-1/2 top-1/2 opacity-0 [animation:var(--std-anim-sparkle)] " +
@@ -75,8 +89,9 @@ function SealFace() {
 }
 
 /**
- * A pink postage stamp in the corner, and a round postmark carrying the city and the
- * date — so a guest learns where and when before the envelope is even opened.
+ * A pink postage stamp seated on the envelope's top-right corner, and a round postmark
+ * carrying the city and the date — so a guest learns where and when before the envelope
+ * is even opened.
  */
 function Postmark({ fading }: { fading: boolean }) {
   return (
@@ -84,8 +99,8 @@ function Postmark({ fading }: { fading: boolean }) {
       aria-hidden
       className={
         fading
-          ? "pointer-events-none absolute right-[-5%] top-[-26%] w-[40%] [animation:var(--std-anim-prompt-out)]"
-          : "pointer-events-none absolute right-[-5%] top-[-26%] w-[40%]"
+          ? "pointer-events-none absolute right-[2.5%] top-[4%] w-[37%] [animation:var(--std-anim-prompt-out)]"
+          : "pointer-events-none absolute right-[2.5%] top-[4%] w-[37%]"
       }
     >
       <svg viewBox="0 0 168 84" className="block w-full overflow-visible">
@@ -179,8 +194,9 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
                 : "absolute inset-0 origin-top [transform-style:preserve-3d] [transform:rotateX(0deg)]"
           }
         >
-          {/* Flap front. */}
+          {/* Flap front, over a copy nudged down a hair that shows as a fine white edge. */}
           <div className="absolute inset-0 [backface-visibility:hidden] [filter:var(--std-env-flap-shadow)]">
+            <div className="absolute inset-0 translate-y-[calc(1.2*var(--std-u))] [background:var(--std-env-flap-edge)] [mask:var(--std-flap-mask)]" />
             <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [mask:var(--std-flap-mask)]" />
           </div>
 
@@ -228,7 +244,10 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
             <div
               className={`${SEAL_BOX} [transition:scale_140ms_ease] motion-reduce:[transition:none] group-has-[button:active]:[scale:0.94]`}
             >
-              <SealFace />
+              <div className={SEAL_SWELL}>
+                <SealFace />
+                <span aria-hidden className={SEAL_SHIMMER} />
+              </div>
             </div>
           )}
 
