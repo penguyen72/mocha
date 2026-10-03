@@ -1,5 +1,6 @@
 import { PARALLAX_NEAR, SPRIG_IN } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
+import { RecordPlayer } from "./record-player";
 import {
   DATE_CARD_DATE,
   DATE_CARD_DAY,
@@ -26,6 +27,9 @@ const SPRIG =
   "pointer-events-none absolute bottom-[-6%] right-[-7%] h-[calc(22*var(--std-u))] " +
   "w-[calc(22*var(--std-u))] [transform:rotate(35deg)]";
 
+/** The song's record, in the open corner beside "Save"; arrives with the sprig. */
+const RECORD = "absolute right-[11%] top-[6%] w-[calc(38*var(--std-u))]";
+
 /** Hand-drawn strokes: pathLength 1 lets one dash animation draw any path. */
 const STROKE = "[stroke-dasharray:1] [stroke-dashoffset:0]";
 
@@ -38,15 +42,18 @@ export function DateCard({ animated }: DateCardProps) {
       <div className={`${RULE} bottom-[calc(5*var(--std-u))]`} />
 
       <div aria-hidden className="absolute inset-0 flex flex-col px-[9%] pt-[10%] text-std-date-ink">
-        <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-none">
-          {DATE_CARD_SAVE}
-        </span>
-        <span className="ml-[2%] flex items-baseline gap-[calc(4*var(--std-u))]">
-          <span className="font-script text-[calc(22*var(--std-u))] leading-none">
-            {DATE_CARD_THE}
+        {/* Inset so the lockup's left edge lines up with the first date of the week below. */}
+        <span className="ml-[calc(1.6*var(--std-u))] flex flex-col">
+          <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-none">
+            {DATE_CARD_SAVE}
           </span>
-          <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-[1.05]">
-            {DATE_CARD_DATE}
+          <span className="ml-[calc(3*var(--std-u))] flex items-baseline gap-[calc(4*var(--std-u))]">
+            <span className="font-script text-[calc(22*var(--std-u))] leading-none">
+              {DATE_CARD_THE}
+            </span>
+            <span className="font-serif text-[calc(36*var(--std-u))] font-medium leading-[1.05]">
+              {DATE_CARD_DATE}
+            </span>
           </span>
         </span>
 
@@ -125,6 +132,7 @@ export function DateCard({ animated }: DateCardProps) {
         </span>
       </div>
 
+      <RecordPlayer className={animated ? `${RECORD} ${SPRIG_IN}` : RECORD} />
       <FloralSprig className={animated ? `${SPRIG} ${SPRIG_IN}` : SPRIG} />
     </div>
   );
