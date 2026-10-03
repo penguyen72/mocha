@@ -84,8 +84,8 @@ function Postmark({ fading }: { fading: boolean }) {
       aria-hidden
       className={
         fading
-          ? "pointer-events-none absolute right-[-7%] top-[-34%] w-[50%] [animation:var(--std-anim-prompt-out)]"
-          : "pointer-events-none absolute right-[-7%] top-[-34%] w-[50%]"
+          ? "pointer-events-none absolute left-[27%] top-[7%] w-[46%] [animation:var(--std-anim-prompt-out)]"
+          : "pointer-events-none absolute left-[27%] top-[7%] w-[46%]"
       }
     >
       <svg viewBox="0 0 168 84" className="block w-full overflow-visible">
@@ -154,7 +154,7 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
     <>
       {/* Back of the envelope, with its patterned liner. */}
       <div aria-hidden className={`${box} z-[1]`}>
-        <div className="absolute inset-0 rounded-[2px] [background:var(--std-env-back-fill)] [box-shadow:var(--std-env-back-shadow)]" />
+        <div className="absolute inset-0 rounded-[3px] [background:var(--std-env-back-fill)] [box-shadow:var(--std-env-back-shadow)]" />
         <div className="absolute left-[3.5%] right-[3.5%] top-[4%] h-[66%] [background:var(--std-liner-pattern)] [box-shadow:inset_0_0_0_calc(1*var(--std-u))_var(--std-liner-rule)]" />
       </div>
 
@@ -181,20 +181,18 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
         >
           {/* Flap front. */}
           <div className="absolute inset-0 [backface-visibility:hidden] [filter:var(--std-env-flap-shadow)]">
-            <div className="absolute inset-0 [background:var(--std-env-edge)] [clip-path:polygon(0_0,100%_0,50%_80%)]" />
-            <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [clip-path:polygon(1.4%_0,98.6%_0,50%_77.6%)]" />
+            <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [mask:var(--std-flap-mask)]" />
           </div>
 
           {/* Flap back, revealed as the flap lies over. */}
           <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateX(180deg)]">
-            <div className="absolute inset-0 [background:var(--std-env-edge)] [clip-path:polygon(0_100%,100%_100%,50%_20%)]" />
-            <div className="absolute inset-0 [background:var(--std-env-flap-back-fill)] [clip-path:polygon(1.4%_100%,98.6%_100%,50%_22.4%)]" />
+            <div className="absolute inset-0 [background:var(--std-env-flap-back-fill)] [mask:var(--std-flap-back-mask)]" />
             <div className="absolute inset-0 [background:var(--std-liner-pattern)] [clip-path:polygon(5%_97%,95%_97%,50%_28%)]" />
           </div>
         </div>
       </div>
 
-      {/* Front pocket: three panels and the rose-pearl rim. */}
+      {/* Front pocket: three folded panels. */}
       <div
         aria-hidden
         className={`${box} pointer-events-none z-[5] group-has-[button:hover]:[filter:var(--std-env-lift-shadow)]`}
@@ -208,18 +206,11 @@ export function Envelope({ phase, onOpen, buttonRef }: EnvelopeProps) {
         <div className="absolute inset-0 [filter:var(--std-env-bottom-shadow)]">
           <div className="absolute inset-0 [background:var(--std-env-bottom-fill)] [clip-path:polygon(0_100%,50%_36%,100%_100%)]" />
         </div>
-        <div className="absolute inset-0 border-[calc(1.6*var(--std-u))] border-transparent [border-image:var(--std-env-edge)_1]" />
       </div>
 
-      {/* Pearl sheen, postmark, wax seal, and the single control that opens the envelope. */}
+      {/* Postmark, wax seal, and the single control that opens the envelope. */}
       {showSealLayer && (
         <div className={`${box} z-[8]`}>
-          {closed && (
-            <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-              <div className="absolute inset-y-0 left-0 w-[35%] [background:var(--std-env-sheen)] [animation:var(--std-anim-sheen)]" />
-            </div>
-          )}
-
           <Postmark fading={opening} />
 
           {opening ? (

@@ -27,6 +27,14 @@ const STAGE_FRAME =
   "group relative aspect-[455/779] w-[min(100vw,560px,max(58.4dvh,340px))] flex-none " +
   "[animation:var(--std-anim-stage-in)] @container";
 
+/**
+ * The opened invitation's cards and note sit lower in the frame than the sealed envelope
+ * does, so once the cards are out the whole stage glides up to centre them vertically.
+ */
+const STAGE_SETTLED =
+  "[translate:0_-3.5%] [transition:translate_1200ms_cubic-bezier(0.4,0,0.2,1)_1400ms] " +
+  "motion-reduce:[transition:none]";
+
 function subscribeToHash(onStoreChange: () => void) {
   window.addEventListener("hashchange", onStoreChange);
   return () => {
@@ -164,7 +172,9 @@ export function InvitationStage() {
   const revealed = effectivePhase !== "closed";
 
   return (
-    <div className={STAGE_FRAME} onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
+    <div
+      className={revealed ? `${STAGE_FRAME} ${STAGE_SETTLED}` : STAGE_FRAME}
+      onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
       {!revealed || opening ? (
         <>
           <MailHeader fading={opening} />

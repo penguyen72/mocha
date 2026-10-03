@@ -83,27 +83,22 @@
        className="[background:var(--std-liner-pattern)]"
      --------------------------------------------------------------------------- */
 
-  /* Rose-pearl: the envelope rim, in place of gold. */
-  --std-env-edge: linear-gradient(
-    135deg,
-    #efc1c3 0%,
-    #fff6f4 35%,
-    #f2c9c9 60%,
-    #fde9e7 85%,
-    #e9b3b7 100%
-  );
-  --std-env-back-fill: linear-gradient(180deg, #f7e6e2 0%, #faeeeb 55%, #fcf3f0 100%);
-  --std-env-left-fill: linear-gradient(90deg, #fdf3f0, #fff9f7);
-  --std-env-right-fill: linear-gradient(270deg, #fbf0ed, #fef7f5);
-  --std-env-bottom-fill: linear-gradient(0deg, #fffbfa, #fcefeb);
-  --std-env-flap-fill: linear-gradient(180deg, #fffaf8, #fcf0ed);
-  --std-env-flap-back-fill: #faebe7;
-  --std-env-sheen: linear-gradient(
-    105deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.75) 50%,
-    transparent 100%
-  );
+  /* A faint paper grain, layered over every envelope surface so it reads as stock rather
+     than flat colour. */
+  --std-paper-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45 0 0 0 0 .28 0 0 0 0 .3 0 0 0 .16 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  --std-env-back-fill: var(--std-paper-grain), #ecc6c6;
+  --std-env-left-fill: var(--std-paper-grain), #f3d3d2;
+  --std-env-right-fill: var(--std-paper-grain), #f3d3d2;
+  --std-env-bottom-fill: var(--std-paper-grain), #f4d5d4;
+  --std-env-flap-fill: var(--std-paper-grain), #f2d1d0;
+
+  /* The flap's outline: a V with a softly rounded point, as die-cut envelopes have. The
+     SVG is stretched to the envelope, so the shape follows its proportions. */
+  --std-flap-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 0 H100 V3 L57.5 71 Q50 83 42.5 71 L0 3 Z'/></svg>")
+    0 0 / 100% 100% no-repeat;
+  --std-flap-back-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 100 H100 V97 L57.5 29 Q50 17 42.5 29 L0 97 Z'/></svg>")
+    0 0 / 100% 100% no-repeat;
+  --std-env-flap-back-fill: var(--std-paper-grain), #f0cccb;
 
   /* Rose-pearl foil for the names and the circled date: flat dusty rose at both ends
      so the sweep can loop without a seam, with a narrow pearl highlight between. */
@@ -173,11 +168,12 @@
 
   /* Shadows */
   --std-env-back-shadow:
-    0 14px 26px -10px rgba(150, 95, 100, 0.26), 0 2px 5px rgba(150, 95, 100, 0.1);
-  --std-env-left-shadow: drop-shadow(1px 0 1.5px rgba(150, 95, 100, 0.14));
-  --std-env-right-shadow: drop-shadow(-1px 0 1.5px rgba(150, 95, 100, 0.14));
-  --std-env-bottom-shadow: drop-shadow(0 -1px 2px rgba(150, 95, 100, 0.18));
-  --std-env-flap-shadow: drop-shadow(0 1.5px 2px rgba(150, 95, 100, 0.2));
+    0 1px 2px rgba(150, 95, 100, 0.14), 0 10px 18px -8px rgba(150, 95, 100, 0.24),
+    0 30px 44px -22px rgba(150, 95, 100, 0.3);
+  --std-env-left-shadow: drop-shadow(0.5px 0 0.5px rgba(255, 255, 255, 0.5)) drop-shadow(1px 0 1.5px rgba(150, 80, 90, 0.12));
+  --std-env-right-shadow: drop-shadow(-0.5px 0 0.5px rgba(255, 255, 255, 0.5)) drop-shadow(-1px 0 1.5px rgba(150, 80, 90, 0.12));
+  --std-env-bottom-shadow: drop-shadow(0 -0.5px 0.5px rgba(255, 255, 255, 0.55)) drop-shadow(0 -1px 1.5px rgba(150, 80, 90, 0.12));
+  --std-env-flap-shadow: drop-shadow(0 1.5px 2.5px rgba(140, 70, 80, 0.22));
   --std-env-lift-shadow: drop-shadow(0 8px 10px rgba(150, 95, 100, 0.14));
   --std-env-lift-transition: translate 180ms ease, scale 120ms ease;
   --std-announce-shadow: 0 1px 4px rgba(150, 95, 100, 0.16);
@@ -192,7 +188,7 @@
      (docs/superpowers/specs/2026-10-02-save-the-date-delight-design.md) adds the
      beats after them. The last one-shot animation, --std-anim-extras-in, ends at
      4970ms, which is OPENING_DURATION_MS in src/components/invitation-phase.ts —
-     keep the two in sync. Infinite loops (float, sheen, foil, falling petals)
+     keep the two in sync. Infinite loops (float, foil, falling petals)
      are not part of that count.
 
      The flap and the three cards each run two animations at once (a transform and
@@ -207,7 +203,6 @@
   --std-anim-open-prompt-in: std-note-in 500ms ease-out 1300ms both;
   --std-anim-stamp: std-stamp 460ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 700ms both;
   --std-anim-float: std-float 4200ms ease-in-out infinite;
-  --std-anim-sheen: std-sheen 5600ms ease-in-out 1200ms infinite both;
 
   /* Opening: the seal cracks, the flap lifts, the cards and petals fly */
   --std-anim-prompt-out: std-prompt-out 224ms linear both;
@@ -275,8 +270,7 @@
     --std-anim-open-prompt-in: none;
     --std-anim-stamp: none;
     --std-anim-float: none;
-    --std-anim-sheen: none;
-    --std-anim-prompt-out: none;
+      --std-anim-prompt-out: none;
     --std-anim-seal-left: none;
     --std-anim-seal-right: none;
     --std-anim-sparkle: none;
@@ -383,16 +377,6 @@
   }
   50% {
     transform: translateY(calc(-3 * var(--std-u)));
-  }
-}
-
-@keyframes std-sheen {
-  0% {
-    transform: translateX(-160%);
-  }
-  40%,
-  100% {
-    transform: translateX(360%);
   }
 }
 
