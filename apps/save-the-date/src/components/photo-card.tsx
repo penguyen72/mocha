@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { PARALLAX_MID, SPRIG_IN, WRITE_ON } from "./card-motion";
+import { PARALLAX_MID, SPRIG_IN } from "./card-motion";
 import { FloralSprig } from "./floral-sprig";
 import { PHOTO_ALT, PHOTO_CAPTION } from "./invitation-content";
 
@@ -17,6 +17,7 @@ const CARD_ANIMATION = "[animation:var(--std-anim-card-p),var(--std-anim-card-p-
 
 const SPRIG = "pointer-events-none absolute h-[calc(22*var(--std-u))] w-[calc(22*var(--std-u))]";
 
+/** The photograph and its caption are already there when the Polaroid comes out of the envelope. */
 const CAPTION =
   "absolute inset-x-0 top-[79%] flex items-center justify-center " +
   "font-script text-[calc(20*var(--std-u))] leading-none text-std-announce-ink";
@@ -30,18 +31,11 @@ export function PhotoCard({ animated }: PhotoCardProps) {
           alt={PHOTO_ALT}
           fill
           sizes="(max-width: 560px) 37vw, 207px"
-          className={animated ? "object-cover [animation:var(--std-anim-develop-img)]" : "object-cover"}
+          className="object-cover"
         />
-        {/* The Polaroid develops: a pale blank that clears to reveal the photograph. */}
-        {animated && (
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-std-photo-well opacity-0 [animation:var(--std-anim-develop)]"
-          />
-        )}
       </div>
 
-      <div aria-hidden className={animated ? `${CAPTION} ${WRITE_ON} [animation:var(--std-anim-caption)]` : CAPTION}>
+      <div aria-hidden className={CAPTION}>
         {/* The heart hangs off the caption's right edge so the words alone sit on the centre line. */}
         <span className="relative">
           {PHOTO_CAPTION}
