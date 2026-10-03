@@ -4,7 +4,9 @@ import { Details } from "@/components/details";
 import { Explore } from "@/components/explore";
 import { Faq } from "@/components/faq";
 import { Party } from "@/components/party";
+import { RSVP_URL } from "@/components/rsvp-content";
 import { RsvpSection } from "@/components/rsvp-section";
+import { RsvpSheet } from "@/components/rsvp-sheet";
 import { Schedule } from "@/components/schedule";
 import { Stay } from "@/components/stay";
 import { Travel } from "@/components/travel";
@@ -20,7 +22,7 @@ const NAV_LINKS = [
   { label: "FAQ", href: "#faq" },
 ];
 
-const RSVP_CTA = { label: "RSVP", href: "#rsvp" };
+const RSVP_CTA = { label: "RSVP", href: RSVP_URL };
 
 export default function Home() {
   return (
@@ -47,7 +49,7 @@ export default function Home() {
           }
           dateLabel="Oct 1–3, 2027"
           locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
-          cta={{ label: "RSVP Now", href: "#rsvp" }}
+          cta={{ label: "RSVP Now", href: RSVP_URL }}
           backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
         />
 
@@ -69,6 +71,8 @@ export default function Home() {
 
         <RsvpSection />
       </main>
+
+      <RsvpSheet />
 
       <SiteFooter
         heading={
