@@ -12,7 +12,7 @@ Run this after every UI change, before telling the user the work is done. Fix wh
 - Diff the edited files. Revert accidental edits to layout, spacing, colors, fonts, copy, or timing that the request did not mention.
 
 ## 2. Load cleanly
-- Start the dev server and open each route: `/`, `/envelope-open`, `/share-your-address`.
+- Start the dev server and open each screen: `/` (sealed envelope), `/#open` (opened invitation), and `/share-your-address`. The opened invitation is the `#open` hash on `/`, not a separate route; clicking the seal sets it.
 - Each route must load with zero console errors and no failed image or font requests.
 - No image may come from a `canva.site` URL. All artwork loads from the local assets folder.
 
@@ -34,13 +34,13 @@ Check frame by frame. Pause the Web Animations at set times (for example, `docum
 - The flap never shows mirrored text. Its underside shows the liner.
 - The envelope does not move, resize, or swap artwork while it opens.
 - Cards stay hidden behind the front pocket until they clear it.
-- The cards end exactly in their settled positions with no jump. Compare the last animated frame with a fresh load of `/envelope-open`.
+- The cards end exactly in their settled positions with no jump. Compare the last animated frame with a fresh load of `/#open`.
 - Double-clicking the envelope does not start a second animation.
 - Ribbon and petals appear only as designed and leave no stray layer behind.
 - No overlay remains after the animation. Every button stays clickable.
 
 ## 5. Navigation
-- A refresh on `/envelope-open` shows the settled cards with a brief fade and no envelope sequence.
+- A refresh on `/#open` shows the settled cards with a brief fade and no opening sequence. The prerendered sealed envelope may paint for a moment under the stage's 300ms fade-in; that is expected, but the flap, ribbon, and flying cards must not play.
 - SHARE YOUR ADDRESS goes to the form, and BACK returns without replaying the opening.
 - Browser Back and Forward land on the right screen each time.
 
