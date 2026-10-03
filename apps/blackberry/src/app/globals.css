@@ -10,12 +10,12 @@
   --bb-raindrops-on-roses: #e6dadc;
   --bb-sugar-swizzle: #f0eeeb;
 
-  --site-background: var(--bb-blush);
+  --site-background: color-mix(in srgb, var(--bb-soft-white) 65%, var(--bb-intimate-pink));
   --site-surface: var(--bb-soft-white);
-  --site-foreground: #2a2426;
-  --site-muted: #5f4d55;
-  --site-border: #edb8c4;
-  --site-primary: #8e3348;
+  --site-foreground: #43383e;
+  --site-muted: #6b5961;
+  --site-border: var(--bb-raindrops-on-roses);
+  --site-primary: #735560;
   --site-primary-foreground: var(--bb-soft-white);
   --site-font-sans: var(--font-jost), sans-serif;
   --site-font-serif: var(--font-cormorant-garamond), serif;
@@ -24,12 +24,12 @@
   --site-inverted-foreground: var(--bb-soft-white);
   --site-destructive: #b3261e;
 
-  /* Blend the wedding palette with Save the Date's blush card, date card,
-     and ribbon pinks. Deep rose keeps text and controls readable on every fill. */
+  /* Mostly the wedding palette, with a small touch of Save the Date's pinks.
+     Muted rose accents and soft charcoal keep the light fills readable. */
   --bb-accent: var(--site-primary);
-  --bb-blush: color-mix(in srgb, var(--bb-intimate-pink) 50%, #f8e3e8);
-  --bb-pink: color-mix(in srgb, var(--bb-intimate-pink) 35%, #f2c8d2);
-  --bb-rose: color-mix(in srgb, var(--bb-raindrops-on-roses) 25%, #edb2c0);
+  --bb-blush: var(--bb-soft-blush);
+  --bb-pink: color-mix(in srgb, var(--bb-intimate-pink) 85%, #f2c8d2);
+  --bb-rose: color-mix(in srgb, var(--bb-raindrops-on-roses) 85%, #edb2c0);
   --bb-line: var(--site-border);
 }
 
@@ -56,7 +56,7 @@ body {
   font-weight: 300;
 }
 
-/* App-local treatments for the shared chrome, keeping large sections pink. */
+/* App-local treatments for the shared chrome, keeping section colors cohesive. */
 #home a[href="#rsvp"],
 nav a[href="#rsvp"].rounded-full {
   background: var(--bb-pink);
