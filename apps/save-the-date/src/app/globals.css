@@ -289,28 +289,29 @@
   --std-anim-extras-in: std-note-in 420ms ease-out 4550ms both;
 
   /* Resealing, when a guest asks to open it again (docs/superpowers/specs/
-     2026-10-03-save-the-date-reseal-design.md). The note clears away, the cards tuck back
-     in top card first — running their opening keyframes backwards, compressed — the flap
-     folds down over them, and a whole seal presses on. The last beat,
-     --std-anim-reseal-sparkle, ends at 2880ms, which is CLOSING_DURATION_MS in
-     src/components/invitation-phase.ts — keep the two in sync. */
+     2026-10-03-save-the-date-reseal-design.md). The note clears away; the cards straighten
+     and gather into a stack above the envelope, top card first, all arriving at 1100ms;
+     at 1150ms the whole stack slides into the pocket together (so no card ever passes
+     behind another mid-air); the flap folds down over them, and a whole seal presses on.
+     The last beat, --std-anim-reseal-sparkle, ends at 3100ms, which is
+     CLOSING_DURATION_MS in src/components/invitation-phase.ts — keep the two in sync. */
   --std-anim-note-out: std-note-out 320ms ease-in both;
   --std-anim-sprig-out: std-prompt-out 200ms linear both;
   --std-anim-petals-out: std-prompt-out 400ms linear both;
-  --std-anim-tuck-p: std-card-p 1192ms linear 150ms reverse both;
-  --std-anim-tuck-p-z: std-card-p-z 1192ms linear 150ms reverse both;
-  --std-anim-tuck-d: std-card-d 1144ms linear 300ms reverse both;
-  --std-anim-tuck-d-z: std-card-d-z 1144ms linear 300ms reverse both;
-  --std-anim-tuck-a: std-card-a 1096ms linear 450ms reverse both;
-  --std-anim-tuck-a-z: std-card-a-z 1096ms linear 450ms reverse both;
-  --std-anim-flap-close: std-flap-open 850ms cubic-bezier(0.5, 0, 0.3, 1) 1350ms reverse both;
-  --std-anim-flap-close-z: std-flap-z 850ms cubic-bezier(0.5, 0, 0.3, 1) 1350ms reverse both;
-  --std-anim-seal-press: std-seal-press 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 2100ms both;
-  --std-anim-reseal-sparkle: std-sparkle 600ms ease-out 2280ms both;
-  --std-anim-postmark-return: std-note-in 420ms ease-out 2300ms both;
+  --std-anim-tuck-p: std-tuck-p 1600ms linear 150ms both;
+  --std-anim-tuck-p-z: std-tuck-p-z 1600ms linear 150ms both;
+  --std-anim-tuck-d: std-tuck-d 1500ms linear 250ms both;
+  --std-anim-tuck-d-z: std-tuck-d-z 1500ms linear 250ms both;
+  --std-anim-tuck-a: std-tuck-a 1400ms linear 350ms both;
+  --std-anim-tuck-a-z: std-tuck-a-z 1400ms linear 350ms both;
+  --std-anim-flap-close: std-flap-open 800ms cubic-bezier(0.5, 0, 0.3, 1) 1650ms reverse both;
+  --std-anim-flap-close-z: std-flap-z 800ms cubic-bezier(0.5, 0, 0.3, 1) 1650ms reverse both;
+  --std-anim-seal-press: std-seal-press 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 2350ms both;
+  --std-anim-reseal-sparkle: std-sparkle 600ms ease-out 2500ms both;
+  --std-anim-postmark-return: std-note-in 420ms ease-out 2550ms both;
 
   /* The stage drifts back down to its sealed height while the flap folds. */
-  --std-stage-lower-transition: translate 900ms cubic-bezier(0.45, 0, 0.25, 1) 1300ms;
+  --std-stage-lower-transition: translate 1000ms cubic-bezier(0.45, 0, 0.25, 1) 1500ms;
 
   /* Ambient loops once open */
   --std-anim-foil: std-foil 7000ms ease-in-out 600ms infinite;
@@ -759,6 +760,86 @@
   to {
     opacity: 0;
     transform: translateY(calc(6 * var(--std-u)));
+  }
+}
+/* Resealing: each card straightens and lifts to where it peaked on the way out, waits
+   for the others, then slides down into the pocket with them. */
+@keyframes std-tuck-p {
+  0% {
+    transform: translate(0, 0) rotate(-7deg) scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  59.375% {
+    transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg) scale(0.9);
+  }
+  62.5% {
+    transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg) scale(0.9);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.35, 1);
+  }
+  100% {
+    transform: translate(calc(77.5 * var(--std-u)), calc(-22 * var(--std-u))) rotate(0deg) scale(0.82);
+  }
+}
+@keyframes std-tuck-p-z {
+  0%,
+  62.5% {
+    z-index: 7;
+  }
+  62.6%,
+  100% {
+    z-index: 3;
+  }
+}
+@keyframes std-tuck-d {
+  0% {
+    transform: translate(0, 0) rotate(9.5deg) scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  56.667% {
+    transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg) scale(0.9);
+  }
+  60% {
+    transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg) scale(0.9);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.35, 1);
+  }
+  100% {
+    transform: translate(calc(-85.5 * var(--std-u)), calc(64 * var(--std-u))) rotate(0deg) scale(0.82);
+  }
+}
+@keyframes std-tuck-d-z {
+  0%,
+  60% {
+    z-index: 7;
+  }
+  60.1%,
+  100% {
+    z-index: 3;
+  }
+}
+@keyframes std-tuck-a {
+  0% {
+    transform: translate(0, 0) rotate(-9deg) scale(1);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  53.571% {
+    transform: translate(calc(59.5 * var(--std-u)), calc(-44.82 * var(--std-u))) rotate(0deg) scale(0.9);
+  }
+  57.143% {
+    transform: translate(calc(59.5 * var(--std-u)), calc(-44.82 * var(--std-u))) rotate(0deg) scale(0.9);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.35, 1);
+  }
+  100% {
+    transform: translate(calc(59.5 * var(--std-u)), calc(161 * var(--std-u))) rotate(0deg) scale(0.82);
+  }
+}
+@keyframes std-tuck-a-z {
+  0%,
+  57.143% {
+    z-index: 7;
+  }
+  57.243%,
+  100% {
+    z-index: 3;
   }
 }
 @keyframes std-seal-press {

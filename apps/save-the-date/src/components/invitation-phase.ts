@@ -14,7 +14,7 @@ export const OPENING_DURATION_MS = 4970;
  * How long resealing the envelope runs, in milliseconds.
  *
  * This mirrors the closing @keyframes timeline in src/app/globals.css: the last one-shot
- * animation, --std-anim-reseal-sparkle, starts at 2280ms and runs for 600ms. Change one and
+ * animation, --std-anim-reseal-sparkle, starts at 2500ms and runs for 600ms. Change one and
  * you must change the other.
  */
-export const CLOSING_DURATION_MS = 2880;
+export const CLOSING_DURATION_MS = 3100;
