@@ -139,15 +139,15 @@ function Postmark({ fading }: { fading: boolean }) {
           <path d="M4 50 q 6.5 -4 13 0 t 13 0 t 13 0 t 13 0 t 13 0" strokeWidth="1.3" />
           <circle cx="108" cy="38" r="28" strokeWidth="1.6" className="fill-std-sparkle-white/40" />
           <circle cx="108" cy="38" r="25.4" strokeWidth="0.7" />
-          <path id="std-postmark-arc" d="M88 38 A20 20 0 0 1 128 38" strokeWidth="0" />
-          <text className="fill-std-postmark-ink stroke-none font-sans text-[6.6px] font-semibold tracking-[1.4px]">
+          <path id="std-postmark-arc" d="M90.1 39.88 A18 18 0 1 1 125.9 39.88" strokeWidth="0" />
+          <text className="fill-std-postmark-ink stroke-none font-sans text-[6.6px] font-semibold tracking-[1.2px]">
             <textPath href="#std-postmark-arc" startOffset="50%" textAnchor="middle">
               {POSTMARK_CITY}
             </textPath>
           </text>
           <text
             x="108"
-            y="47"
+            y="51.5"
             textAnchor="middle"
             className="fill-std-postmark-ink stroke-none font-serif text-[11px] font-semibold tracking-[0.6px] lining-nums"
           >
