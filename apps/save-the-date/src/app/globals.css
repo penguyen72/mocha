@@ -279,12 +279,9 @@
   --std-anim-write-2: std-write 550ms ease-out 2650ms both;
   --std-anim-write-3: std-write 550ms ease-out 3050ms both;
   --std-anim-write-4: std-write 500ms ease-out 3350ms both;
-  --std-anim-develop: std-develop 1700ms ease-out 2900ms both;
-  --std-anim-develop-img: std-develop-img 1700ms ease-out 2900ms both;
   --std-anim-heart: std-draw 650ms ease-in-out 3550ms both;
   --std-anim-ridge: std-draw 800ms ease-out 3700ms both;
   --std-anim-city: std-note-in 420ms ease-out 3900ms both;
-  --std-anim-caption: std-write 600ms ease-out 4100ms both;
   --std-anim-note-in: std-note-in 420ms ease-out 4300ms both;
   --std-anim-extras-in: std-note-in 420ms ease-out 4550ms both;
 
@@ -380,12 +377,9 @@
     --std-anim-write-2: none;
     --std-anim-write-3: none;
     --std-anim-write-4: none;
-    --std-anim-develop: none;
-    --std-anim-develop-img: none;
     --std-anim-heart: none;
     --std-anim-ridge: none;
     --std-anim-city: none;
-    --std-anim-caption: none;
     --std-anim-note-in: none;
     --std-anim-extras-in: none;
     --std-anim-note-out: none;
@@ -733,23 +727,7 @@
   }
 }
 
-@keyframes std-develop {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
 
-@keyframes std-develop-img {
-  from {
-    filter: saturate(0.2) brightness(1.15);
-  }
-  to {
-    filter: none;
-  }
-}
 
 
 @keyframes std-note-out {

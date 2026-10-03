@@ -15,4 +15,11 @@ describe("PhotoCard", () => {
     render(<PhotoCard animated={animated} />);
     expect(screen.getByText(PHOTO_CAPTION)).toBeInTheDocument();
   });
+
+  it("comes out of the envelope already developed and captioned", () => {
+    const { container } = render(<PhotoCard animated />);
+    expect(screen.getByAltText(PHOTO_ALT).className).not.toMatch(/animation/);
+    expect(screen.getByText(PHOTO_CAPTION).parentElement?.className).not.toMatch(/animation|mask/);
+    expect(container.querySelectorAll("[class*='develop']")).toHaveLength(0);
+  });
 });
