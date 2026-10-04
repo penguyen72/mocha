@@ -74,7 +74,27 @@ export const COUNTDOWN_EYEBROW = "The countdown is on!";
 export const COUNTDOWN_TODAY = "Today’s the day!";
 
 export const CALENDAR_LABEL = "Add to calendar";
+/**
+ * Served from the app's own origin. Opened directly, Apple devices offer to add the one
+ * event; a webcal: link would subscribe the guest to a whole new calendar instead.
+ */
 export const CALENDAR_HREF = "/peyton-and-liane.ics";
+export const CALENDAR_FILE_NAME = "peyton-and-liane.ics";
+
+/** The calendar sheet's header: a small date tile beside the event's title and details. */
+export const CALENDAR_SHEET_TITLE = "Peyton & Liane's Wedding";
+export const CALENDAR_SHEET_DATE = "Saturday, October 16, 2027";
+export const CALENDAR_SHEET_PLACE = "Trenton, Georgia";
+export const CALENDAR_SHEET_WHEN = `${CALENDAR_SHEET_DATE} · ${CALENDAR_SHEET_PLACE}`;
+export const CALENDAR_TILE_MONTH = "Oct";
+export const CALENDAR_DISMISS = "Not now";
+
+/** One row per calendar in the sheet: what it is, and what choosing it will do. */
+export const CALENDAR_CHOICES = {
+  google: { name: "Google Calendar", hint: "Opens in a new tab" },
+  apple: { name: "Apple Calendar", hint: "iPhone, iPad & Mac" },
+  file: { name: "Outlook & others", hint: "Download an .ics file" },
+} as const;
 /** An all-day event uses an exclusive end date, matching the static .ics file. */
 export const GOOGLE_CALENDAR_HREF =
   "https://calendar.google.com/calendar/r/eventedit?" +

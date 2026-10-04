@@ -27,7 +27,7 @@ sheet from being clipped or scaled by the invitation stage.
 The same markup has two layouts, switched by a width media query:
 
 - **Phone:** pinned to the bottom edge, full width, rounded top corners, slides up.
-- **Desktop:** centred, about 340px wide, fades and lifts in.
+- **Desktop:** centred, 372px wide so the date and place fit on one line, fades and lifts in.
 
 With `prefers-reduced-motion: reduce`, it appears without movement. The backdrop is a translucent
 wash of the invitation's dark ink. No drag handle and no swipe-to-dismiss.

@@ -19,7 +19,7 @@ It runs at http://localhost:3002.
 | --- | --- |
 | `/` | The sealed envelope. Opening it plays the choreography and settles on the invitation. |
 | `/#open` | The opened invitation, with no animation — so a reload or shared link stays open. |
-| `/peyton-and-liane.ics` | The static all-day wedding event used by the Apple subscription and calendar-file download. |
+| `/peyton-and-liane.ics` | The static all-day wedding event behind the Apple Calendar and calendar-file choices. |
 
 ## How it is built
 
@@ -36,21 +36,25 @@ token contract.
 
 ## Add to calendar
 
-The invitation's **Add to calendar** button reveals Google Calendar, Apple Calendar, and a
-calendar-file download. Google opens a prefilled event in a new tab for the guest to save.
-Apple opens a `webcal:` subscription to the `.ics` file on the current host.
-A device without a calendar protocol handler can use the
-download option to import the file into Apple Calendar on Mac, Outlook, or another calendar app.
+The invitation's **Add to calendar** button opens a sheet with Google Calendar, Apple Calendar,
+and Outlook & others. On phones it slides up from the bottom edge; on wider screens the same
+sheet is a centred dialog. It is a native modal `<dialog>` in `src/components/add-to-calendar.tsx`,
+so the browser provides the backdrop, the focus trap, and Escape to close.
+
+- **Google Calendar** opens a prefilled event in a new tab for the guest to save.
+- **Apple Calendar** links the `.ics` file directly. iPhone and iPad Safari offer to add the
+  single event, and a Mac opens Calendar's import prompt. It deliberately does not use a
+  `webcal:` link, which would subscribe the guest to a separate calendar instead.
+- **Outlook & others** downloads the same file to import into any other calendar app.
 
 All options save October 16, 2027 as an all-day event in Trenton, Georgia, with a note that the
 formal invitation will follow. The exclusive end date is October 17. If these details change,
 update both `GOOGLE_CALENDAR_HREF` in `src/components/invitation-content.ts` and
-`public/peyton-and-liane.ics`; the calendar test checks that they agree. Imported files and
-Google's saved copies do not receive subsequent website updates. Apple's subscribed calendar
-can refresh the hosted file.
+`public/peyton-and-liane.ics`; the calendar test checks that they agree. Saved copies do not
+receive subsequent website updates.
 
-The chooser supports Tab navigation, Escape to close and restore focus, and dismissal when
-focus moves away or the guest taps elsewhere. It uses the invitation's existing client boundary.
+The sheet closes on Escape, **Not now**, a click on the backdrop, or choosing a calendar, and
+then returns focus to the button.
 
 The design this was ported from is recorded in
 [`docs/superpowers/reference/save-the-date-dc-source.md`](../../docs/superpowers/reference/save-the-date-dc-source.md),
