@@ -49,3 +49,21 @@ if (!Element.prototype.releasePointerCapture) {
 if (!Element.prototype.scrollIntoView) {
   Element.prototype.scrollIntoView = () => {};
 }
+
+// jsdom has <dialog> but not its methods. Open and close it by its attribute, and cancel the
+// open modal on Escape the way browsers do, so components can rely on the native behaviour.
+if (!HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
+    this.setAttribute("open", "");
+  };
+  HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
+    if (!this.open) return;
+    this.removeAttribute("open");
+    this.dispatchEvent(new Event("close"));
+  };
+  document.addEventListener("keydown", (event) => {
+    const dialog = document.querySelector<HTMLDialogElement>("dialog[open]");
+    if (event.key !== "Escape" || !dialog) return;
+    if (dialog.dispatchEvent(new Event("cancel", { cancelable: true }))) dialog.close();
+  });
+}

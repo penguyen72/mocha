@@ -1,13 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
-
+import { AddToCalendar } from "./add-to-calendar";
 import { Countdown } from "./countdown";
-import {
-  CALENDAR_HREF,
-  CALENDAR_LABEL,
-  GOOGLE_CALENDAR_HREF,
-  NOTE_TEXT,
-  REPLAY_LABEL,
-} from "./invitation-content";
+import { NOTE_TEXT, REPLAY_LABEL } from "./invitation-content";
 
 type InvitationNoteProps = {
   animated: boolean;
@@ -37,31 +30,7 @@ const ACTION =
   "hover:text-std-link-hover focus-visible:outline-2 focus-visible:outline-offset-2 " +
   "focus-visible:outline-std-focus-ring";
 
-const CALENDAR_OPTION =
-  "flex min-h-11 items-center rounded px-3 py-2 font-sans text-sm font-medium " +
-  "text-std-accent-ink hover:bg-std-blush-card focus-visible:outline-2 " +
-  "focus-visible:outline-offset-2 focus-visible:outline-std-focus-ring";
-
 export function InvitationNote({ animated, leaving = false, onReplay }: InvitationNoteProps) {
-  // Build the subscription URL when opening, so it uses the current deployment's
-  // host and port without reading window during server rendering or hydration.
-  const [appleHref, setAppleHref] = useState<string | null>(null);
-  const calendarRef = useRef<HTMLDivElement>(null);
-  const calendarButtonRef = useRef<HTMLButtonElement>(null);
-  const calendarId = useId();
-  const calendarOpen = appleHref !== null;
-
-  useEffect(() => {
-    if (!calendarOpen) return;
-    const dismissOutside = (event: PointerEvent) => {
-      if (event.target instanceof Node && !calendarRef.current?.contains(event.target)) {
-        setAppleHref(null);
-      }
-    };
-    document.addEventListener("pointerdown", dismissOutside);
-    return () => document.removeEventListener("pointerdown", dismissOutside);
-  }, [calendarOpen]);
-
   return (
     <div className={leaving ? `${NOTE} [animation:var(--std-anim-note-out)]` : NOTE} inert={leaving}>
       <div className={animated ? `${LINE} [animation:var(--std-anim-note-in)]` : LINE}>
@@ -74,62 +43,8 @@ export function InvitationNote({ animated, leaving = false, onReplay }: Invitati
 
       <div className={animated ? `${EXTRAS} [animation:var(--std-anim-extras-in)]` : EXTRAS}>
         <Countdown />
-        <div className="relative flex items-center gap-[calc(10*var(--std-u))]">
-          <div
-            ref={calendarRef}
-            className="contents"
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) setAppleHref(null);
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Escape" && calendarOpen) {
-                event.stopPropagation();
-                setAppleHref(null);
-                calendarButtonRef.current?.focus();
-              }
-            }}
-          >
-            <button
-              ref={calendarButtonRef}
-              type="button"
-              className={ACTION}
-              aria-expanded={calendarOpen}
-              aria-controls={calendarId}
-              onClick={() => {
-                if (calendarOpen) {
-                  setAppleHref(null);
-                } else {
-                  const url = new URL(CALENDAR_HREF, window.location.href);
-                  setAppleHref(`webcal://${url.host}${url.pathname}`);
-                }
-              }}
-            >
-              {CALENDAR_LABEL}
-            </button>
-            {calendarOpen && (
-              <div
-                id={calendarId}
-                role="group"
-                aria-label="Choose a calendar"
-                className="absolute bottom-full left-1/2 mb-2 w-72 max-w-[calc(100vw-32px)] -translate-x-1/2 rounded-xl border border-std-liner-rule bg-std-stage p-3 [box-shadow:var(--std-announce-shadow)]"
-              >
-                <a
-                  href={GOOGLE_CALENDAR_HREF}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={CALENDAR_OPTION}
-                >
-                  Google Calendar
-                </a>
-                <a href={appleHref} className={CALENDAR_OPTION}>
-                  Apple Calendar
-                </a>
-                <a href={CALENDAR_HREF} download="peyton-and-liane.ics" className={CALENDAR_OPTION}>
-                  Download calendar file
-                </a>
-              </div>
-            )}
-          </div>
+        <div className="flex items-center gap-[calc(10*var(--std-u))]">
+          <AddToCalendar className={ACTION} />
           <span aria-hidden className="text-std-liner-rule">
             ·
           </span>
