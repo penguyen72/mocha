@@ -69,6 +69,13 @@ function connectMixer(audio: HTMLAudioElement): Mixer | null {
   }
 }
 
+/**
+ * How loud the song plays, just under full volume. The recording is mastered so hot that its
+ * loudest moments decode past full scale; Web Audio clips those, which a phone plays as
+ * crackle. This leaves them room.
+ */
+export const SONG_VOLUME = 0.85;
+
 /** The song rises in over the first half of the envelope opening. */
 export const SONG_FADE_IN_MS = 2500;
 
@@ -173,7 +180,7 @@ export function SongProvider({ children }: { children: ReactNode }) {
       // A phone suspends Web Audio in the background; a tap brings it back.
       mixerRef.current?.context.resume().catch(() => {});
       // A song starting over rises from silence; one fading out comes back from where it is.
-      fadeTo(audio.paused && fadeMs > 0 ? 0 : volume(), 1, fadeMs);
+      fadeTo(audio.paused && fadeMs > 0 ? 0 : volume(), SONG_VOLUME, fadeMs);
       audio.play()?.catch(() => setPlaying(false));
     },
     [cancelStop, fadeTo, volume],
