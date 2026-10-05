@@ -84,6 +84,37 @@ describe("InvitationStage", () => {
     expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
+  it("marks the stage as sealed only while it shows the sealed envelope", () => {
+    const { container } = render(<InvitationStage />);
+    const frame = container.firstElementChild as HTMLElement;
+    expect(frame).toHaveAttribute("data-stage");
+    expect(frame).toHaveAttribute("data-sealed");
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+
+    expect(frame).not.toHaveAttribute("data-sealed");
+  });
+
+  it("eases the floating envelope and swollen seal back from where they were when clicked", () => {
+    const realStyle = window.getComputedStyle.bind(window);
+    vi.spyOn(window, "getComputedStyle").mockImplementation((element, pseudo) => {
+      if (element.hasAttribute("data-envelope-float")) {
+        return { transform: "matrix(1, 0, 0, 1, 0, -3.5)" } as CSSStyleDeclaration;
+      }
+      if (element.hasAttribute("data-seal-rest")) return { scale: "0.97" } as CSSStyleDeclaration;
+      if (element.hasAttribute("data-seal-swell")) return { scale: "1.04" } as CSSStyleDeclaration;
+      return realStyle(element, pseudo);
+    });
+    const { container } = render(<InvitationStage />);
+    const frame = container.firstElementChild as HTMLElement;
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+
+    expect(frame.style.getPropertyValue("--std-float-from")).toBe("-3.5px");
+    expect(frame.style.getPropertyValue("--std-seal-from")).toBe("1.009");
+    vi.restoreAllMocks();
+  });
+
   it("moves focus to the invitation heading once the choreography completes", () => {
     vi.useFakeTimers();
     render(<InvitationStage />);

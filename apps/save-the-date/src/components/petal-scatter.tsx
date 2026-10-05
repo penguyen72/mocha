@@ -60,7 +60,7 @@ export function PetalScatter({ leaving = false }: PetalScatterProps) {
       className={
         leaving
           ? "pointer-events-none absolute inset-0 [animation:var(--std-anim-petals-out)]"
-          : "pointer-events-none absolute inset-0"
+          : "pointer-events-none absolute inset-0 [animation:var(--std-anim-petals-in)]"
       }
     >
       {DEPTHS.map(({ depth, layer, petals }) => (
