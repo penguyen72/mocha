@@ -24,15 +24,20 @@ type EnvelopeProps = {
 /**
  * Every envelope layer occupies this same box inside the stage frame, and every layer
  * lifts together when the envelope is hovered or pressed. The stage frame carries
- * `group`, and the envelope button is the only <button> inside it, so `group-has-` scopes
- * the lift precisely — and that button only exists while the envelope is closed, which is
- * exactly when the design lifts. Under reduced motion the affordance stays but the
- * transition does not.
+ * `group`, and `group-has-` watches the envelope's own button, which only exists while
+ * the envelope is closed — exactly when the design lifts. The opened invitation's buttons
+ * (the record, Add to calendar, open it again) must not lift it.
+ *
+ * Only a mouse or pen gets the lift. A phone leaves :hover stuck on whatever was tapped
+ * last and squashes it with :active as the tap lands, so every tap — opening the
+ * envelope, asking to open it again — jolted the envelope up and back in a few frames.
+ * Under reduced motion the affordance stays but the transition does not.
  */
 const LAYER_BOX =
   "absolute left-[13%] top-[42%] aspect-[8/5] w-[74%] " +
   "[transition:var(--std-env-lift-transition)] motion-reduce:[transition:none] " +
-  "group-has-[button:hover]:[translate:0_-3px] group-has-[button:active]:[scale:0.99]";
+  "[@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:hover]:[translate:0_-3px] " +
+  "[@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:active]:[scale:0.99]";
 
 /** While sealed, every layer floats together; they all mount at once, so they stay in step. */
 const FLOAT = "[animation:var(--std-anim-float)]";
@@ -66,7 +71,7 @@ const SEAL_PRESS =
 /** The whole seal swells a little while the envelope is hovered; the press still shrinks it. */
 const SEAL_SWELL =
   "absolute inset-0 [transition:scale_250ms_ease] motion-reduce:[transition:none] " +
-  "group-has-[button:hover]:[scale:1.04]";
+  "[@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:hover]:[scale:1.04]";
 
 /** A band of light that passes over the wax every few seconds, kept inside the seal's round. */
 const SEAL_SHIMMER =
@@ -251,7 +256,7 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
       {/* Front pocket: three folded panels. */}
       <div
         aria-hidden
-        className={`${box} pointer-events-none z-[5] group-has-[button:hover]:[filter:var(--std-env-lift-shadow)]`}
+        className={`${box} pointer-events-none z-[5] [@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:hover]:[filter:var(--std-env-lift-shadow)]`}
       >
         <div className="absolute inset-0 [filter:var(--std-env-left-shadow)]">
           <div className="absolute inset-0 [background:var(--std-env-left-fill)] [clip-path:polygon(0_0,50%_56%,0_100%)]" />
@@ -292,7 +297,7 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
           ) : (
             <div
               data-seal-rest
-              className={`${SEAL_BOX} [transition:scale_140ms_ease] motion-reduce:[transition:none] group-has-[button:active]:[scale:0.94]`}
+              className={`${SEAL_BOX} [transition:scale_140ms_ease] motion-reduce:[transition:none] [@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:active]:[scale:0.94]`}
             >
               <div data-seal-swell className={SEAL_SWELL}>
                 <SealFace />
@@ -304,6 +309,7 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
           {closed && (
             <button
               ref={buttonRef}
+              data-envelope-button
               type="button"
               aria-label={ENVELOPE_BUTTON_LABEL}
               onClick={onOpen}

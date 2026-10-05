@@ -67,4 +67,20 @@ describe("Envelope", () => {
     expect(seals).toHaveLength(1);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
+
+  it("lifts only for its own button, and only under a mouse or pen", () => {
+    const { container } = render(<Envelope phase="closed" onOpen={vi.fn()} />);
+    const button = screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL });
+    expect(button).toHaveAttribute("data-envelope-button");
+
+    // A bare `button:hover` would also catch the opened invitation's buttons, and a phone
+    // leaves :hover stuck after every tap.
+    const lifts = Array.from(container.querySelectorAll("[class*='group-has-']")).flatMap((el) =>
+      Array.from(el.classList).filter((name) => name.includes("group-has-")),
+    );
+    expect(lifts.length).toBeGreaterThan(0);
+    for (const lift of lifts) {
+      expect(lift).toMatch(/^\[@media\(hover:hover\)_and_\(pointer:fine\)\]:group-has-\[\[data-envelope-button\]:/);
+    }
+  });
 });

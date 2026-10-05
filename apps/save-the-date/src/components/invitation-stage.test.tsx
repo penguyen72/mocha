@@ -223,6 +223,18 @@ describe("InvitationStage", () => {
     expect(screen.queryByText(NOTE_TEXT)).not.toBeInTheDocument();
   });
 
+  it("tilts the cards toward a mouse, but leaves them still under a finger", () => {
+    window.history.replaceState(null, "", "/#open");
+    const { container } = render(<InvitationStage />);
+    const stage = container.querySelector<HTMLElement>("[data-stage]")!;
+
+    fireEvent.pointerMove(stage, { pointerType: "touch", clientX: 0, clientY: 0 });
+    expect(stage.style.getPropertyValue("--std-tilt-x")).toBe("");
+
+    fireEvent.pointerMove(stage, { pointerType: "mouse", clientX: 0, clientY: 0 });
+    expect(stage.style.getPropertyValue("--std-tilt-x")).not.toBe("");
+  });
+
   it("opens straight away when the page is entered at #open", () => {
     window.history.replaceState(null, "", "/#open");
     render(<InvitationStage />);
