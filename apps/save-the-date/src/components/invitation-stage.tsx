@@ -64,9 +64,13 @@ function notifyHashChange() {
   window.dispatchEvent(new Event("hashchange"));
 }
 
-/** Feeds the cards' parallax: the pointer's position over the stage, from -1 to 1. */
+/**
+ * Feeds the cards' parallax: the pointer's position over the stage, from -1 to 1.
+ * Only a mouse or pen hovers; a finger would drag the cards toward each tap and let
+ * them spring back as it lifts, so touch leaves them still.
+ */
 function tiltTowards(event: PointerEvent<HTMLDivElement>) {
-  if (prefersReducedMotion()) return;
+  if (event.pointerType === "touch" || prefersReducedMotion()) return;
   const frame = event.currentTarget;
   const bounds = frame.getBoundingClientRect();
   const x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
