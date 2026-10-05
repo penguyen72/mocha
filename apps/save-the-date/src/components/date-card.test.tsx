@@ -10,10 +10,15 @@ import {
   DATE_CARD_THE,
   DATE_CARD_WEEK,
 } from "./invitation-content";
+import { SongProvider } from "./song";
 
 describe("DateCard", () => {
   it.each([false, true])("renders the wording, the wedding week and the city (animated: %s)", (animated) => {
-    render(<DateCard animated={animated} />);
+    render(
+      <SongProvider>
+        <DateCard animated={animated} />
+      </SongProvider>,
+    );
     expect(screen.getByText(DATE_CARD_SAVE)).toBeInTheDocument();
     expect(screen.getByText(DATE_CARD_THE)).toBeInTheDocument();
     expect(screen.getByText(DATE_CARD_DATE)).toBeInTheDocument();

@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useId } from "react";
 
 import {
   RECORD_HINT_PAUSE,
   RECORD_HINT_PLAY,
   RECORD_PAUSE_LABEL,
   RECORD_PLAY_LABEL,
-  SONG_SRC,
 } from "./invitation-content";
+import { useSong } from "./song";
 
 type RecordPlayerProps = {
   /** Complete positioning and entrance animation for the record, as a literal class string. */
@@ -36,47 +36,12 @@ const DISC_SPIN = "[animation:var(--std-anim-record-spin)]";
 const DISC_ARRIVE = "[animation:var(--std-anim-record-arrive)]";
 
 /**
- * A vinyl record on the date card that plays the couple's song on a loop. The record is the
- * only control: the audio element has no controls of its own and follows the record's taps.
+ * A vinyl record on the date card that turns with the couple's song. The song starts as the
+ * envelope opens; the record is its only control, pausing and resuming it.
  */
 export function RecordPlayer({ className, animated }: RecordPlayerProps) {
-  const [started, setStarted] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [songSrc, setSongSrc] = useState(SONG_SRC);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const { playing, started, toggle } = useSong();
   const arcId = `record-arc-${useId().replace(/:/g, "")}`;
-
-  // A phone only starts fetching a streamed song once the record is tapped, which held the
-  // music back by about a second. Download it while the card opens instead, and play it
-  // from memory. A tap before the download lands still streams the song as before.
-  useEffect(() => {
-    const download = new AbortController();
-    let downloadedSrc: string | null = null;
-
-    fetch(SONG_SRC, { signal: download.signal })
-      .then((response) => (response.ok ? response.blob() : null))
-      .then((song) => {
-        const audio = audioRef.current;
-        // Swapping the source would cut off a song that is already playing or paused mid-way.
-        if (song === null || audio === null || !audio.paused || audio.currentTime > 0) return;
-        downloadedSrc = URL.createObjectURL(song);
-        setSongSrc(downloadedSrc);
-      })
-      .catch(() => {});
-
-    return () => {
-      download.abort();
-      if (downloadedSrc !== null) URL.revokeObjectURL(downloadedSrc);
-    };
-  }, []);
-
-  function toggle() {
-    const audio = audioRef.current;
-    if (audio === null) return;
-    // Playing straight from the tap keeps it inside the user gesture browsers ask for.
-    if (audio.paused) audio.play().catch(() => setPlaying(false));
-    else audio.pause();
-  }
 
   return (
     <div className={className}>
@@ -122,19 +87,6 @@ export function RecordPlayer({ className, animated }: RecordPlayerProps) {
           </textPath>
         </text>
       </svg>
-
-      {/* The song downloads separately (above), so the element itself must not fetch it too. */}
-      <audio
-        ref={audioRef}
-        src={songSrc}
-        preload="none"
-        loop
-        onPlay={() => {
-          setStarted(true);
-          setPlaying(true);
-        }}
-        onPause={() => setPlaying(false)}
-      />
     </div>
   );
 }
