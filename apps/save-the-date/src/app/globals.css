@@ -247,6 +247,8 @@
 
   /* Sealed envelope */
   --std-anim-stage-in: std-stage-in 300ms ease-out both;
+  /* A hard load of /#open: the stage waits, hidden, until it is open, then fades in. */
+  --std-anim-stage-reveal: std-stage-in 400ms ease-out both;
   --std-anim-mail-in: std-note-in 500ms ease-out 150ms both;
   --std-anim-mail-write: std-write 1100ms ease-out 400ms both;
   --std-anim-bloom: std-bloom 1600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
@@ -307,7 +309,9 @@
   --std-anim-tuck-a-z: std-tuck-a-z 1400ms linear 350ms both;
   --std-anim-flap-close: std-flap-open 800ms cubic-bezier(0.5, 0, 0.3, 1) 1650ms reverse both;
   --std-anim-flap-close-z: std-flap-z 800ms cubic-bezier(0.5, 0, 0.3, 1) 1650ms reverse both;
-  --std-anim-seal-press: std-seal-press 420ms cubic-bezier(0.2, 0.9, 0.3, 1.2) 2350ms both;
+  --std-anim-seal-press: std-seal-press 420ms linear 2350ms both;
+  /* The pressed seal fades in on its own gentle curve; on the press's easing it jumped. */
+  --std-anim-seal-press-fade: std-stage-in 180ms ease-out 2350ms both;
   --std-anim-reseal-sparkle: std-sparkle 600ms ease-out 2500ms both;
   --std-anim-postmark-return: std-note-in 420ms ease-out 2550ms both;
 
@@ -328,6 +332,9 @@
   --std-anim-fall-9: std-petal-fall 16.5s linear 6s infinite both;
   --std-anim-fall-10: std-petal-fall 14.5s linear -13s infinite both;
   --std-anim-fall-11: std-petal-fall 18s linear 3.4s infinite both;
+  /* Some petals start mid-fall so the air is already full when the envelope opens; the
+     whole scatter fades in as the seal cracks so none of them pops into view. */
+  --std-anim-petals-in: std-stage-in 900ms ease-out 200ms both;
   --std-anim-drift: std-petal-drift 2600ms ease-in-out infinite alternate;
   --std-anim-drift-b: std-petal-drift 3400ms ease-in-out -1.3s infinite alternate-reverse;
 
@@ -356,6 +363,7 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --std-anim-stage-in: std-stage-in 120ms ease-out both;
+    --std-anim-stage-reveal: std-stage-in 120ms ease-out both;
     --std-anim-mail-in: none;
     --std-anim-mail-write: none;
     --std-anim-bloom: none;
@@ -400,6 +408,8 @@
     --std-anim-flap-close: none;
     --std-anim-flap-close-z: none;
     --std-anim-seal-press: none;
+    --std-anim-seal-press-fade: none;
+    --std-anim-petals-in: none;
     --std-anim-reseal-sparkle: none;
     --std-anim-postmark-return: none;
     --std-stage-lower-transition: none;
@@ -861,20 +871,14 @@
    jumped, so each half now has its own: in fast, out fast, nothing still in between. */
 @keyframes std-seal-press {
   0% {
-    opacity: 0;
     transform: scale(1.35);
     animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0.5);
   }
-  25% {
-    opacity: 1;
-  }
   60% {
-    opacity: 1;
     transform: scale(0.92, 0.9);
     animation-timing-function: cubic-bezier(0.25, 0.55, 0.4, 1.25);
   }
   100% {
-    opacity: 1;
     transform: none;
   }
 }
@@ -891,6 +895,18 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* On a hard load of /#open (marked by the inline script in layout.tsx before first paint),
+   the prerendered sealed envelope stays hidden: its fade-in is held at the first frame
+   until React removes data-sealed, then plays, so the opened invitation fades in without
+   the sealed one flashing first. Once played, it stays finished even after a reseal. */
+html[data-std-open] [data-stage] {
+  animation: var(--std-anim-stage-reveal);
+}
+
+html[data-std-open] [data-stage][data-sealed] {
+  animation-play-state: paused;
 }
 
 html {

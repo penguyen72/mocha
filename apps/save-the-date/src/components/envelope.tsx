@@ -60,7 +60,8 @@ const SEAL_HALVES = [
 const SEAL_SETTLE = "[animation:var(--std-anim-seal-settle)]";
 
 /** A fresh seal pressed onto the flap's point as the envelope closes again. */
-const SEAL_PRESS = "absolute inset-0 [animation:var(--std-anim-seal-press)]";
+const SEAL_PRESS =
+  "absolute inset-0 [animation:var(--std-anim-seal-press),var(--std-anim-seal-press-fade)]";
 
 /** The whole seal swells a little while the envelope is hovered; the press still shrinks it. */
 const SEAL_SWELL =

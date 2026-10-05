@@ -84,6 +84,17 @@ describe("InvitationStage", () => {
     expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
+  it("marks the stage as sealed only while it shows the sealed envelope", () => {
+    const { container } = render(<InvitationStage />);
+    const frame = container.firstElementChild as HTMLElement;
+    expect(frame).toHaveAttribute("data-stage");
+    expect(frame).toHaveAttribute("data-sealed");
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+
+    expect(frame).not.toHaveAttribute("data-sealed");
+  });
+
   it("eases the floating envelope and swollen seal back from where they were when clicked", () => {
     const realStyle = window.getComputedStyle.bind(window);
     vi.spyOn(window, "getComputedStyle").mockImplementation((element, pseudo) => {

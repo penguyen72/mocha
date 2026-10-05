@@ -131,8 +131,9 @@ export function InvitationStage() {
   // the server and hydration both see the sealed envelope, then React re-renders with
   // the real hash.
   //
-  // On a hard load of /#open the prerendered sealed envelope does paint first; the
-  // stage's 300ms fade-in runs over that swap rather than hiding it outright.
+  // On a hard load of /#open the prerendered sealed envelope would paint first. An inline
+  // script in the layout marks the page before that paint, and globals.css holds the stage
+  // hidden while it is still sealed, then fades it in already open.
   const effectivePhase: InvitationPhase =
     phase === "closed" && entryHash === OPEN_HASH ? "open" : phase;
 
@@ -221,6 +222,10 @@ export function InvitationStage() {
   return (
     <div
       ref={frameRef}
+      // data-sealed lets globals.css keep the stage hidden on a hard load of /#open until
+      // React swaps the prerendered sealed envelope for the opened invitation.
+      data-stage
+      data-sealed={effectivePhase === "closed" ? "" : undefined}
       className={`${STAGE_FRAME} ${opening ? STAGE_RISING : closing ? STAGE_LOWERING : revealed ? STAGE_OPEN : STAGE_SEALED}`}
       onPointerMove={tiltTowards} onPointerLeave={settleTilt}>
       {/* Candlelight: an ivory glow behind the names and envelope that pushes the floral

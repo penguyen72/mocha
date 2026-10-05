@@ -32,6 +32,14 @@ export const metadata: Metadata = {
     "Peyton and Liane are getting married. October 16, 2027, in Trenton, Georgia. Formal invitation to follow.",
 };
 
+/**
+ * Runs while the HTML is parsed, before the first paint: on a hard load of /#open (a reload,
+ * or a link copied after opening) it marks the page so globals.css can hold back the
+ * prerendered sealed envelope until React shows the opened invitation in its place.
+ */
+const OPEN_ON_LOAD_SCRIPT =
+  'if(location.hash==="#open")document.documentElement.setAttribute("data-std-open","")';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,8 +49,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${montserrat.variable} ${cormorantGaramond.variable} ${parisienne.variable}`}
+      // The inline script below may add data-std-open before React hydrates.
+      suppressHydrationWarning
     >
-      <body>{children}</body>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: OPEN_ON_LOAD_SCRIPT }} />
+        {children}
+      </body>
     </html>
   );
 }
