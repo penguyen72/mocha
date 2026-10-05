@@ -255,6 +255,10 @@
   --std-anim-open-prompt-in: std-note-in 500ms ease-out 2000ms both;
   --std-anim-seal-shimmer: std-seal-shimmer 5000ms ease-in-out 3000ms infinite;
   --std-anim-float: std-float 4200ms ease-in-out infinite;
+  /* At the click the float and the seal's hover swell ease back to rest from wherever they
+     were (see holdRestingPose in invitation-stage.tsx) instead of snapping. */
+  --std-anim-float-settle: std-float-settle 320ms cubic-bezier(0.3, 0, 0.3, 1) both;
+  --std-anim-seal-settle: std-seal-settle 180ms ease-out both;
 
   /* Opening: the seal cracks, the flap lifts, the cards and petals fly */
   --std-anim-prompt-out: std-prompt-out 224ms linear both;
@@ -360,6 +364,8 @@
     --std-anim-seal-shimmer: none;
     --std-anim-stamp: none;
     --std-anim-float: none;
+    --std-anim-float-settle: none;
+    --std-anim-seal-settle: none;
       --std-anim-prompt-out: none;
     --std-anim-seal-left: none;
     --std-anim-seal-right: none;
@@ -509,6 +515,24 @@
   }
   50% {
     transform: translateY(calc(-3 * var(--std-u)));
+  }
+}
+
+@keyframes std-float-settle {
+  from {
+    transform: translateY(var(--std-float-from, 0px));
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes std-seal-settle {
+  from {
+    scale: var(--std-seal-from, 1);
+  }
+  to {
+    scale: 1;
   }
 }
 
@@ -834,14 +858,22 @@
     z-index: 3;
   }
 }
+/* The seal speeds up as it comes down onto the flap, squashes, and springs straight back.
+   With one curve across both halves it came to rest in the squash for ~70ms and then
+   jumped, so each half now has its own: in fast, out fast, nothing still in between. */
 @keyframes std-seal-press {
   0% {
     opacity: 0;
     transform: scale(1.35);
+    animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0.5);
+  }
+  25% {
+    opacity: 1;
   }
   60% {
     opacity: 1;
     transform: scale(0.92, 0.9);
+    animation-timing-function: cubic-bezier(0.25, 0.55, 0.4, 1.25);
   }
   100% {
     opacity: 1;

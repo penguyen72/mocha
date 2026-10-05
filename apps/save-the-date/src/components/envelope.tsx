@@ -38,6 +38,12 @@ const LAYER_BOX =
 const FLOAT = "[animation:var(--std-anim-float)]";
 
 /**
+ * As the envelope opens, every layer glides down from wherever the float had carried it
+ * (the stage records that as --std-float-from at the click) rather than snapping to rest.
+ */
+const FLOAT_SETTLE = "[animation:var(--std-anim-float-settle)]";
+
+/**
  * Centred on the envelope. The seal is 34.6% of the envelope's height (21% of its width at
  * the art's 777:800 ratio, on an 8:5 envelope), so a 32.7% top puts its middle at exactly
  * 50%, still covering the flap's point just below.
@@ -49,6 +55,9 @@ const SEAL_HALVES = [
   "[clip-path:polygon(0_0,52%_0,46%_18%,55%_34%,45%_52%,54%_70%,47%_86%,51%_100%,0_100%)] [animation:var(--std-anim-seal-left)]",
   "[clip-path:polygon(52%_0,100%_0,100%_100%,51%_100%,47%_86%,54%_70%,45%_52%,55%_34%,46%_18%)] [animation:var(--std-anim-seal-right)]",
 ] as const;
+
+/** The cracking halves start at the size the seal had swollen or pressed to (--std-seal-from). */
+const SEAL_SETTLE = "[animation:var(--std-anim-seal-settle)]";
 
 /** A fresh seal pressed onto the flap's point as the envelope closes again. */
 const SEAL_PRESS = "absolute inset-0 [animation:var(--std-anim-seal-press)]";
@@ -189,12 +198,12 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
       : resealed
         ? "rest"
         : "stamp";
-  const box = closed ? `${LAYER_BOX} ${FLOAT}` : LAYER_BOX;
+  const box = closed ? `${LAYER_BOX} ${FLOAT}` : opening ? `${LAYER_BOX} ${FLOAT_SETTLE}` : LAYER_BOX;
 
   return (
     <>
       {/* Back of the envelope, with its patterned liner. */}
-      <div aria-hidden className={`${box} z-[1]`}>
+      <div aria-hidden data-envelope-float className={`${box} z-[1]`}>
         <div className="absolute inset-0 rounded-[3px] [background:var(--std-env-back-fill)] [box-shadow:var(--std-env-back-shadow)]" />
         <div className="absolute left-[3.5%] right-[3.5%] top-[4%] h-[66%] [background:var(--std-liner-pattern)] [box-shadow:inset_0_0_0_calc(1*var(--std-u))_var(--std-liner-rule)]" />
       </div>
@@ -207,7 +216,7 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
           open
             ? `${LAYER_BOX} pointer-events-none z-[2] [perspective-origin:50%_0] [perspective:760px]`
             : opening
-              ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-z)] [perspective-origin:50%_0] [perspective:760px]`
+              ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-z),var(--std-anim-float-settle)] [perspective-origin:50%_0] [perspective:760px]`
               : closing
                 ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-close-z)] [perspective-origin:50%_0] [perspective:760px]`
               : `${box} pointer-events-none z-[6] [perspective-origin:50%_0] [perspective:760px]`
@@ -260,7 +269,7 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
           <Postmark motion={postmark} />
 
           {opening ? (
-            <div aria-hidden className={SEAL_BOX}>
+            <div aria-hidden className={`${SEAL_BOX} ${SEAL_SETTLE}`}>
               {SEAL_HALVES.map((half) => (
                 <div key={half} className={`absolute inset-0 ${half}`}>
                   <SealFace />
@@ -281,9 +290,10 @@ export function Envelope({ phase, onOpen, buttonRef, resealed = false }: Envelop
             </div>
           ) : (
             <div
+              data-seal-rest
               className={`${SEAL_BOX} [transition:scale_140ms_ease] motion-reduce:[transition:none] group-has-[button:active]:[scale:0.94]`}
             >
-              <div className={SEAL_SWELL}>
+              <div data-seal-swell className={SEAL_SWELL}>
                 <SealFace />
                 <span aria-hidden className={SEAL_SHIMMER} />
               </div>
