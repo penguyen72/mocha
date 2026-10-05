@@ -581,21 +581,19 @@
 }
 
 @keyframes std-flap-open {
+  /* The flap swings straight open, with no wind-up: tipping toward the guest first read
+     as the envelope opening, closing and opening again. A per-keyframe easing would also
+     bring it to rest standing upright at 50%, so these two curves meet there at the same
+     speed (90deg over 50%, end slope 1.5; 88deg over 50%, start slope 1.534). It swings
+     through 90deg without stalling, the z-index swap in std-flap-z still lands at 90deg,
+     and played in reverse to reseal, the join stays just as smooth. */
   0% {
     transform: rotateX(0deg);
-  }
-  /* A per-keyframe easing would otherwise bring the flap to rest standing upright at 50%.
-     These two curves meet there at the same speed (94deg over 42%, end slope 1.5; 88deg
-     over 50%, start slope 1.907), so it swings through 90deg without stalling, and the
-     z-index swap in std-flap-z still lands at 90deg. Played in reverse to reseal, the
-     join stays just as smooth. */
-  8% {
-    transform: rotateX(-4deg);
     animation-timing-function: cubic-bezier(0.55, 0, 0.7, 0.55);
   }
   50% {
     transform: rotateX(90deg);
-    animation-timing-function: cubic-bezier(0.2, 0.381, 0.3, 1);
+    animation-timing-function: cubic-bezier(0.2, 0.307, 0.3, 1);
   }
   100% {
     transform: rotateX(178deg);
