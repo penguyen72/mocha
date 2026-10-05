@@ -16,6 +16,7 @@ import { InvitationNote } from "./invitation-note";
 import { MailHeader, OpenPrompt } from "./mail-header";
 import { PetalScatter } from "./petal-scatter";
 import { PhotoCard } from "./photo-card";
+import { SONG_FADE_IN_MS, SONG_FADE_OUT_MS, SongProvider, useSong } from "./song";
 
 import { INVITATION_HEADING } from "./invitation-content";
 import {
@@ -119,6 +120,15 @@ function prefersReducedMotion() {
 }
 
 export function InvitationStage() {
+  return (
+    <SongProvider>
+      <Stage />
+    </SongProvider>
+  );
+}
+
+function Stage() {
+  const { play: playSong, stop: stopSong } = useSong();
   const [phase, setPhase] = useState<InvitationPhase>("closed");
   const entryHash = useSyncExternalStore(subscribeToHash, readHash, readServerHash);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -190,6 +200,9 @@ export function InvitationStage() {
   const open = useCallback(() => {
     if (phase !== "closed") return;
 
+    // The song starts with the tap that opens the envelope, the gesture browsers ask for,
+    // and rises in as the flap lifts.
+    playSong(SONG_FADE_IN_MS);
     window.history.replaceState(null, "", OPEN_HASH);
 
     if (prefersReducedMotion()) {
@@ -200,7 +213,7 @@ export function InvitationStage() {
     if (frameRef.current !== null) holdRestingPose(frameRef.current);
     setPhase("opening");
     timerRef.current = setTimeout(() => setPhase("open"), OPENING_DURATION_MS);
-  }, [phase]);
+  }, [phase, playSong]);
 
   const replay = useCallback(() => {
     if (effectivePhase !== "open") return;
@@ -211,13 +224,16 @@ export function InvitationStage() {
     notifyHashChange();
 
     if (prefersReducedMotion()) {
+      stopSong(SONG_FADE_OUT_MS);
       setPhase("closed");
       return;
     }
 
+    // The song fades away as the invitation tucks back in, and stops as the envelope shuts.
+    stopSong(CLOSING_DURATION_MS);
     setPhase("closing");
     timerRef.current = setTimeout(() => setPhase("closed"), CLOSING_DURATION_MS);
-  }, [effectivePhase]);
+  }, [effectivePhase, stopSong]);
 
   const opening = effectivePhase === "opening";
   const closing = effectivePhase === "closing";

@@ -11,6 +11,7 @@ import {
 } from "./invitation-content";
 import { CLOSING_DURATION_MS, OPENING_DURATION_MS } from "./invitation-phase";
 import { InvitationStage } from "./invitation-stage";
+import { SONG_FADE_OUT_MS } from "./song";
 
 // The live countdown runs its own one-second clock; these tests are about the opening
 // choreography's timer, so the countdown is stubbed out (it has its own tests).
@@ -34,14 +35,73 @@ function setReducedMotion(reduce: boolean) {
   })) as typeof window.matchMedia;
 }
 
+// jsdom does not implement media playback, so stand in for the song: these tests only check
+// when the stage starts and stops it.
+const playSong = vi.fn(() => Promise.resolve());
+const pauseSong = vi.fn();
+
 describe("InvitationStage", () => {
   beforeEach(() => {
     window.history.replaceState(null, "", "/");
     setReducedMotion(false);
+    playSong.mockClear();
+    pauseSong.mockClear();
+    vi.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(playSong);
+    vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(pauseSong);
+    vi.stubGlobal("fetch", vi.fn(() => new Promise<Response>(() => {})));
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("starts the song with the tap that opens the envelope", () => {
+    render(<InvitationStage />);
+    expect(playSong).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: ENVELOPE_BUTTON_LABEL }));
+    expect(playSong).toHaveBeenCalledTimes(1);
+  });
+
+  it("leaves the song for the record when the page is entered already open", () => {
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+    expect(playSong).not.toHaveBeenCalled();
+  });
+
+  it("plays the song through the closing and stops and rewinds it once the envelope is shut", () => {
+    vi.useFakeTimers();
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+    const song = document.querySelector("audio")!;
+    song.currentTime = 30;
+
+    fireEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+    expect(pauseSong).not.toHaveBeenCalled();
+    expect(song.currentTime).toBe(30);
+
+    act(() => {
+      vi.advanceTimersByTime(CLOSING_DURATION_MS);
+    });
+    expect(pauseSong).toHaveBeenCalledTimes(1);
+    expect(song.currentTime).toBe(0);
+  });
+
+  it("still fades the song out when resealing under reduced motion", () => {
+    vi.useFakeTimers();
+    setReducedMotion(true);
+    window.history.replaceState(null, "", "/#open");
+    render(<InvitationStage />);
+
+    fireEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+    expect(pauseSong).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(SONG_FADE_OUT_MS);
+    });
+    expect(pauseSong).toHaveBeenCalledTimes(1);
   });
 
   it("starts closed: the envelope control is offered and the invitation is not yet shown", () => {
@@ -192,7 +252,8 @@ describe("InvitationStage", () => {
     fireEvent.click(replay);
     fireEvent.click(replay);
 
-    expect(vi.getTimerCount()).toBe(1);
+    // One closing, plus the song fading out alongside it.
+    expect(vi.getTimerCount()).toBe(2);
   });
 
   it("can be opened again once it has resealed", () => {
