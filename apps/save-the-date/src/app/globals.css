@@ -263,12 +263,12 @@
   --std-anim-sparkle: std-sparkle 700ms ease-out 180ms both;
   --std-anim-flap: std-flap-open 1152ms cubic-bezier(0.5, 0, 0.3, 1) 384ms both;
   --std-anim-flap-z: std-flap-z 1152ms cubic-bezier(0.5, 0, 0.3, 1) 384ms both;
-  --std-anim-card-a: std-card-a 2192ms linear 1248ms both;
-  --std-anim-card-a-z: std-card-a-z 2192ms linear 1248ms both;
+  --std-anim-card-a: std-card-a 2480ms linear 1248ms both;
+  --std-anim-card-a-z: std-card-a-z 2480ms linear 1248ms both;
   --std-anim-card-d: std-card-d 2288ms linear 1248ms both;
   --std-anim-card-d-z: std-card-d-z 2288ms linear 1248ms both;
-  --std-anim-card-p: std-card-p 2384ms linear 1248ms both;
-  --std-anim-card-p-z: std-card-p-z 2384ms linear 1248ms both;
+  --std-anim-card-p: std-card-p 2096ms linear 1248ms both;
+  --std-anim-card-p-z: std-card-p-z 2096ms linear 1248ms both;
 
   /* The cards' floral sprigs stay hidden until every card has cleared the envelope
      (each card's z-index step lands at ~2272ms), so none peeks over the rim. */
@@ -560,11 +560,18 @@
   0% {
     transform: rotateX(0deg);
   }
+  /* A per-keyframe easing would otherwise bring the flap to rest standing upright at 50%.
+     These two curves meet there at the same speed (94deg over 42%, end slope 1.5; 88deg
+     over 50%, start slope 1.907), so it swings through 90deg without stalling, and the
+     z-index swap in std-flap-z still lands at 90deg. Played in reverse to reseal, the
+     join stays just as smooth. */
   8% {
     transform: rotateX(-4deg);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.7, 0.55);
   }
   50% {
     transform: rotateX(90deg);
+    animation-timing-function: cubic-bezier(0.2, 0.381, 0.3, 1);
   }
   100% {
     transform: rotateX(178deg);
@@ -583,17 +590,29 @@
 }
 
 /* Each card starts tucked inside the envelope, high enough that neither it nor its
-   floral sprigs hang below the envelope's bottom edge before it rises out of the top. */
+   floral sprigs hang below the envelope's bottom edge before it rises out of the top.
+   The rise slows into its peak without a long crawl, and the fan-out starts from rest
+   (no jolt) and still overshoots by about 3% as it lands.
+
+   All three reach the top together at 2272ms, then are dealt front to back, like a stack
+   in the hand: the Polaroid on top leaves at once (lands 3344ms), uncovering the date
+   card, which follows at 2416ms (lands 3536ms), and then the announcement at 2560ms
+   (lands 3728ms). */
 @keyframes std-card-a {
   0% {
     transform: translate(calc(59.5 * var(--std-u)), calc(161 * var(--std-u))) rotate(0deg)
       scale(0.82);
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-timing-function: cubic-bezier(0.35, 0.6, 0.5, 1);
   }
-  46.715% {
+  41.29% {
     transform: translate(calc(59.5 * var(--std-u)), calc(-44.82 * var(--std-u))) rotate(0deg)
       scale(0.9);
-    animation-timing-function: cubic-bezier(0.34, 1.32, 0.64, 1);
+    animation-timing-function: linear;
+  }
+  52.903% {
+    transform: translate(calc(59.5 * var(--std-u)), calc(-44.82 * var(--std-u))) rotate(0deg)
+      scale(0.9);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1.25);
   }
   100% {
     transform: translate(0, 0) rotate(-9deg) scale(1);
@@ -602,10 +621,10 @@
 
 @keyframes std-card-a-z {
   0%,
-  46.715% {
+  41.29% {
     z-index: 3;
   }
-  46.815%,
+  41.39%,
   100% {
     z-index: 7;
   }
@@ -615,7 +634,7 @@
   0% {
     transform: translate(calc(-85.5 * var(--std-u)), calc(64 * var(--std-u))) rotate(0deg)
       scale(0.82);
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-timing-function: cubic-bezier(0.35, 0.6, 0.5, 1);
   }
   44.755% {
     transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg)
@@ -625,7 +644,7 @@
   51.049% {
     transform: translate(calc(-85.5 * var(--std-u)), calc(-157.82 * var(--std-u))) rotate(0deg)
       scale(0.9);
-    animation-timing-function: cubic-bezier(0.34, 1.32, 0.64, 1);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1.25);
   }
   100% {
     transform: translate(0, 0) rotate(9.5deg) scale(1);
@@ -647,17 +666,12 @@
   0% {
     transform: translate(calc(77.5 * var(--std-u)), calc(-22 * var(--std-u))) rotate(0deg)
       scale(0.82);
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    animation-timing-function: cubic-bezier(0.35, 0.6, 0.5, 1);
   }
-  42.953% {
+  48.855% {
     transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg)
       scale(0.9);
-    animation-timing-function: linear;
-  }
-  55.034% {
-    transform: translate(calc(77.5 * var(--std-u)), calc(-229.82 * var(--std-u))) rotate(0deg)
-      scale(0.9);
-    animation-timing-function: cubic-bezier(0.34, 1.32, 0.64, 1);
+    animation-timing-function: cubic-bezier(0.45, 0, 0.25, 1.25);
   }
   100% {
     transform: translate(0, 0) rotate(-7deg) scale(1);
@@ -666,10 +680,10 @@
 
 @keyframes std-card-p-z {
   0%,
-  42.953% {
+  48.855% {
     z-index: 3;
   }
-  43.053%,
+  48.955%,
   100% {
     z-index: 7;
   }

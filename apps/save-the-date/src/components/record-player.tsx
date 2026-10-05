@@ -17,8 +17,13 @@ type RecordPlayerProps = {
   animated: boolean;
 };
 
+/**
+ * On a phone the record is only 30-33px across, so an invisible ring 8px wide around it
+ * catches near-miss taps and brings the target to at least 44px.
+ */
 const RECORD_BUTTON =
   "relative block aspect-square w-full cursor-pointer rounded-full " +
+  "before:absolute before:inset-[-8px] before:rounded-full before:content-[''] " +
   "[box-shadow:var(--std-record-shadow)] focus-visible:outline-2 focus-visible:outline-offset-2 " +
   "focus-visible:outline-std-focus-ring";
 
