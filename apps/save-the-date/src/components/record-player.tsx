@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import {
   RECORD_HINT_PAUSE,
@@ -42,8 +42,33 @@ const DISC_ARRIVE = "[animation:var(--std-anim-record-arrive)]";
 export function RecordPlayer({ className, animated }: RecordPlayerProps) {
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [songSrc, setSongSrc] = useState(SONG_SRC);
   const audioRef = useRef<HTMLAudioElement>(null);
   const arcId = `record-arc-${useId().replace(/:/g, "")}`;
+
+  // A phone only starts fetching a streamed song once the record is tapped, which held the
+  // music back by about a second. Download it while the card opens instead, and play it
+  // from memory. A tap before the download lands still streams the song as before.
+  useEffect(() => {
+    const download = new AbortController();
+    let downloadedSrc: string | null = null;
+
+    fetch(SONG_SRC, { signal: download.signal })
+      .then((response) => (response.ok ? response.blob() : null))
+      .then((song) => {
+        const audio = audioRef.current;
+        // Swapping the source would cut off a song that is already playing or paused mid-way.
+        if (song === null || audio === null || !audio.paused || audio.currentTime > 0) return;
+        downloadedSrc = URL.createObjectURL(song);
+        setSongSrc(downloadedSrc);
+      })
+      .catch(() => {});
+
+    return () => {
+      download.abort();
+      if (downloadedSrc !== null) URL.revokeObjectURL(downloadedSrc);
+    };
+  }, []);
 
   function toggle() {
     const audio = audioRef.current;
@@ -98,10 +123,10 @@ export function RecordPlayer({ className, animated }: RecordPlayerProps) {
         </text>
       </svg>
 
-      {/* preload="none" keeps the song from downloading until a guest taps the record. */}
+      {/* The song downloads separately (above), so the element itself must not fetch it too. */}
       <audio
         ref={audioRef}
-        src={SONG_SRC}
+        src={songSrc}
         preload="none"
         loop
         onPlay={() => {

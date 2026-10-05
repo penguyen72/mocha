@@ -1,5 +1,5 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
   RECORD_HINT_PAUSE,
@@ -23,6 +23,16 @@ const pause = vi.fn(function (this: HTMLMediaElement) {
   this.dispatchEvent(new Event("pause"));
 });
 
+// The card fetches the song as it opens; each test decides when that download finishes.
+let finishDownload: () => void = () => {};
+const fetchSong = vi.fn(
+  () =>
+    new Promise<Response>((resolve) => {
+      finishDownload = () => resolve(new Response("song"));
+    }),
+);
+const SONG_URL = "blob:song";
+
 function disc() {
   const element = document.querySelector("button > span");
   if (!(element instanceof HTMLElement)) throw new Error("No disc rendered");
@@ -42,17 +52,55 @@ describe("RecordPlayer", () => {
     vi.spyOn(HTMLMediaElement.prototype, "paused", "get").mockImplementation(() => paused);
     vi.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(play);
     vi.spyOn(HTMLMediaElement.prototype, "pause").mockImplementation(pause);
+    vi.stubGlobal("fetch", fetchSong);
+    URL.createObjectURL = vi.fn(() => SONG_URL);
+    URL.revokeObjectURL = vi.fn();
   });
 
-  it("waits for a tap before downloading the song", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("starts downloading the song as the card opens, without playing it", () => {
     render(<RecordPlayer className="" animated={false} />);
 
     expect(screen.getByRole("button", { name: RECORD_PLAY_LABEL })).toBeInTheDocument();
     expect(screen.getByText(RECORD_HINT_PLAY)).toBeInTheDocument();
+    expect(fetchSong).toHaveBeenCalledWith(SONG_SRC, expect.anything());
+    // Until the download lands, a tap streams the song as before.
     expect(audio()).toHaveAttribute("src", SONG_SRC);
     expect(audio()).toHaveAttribute("preload", "none");
     expect(audio()).not.toHaveAttribute("controls");
     expect(play).not.toHaveBeenCalled();
+  });
+
+  it("plays the downloaded song so a tap starts the music at once", async () => {
+    render(<RecordPlayer className="" animated={false} />);
+
+    finishDownload();
+    await waitFor(() => expect(audio()).toHaveAttribute("src", SONG_URL));
+    expect(play).not.toHaveBeenCalled();
+  });
+
+  it("keeps streaming a song that started before the download finished", async () => {
+    render(<RecordPlayer className="" animated={false} />);
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: RECORD_PLAY_LABEL }));
+    });
+
+    await act(async () => {
+      finishDownload();
+    });
+    expect(audio()).toHaveAttribute("src", SONG_SRC);
+  });
+
+  it("releases the downloaded song when the card closes", async () => {
+    const { unmount } = render(<RecordPlayer className="" animated={false} />);
+    finishDownload();
+    await waitFor(() => expect(audio()).toHaveAttribute("src", SONG_URL));
+
+    unmount();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith(SONG_URL);
   });
 
   it("loops the song", () => {
