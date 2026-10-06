@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SONG_SRC } from "./invitation-content";
-import { SongProvider, useSong } from "./song";
+import { SONG_VOLUME, SongProvider, useSong } from "./song";
 
 // jsdom does not implement media playback, so stand in for the browser: play and pause flip
 // `paused` and fire the events a real audio element would.
@@ -202,15 +202,24 @@ describe("SongProvider", () => {
     });
     expect(mixer().resume).toHaveBeenCalled();
     expect(mixer().gain.gain.setValueAtTime).toHaveBeenCalledWith(0, 0);
-    // Rising steadily, all the way to full volume, over the fade.
+    // Rising steadily over the fade, to just under full volume.
     expect(mixer().ramps).toHaveLength(20);
     expect(mixer().ramps.every((v, i, all) => i === 0 || v > all[i - 1])).toBe(true);
-    expect(mixer().ramps.at(-1)).toBeCloseTo(1);
+    expect(mixer().ramps.at(-1)).toBeCloseTo(SONG_VOLUME);
     expect(mixer().gain.gain.linearRampToValueAtTime).toHaveBeenLastCalledWith(
-      expect.closeTo(1),
+      expect.closeTo(SONG_VOLUME),
       1,
     );
     expect(play).toHaveBeenCalledTimes(1);
+  });
+
+  it("starts the song just under full volume, so its loudest moments don't crackle", async () => {
+    vi.stubGlobal("AudioContext", FakeAudioContext);
+    renderSong();
+    await startSong();
+
+    expect(SONG_VOLUME).toBeLessThan(0.9);
+    expect(mixer().gain.gain.value).toBeCloseTo(SONG_VOLUME);
   });
 
   it("fades the song out, then stops and rewinds it", async () => {
