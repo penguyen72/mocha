@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500&family=Parisienne&display=block" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1200px;height:630px;overflow:hidden}
+body{position:relative;background:#fdf8f5;font-family:"Cormorant Garamond",serif;color:#3d2c2f}
+.floral{position:absolute;inset:0;background:url("../public/images/floral-background.png") center/cover;filter:sepia(.12) saturate(.8) brightness(1.03);opacity:.9}
+.frame{position:absolute;inset:22px;border:1px solid #f2d6d4}
+.frame2{position:absolute;inset:30px;border:1px solid #fbe3df}
+.polaroid{position:absolute;left:118px;top:78px;width:330px;height:420px;background:linear-gradient(160deg,#fff,#f9f1ec);box-shadow:0 10px 30px -8px rgba(150,95,100,.35),0 2px 6px rgba(150,95,100,.18);transform:rotate(-6deg);padding:20px 20px 0}
+.polaroid .photo{width:100%;height:300px;background:url("../public/images/couple-photo.jpg") center 35%/cover}
+.polaroid .cap{font-family:Parisienne,cursive;font-size:34px;color:#9a5560;text-align:center;margin-top:20px}
+.card{position:absolute;left:520px;top:92px;width:560px;height:446px;background:#fbe3df;box-shadow:0 6px 22px -8px rgba(150,95,100,.3);transform:rotate(1.5deg)}
+.lace{position:absolute;inset:12px;background:radial-gradient(circle,transparent 34%,rgba(255,255,255,.95) 38%,rgba(255,255,255,.95) 54%,transparent 58%) 0 0/20px 20px}
+.inner{position:absolute;inset:30px;background:#fbe3df;border:1.5px solid rgba(255,255,255,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.eyebrow{font-family:Montserrat,sans-serif;font-weight:500;font-size:15px;letter-spacing:.32em;color:#c27a84;text-transform:uppercase}
+.names{font-family:Parisienne,cursive;font-size:68px;line-height:1.2;white-space:nowrap;color:#9a5560;margin:10px 0 6px}
+.std{font-size:44px;font-weight:500;letter-spacing:.02em}
+.std i{font-family:Parisienne,cursive;font-style:normal;font-size:34px;margin:0 6px}
+.date{font-family:Montserrat,sans-serif;font-weight:400;font-size:21px;letter-spacing:.16em;margin-top:14px}
+.city{font-size:26px;font-weight:600;margin-top:6px}
+.rule{display:flex;align-items:center;gap:14px;margin-top:16px;font-size:20px;font-weight:500;letter-spacing:.05em}
+.rule:before,.rule:after{content:"";width:40px;height:1px;background:#b5c4a5}
+.petal{position:absolute;border-radius:50% 50% 46% 54%/64% 60% 40% 36%;background:radial-gradient(ellipse at 32% 30%,#fdeeee,#f2c4c8 68%,#e6aab0);box-shadow:0 1px 1.5px rgba(150,95,100,.16)}
+</style></head><body>
+<div class="floral"></div><div class="frame"></div><div class="frame2"></div>
+<div class="petal" style="left:470px;top:60px;width:30px;height:23px;transform:rotate(30deg)"></div>
+<div class="petal" style="left:95px;top:520px;width:26px;height:20px;transform:rotate(-40deg)"></div>
+<div class="petal" style="left:1100px;top:540px;width:28px;height:22px;transform:rotate(70deg)"></div>
+<div class="petal" style="left:1110px;top:70px;width:22px;height:17px;transform:rotate(-20deg)"></div>
+<div class="polaroid"><div class="photo"></div><div class="cap">just us ♥</div></div>
+<div class="card"><div class="lace"></div><div class="inner">
+<div class="eyebrow">You’re invited to</div>
+<div class="std">Save <i>the</i> Date</div>
+<div class="names">Peyton &amp; Liane</div>
+<div class="date">10 · 16 · 2027</div>
+<div class="city">Trenton, Georgia</div>
+<div class="rule">Formal invitation to follow</div>
+</div></div>
+</body></html>

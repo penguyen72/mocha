@@ -8,7 +8,7 @@ export function Faq() {
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">{FAQ_EYEBROW}</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{FAQ_EYEBROW}</p>
             <h2 className="mt-3 font-serif text-4xl text-foreground sm:text-5xl">{FAQ_HEADING}</h2>
           </div>
         </Reveal>

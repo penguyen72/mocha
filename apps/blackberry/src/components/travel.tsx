@@ -14,7 +14,7 @@ export function Travel() {
     <section id="travel" className="bg-background px-6 py-24 sm:px-12">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">{TRAVEL_EYEBROW}</p>
+          <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{TRAVEL_EYEBROW}</p>
         </Reveal>
         <Reveal delay={0.08}>
           <h2 className="mt-3 font-serif text-4xl text-foreground sm:text-5xl">
@@ -32,7 +32,7 @@ export function Travel() {
                 <div className="flex gap-5">
                   <span
                     aria-hidden
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-bb-peach text-lg text-foreground"
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-bb-pink text-lg text-foreground"
                   >
                     {item.icon}
                   </span>
@@ -47,8 +47,8 @@ export function Travel() {
 
           <Reveal>
             {/* Placeholder pending real venue photography. */}
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gradient-to-br from-bb-blush to-bb-peach">
-              <div className="absolute bottom-6 left-6 rounded-md bg-inverted-foreground px-6 py-4 shadow-lg">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gradient-to-br from-bb-blush to-bb-pink">
+              <div className="absolute bottom-6 left-6 rounded-md bg-surface px-6 py-4 shadow-lg">
                 <p className="font-serif text-lg text-foreground">{TRAVEL_ADDRESS_LINE_1}</p>
                 <p className="text-sm text-muted">{TRAVEL_ADDRESS_LINE_2}</p>
               </div>

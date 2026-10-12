@@ -7,10 +7,16 @@ export const DETAILS_DRESS_EYEBROW = "What to Wear";
 export const DETAILS_DRESS_HEADING = "Dress Code";
 export const DETAILS_DRESS_EMPHASIS = "Garden Formal";
 export const DETAILS_DRESS_BODY =
-  "Think dusty rose, terracotta, sage & warm neutrals to match the fall gardens. Suits and cocktail dresses, florals encouraged.";
+  "Suits and cocktail dresses, with florals encouraged to match the fall gardens.";
 export const DETAILS_DRESS_FOOTNOTE =
   "A note on shoes: the ceremony is on grass & garden paths — block heels or flats will thank you.";
-export const DETAILS_DRESS_SWATCHES = ["#F7DDD0", "#F2C7B4", "#C3A6A8", "#C79B7E", "#B2795E"];
+export const DETAILS_DRESS_SWATCHES = [
+  "var(--bb-soft-white)",
+  "var(--bb-soft-blush)",
+  "var(--bb-intimate-pink)",
+  "var(--bb-raindrops-on-roses)",
+  "var(--bb-sugar-swizzle)",
+];
 
 export const DETAILS_REGISTRY_EYEBROW = "Gifts";
 export const DETAILS_REGISTRY_HEADING = "Registry";

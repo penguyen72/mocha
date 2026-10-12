@@ -1,87 +1,262 @@
 import Image from "next/image";
 
+import type { Ref } from "react";
+
 import {
   ENVELOPE_BUTTON_LABEL,
-  ENVELOPE_LETTERING,
-  ENVELOPE_PROMPT,
-  SEAL_MONOGRAM,
+  POSTMARK_CITY,
+  POSTMARK_DATE,
 } from "./invitation-content";
 import type { InvitationPhase } from "./invitation-phase";
 
 type EnvelopeProps = {
   phase: InvitationPhase;
   onOpen: () => void;
+  /** The open control, so the stage can return focus to it when the envelope is resealed. */
+  buttonRef?: Ref<HTMLButtonElement>;
+  /**
+   * True once the envelope has been resealed on this visit. Its postmark then came back
+   * while it closed, so it must not stamp itself on a second time.
+   */
+  resealed?: boolean;
 };
 
 /**
  * Every envelope layer occupies this same box inside the stage frame, and every layer
  * lifts together when the envelope is hovered or pressed. The stage frame carries
- * `group`, and the envelope button is the only <button> inside it, so `group-has-` scopes
- * the lift precisely — and that button only exists while the envelope is closed, which is
- * exactly when the design lifts. Under reduced motion the affordance stays but the
- * transition does not.
+ * `group`, and `group-has-` watches the envelope's own button, which only exists while
+ * the envelope is closed — exactly when the design lifts. The opened invitation's buttons
+ * (the record, Add to calendar, open it again) must not lift it.
+ *
+ * Only a mouse or pen gets the lift. A phone leaves :hover stuck on whatever was tapped
+ * last and squashes it with :active as the tap lands, so every tap — opening the
+ * envelope, asking to open it again — jolted the envelope up and back in a few frames.
+ * Under reduced motion the affordance stays but the transition does not.
  */
 const LAYER_BOX =
   "absolute left-[13%] top-[42%] aspect-[8/5] w-[74%] " +
   "[transition:var(--std-env-lift-transition)] motion-reduce:[transition:none] " +
-  "group-has-[button:hover]:[translate:0_-3px] group-has-[button:active]:[scale:0.99]";
+  "[@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:hover]:[translate:0_-3px] " +
+  "[@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:active]:[scale:0.99]";
 
-export function Envelope({ phase, onOpen }: EnvelopeProps) {
+/** While sealed, every layer floats together; they all mount at once, so they stay in step. */
+const FLOAT = "[animation:var(--std-anim-float)]";
+
+/**
+ * As the envelope opens, every layer glides down from wherever the float had carried it
+ * (the stage records that as --std-float-from at the click) rather than snapping to rest.
+ */
+const FLOAT_SETTLE = "[animation:var(--std-anim-float-settle)]";
+
+/**
+ * Centred on the envelope. The seal is 34.6% of the envelope's height (21% of its width at
+ * the art's 777:800 ratio, on an 8:5 envelope), so a 32.7% top puts its middle at exactly
+ * 50%, still covering the flap's point just below.
+ */
+const SEAL_BOX = "absolute left-[39.5%] top-[32.7%] aspect-[777/800] w-[21%]";
+
+/** Two jagged halves of the same seal, for the moment it cracks. */
+const SEAL_HALVES = [
+  "[clip-path:polygon(0_0,52%_0,46%_18%,55%_34%,45%_52%,54%_70%,47%_86%,51%_100%,0_100%)] [animation:var(--std-anim-seal-left)]",
+  "[clip-path:polygon(52%_0,100%_0,100%_100%,51%_100%,47%_86%,54%_70%,45%_52%,55%_34%,46%_18%)] [animation:var(--std-anim-seal-right)]",
+] as const;
+
+/** The cracking halves start at the size the seal had swollen or pressed to (--std-seal-from). */
+const SEAL_SETTLE = "[animation:var(--std-anim-seal-settle)]";
+
+/** A fresh seal pressed onto the flap's point as the envelope closes again. */
+const SEAL_PRESS =
+  "absolute inset-0 [animation:var(--std-anim-seal-press),var(--std-anim-seal-press-fade)]";
+
+/** The whole seal swells a little while the envelope is hovered; the press still shrinks it. */
+const SEAL_SWELL =
+  "absolute inset-0 [transition:scale_250ms_ease] motion-reduce:[transition:none] " +
+  "[@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:hover]:[scale:1.04]";
+
+/** A band of light that passes over the wax every few seconds, kept inside the seal's round. */
+const SEAL_SHIMMER =
+  "pointer-events-none absolute inset-0 mix-blend-screen [background:var(--std-seal-shimmer)] " +
+  "[mask-image:var(--std-seal-shimmer-mask)] [animation:var(--std-anim-seal-shimmer)]";
+
+const SPARKLE_SHAPE =
+  "absolute left-1/2 top-1/2 opacity-0 " +
+  "[clip-path:polygon(50%_0,62%_38%,100%_50%,62%_62%,50%_100%,38%_62%,0_50%,38%_38%)]";
+
+const SPARKLE_BURST = `${SPARKLE_SHAPE} [animation:var(--std-anim-sparkle)]`;
+const SPARKLE_RESEAL = `${SPARKLE_SHAPE} [animation:var(--std-anim-reseal-sparkle)]`;
+
+/** One complete literal class string per sparkle — Tailwind cannot see a constructed one. */
+const SPARKLES = [
+  "h-[calc(9*var(--std-u))] w-[calc(9*var(--std-u))] bg-std-sparkle-pink [--std-sx:calc(0*var(--std-u))] [--std-sy:calc(-40*var(--std-u))]",
+  "h-[calc(6*var(--std-u))] w-[calc(6*var(--std-u))] bg-std-sparkle-white [--std-sx:calc(28*var(--std-u))] [--std-sy:calc(-28*var(--std-u))]",
+  "h-[calc(8*var(--std-u))] w-[calc(8*var(--std-u))] bg-std-sparkle-pink [--std-sx:calc(40*var(--std-u))] [--std-sy:calc(0*var(--std-u))]",
+  "h-[calc(6*var(--std-u))] w-[calc(6*var(--std-u))] bg-std-sparkle-white [--std-sx:calc(28*var(--std-u))] [--std-sy:calc(28*var(--std-u))]",
+  "h-[calc(9*var(--std-u))] w-[calc(9*var(--std-u))] bg-std-sparkle-pink [--std-sx:calc(0*var(--std-u))] [--std-sy:calc(40*var(--std-u))]",
+  "h-[calc(6*var(--std-u))] w-[calc(6*var(--std-u))] bg-std-sparkle-white [--std-sx:calc(-28*var(--std-u))] [--std-sy:calc(28*var(--std-u))]",
+  "h-[calc(8*var(--std-u))] w-[calc(8*var(--std-u))] bg-std-sparkle-pink [--std-sx:calc(-40*var(--std-u))] [--std-sy:calc(0*var(--std-u))]",
+  "h-[calc(6*var(--std-u))] w-[calc(6*var(--std-u))] bg-std-sparkle-white [--std-sx:calc(-28*var(--std-u))] [--std-sy:calc(-28*var(--std-u))]",
+] as const;
+
+/**
+ * The wax seal itself, softened to the palette. Its pressed laurel and interlocking rings
+ * are the whole design; no lettering is printed over them.
+ */
+function SealFace() {
+  return (
+    <Image
+        src="/images/wax-seal.png"
+        alt=""
+        fill
+        loading="eager"
+        sizes="(max-width: 560px) 22vw, 123px"
+        className="object-contain [filter:var(--std-seal-filter)]"
+      />
+  );
+}
+
+/**
+ * A pink postage stamp seated on the envelope's top-right corner, and a round postmark
+ * carrying the city and the date — so a guest learns where and when before the envelope
+ * is even opened.
+ */
+const POSTMARK = "pointer-events-none absolute right-[2.5%] top-[4%] w-[37%]";
+
+/** The postmark's motion: stamped on at first load, stepping aside, rising back, or still. */
+type PostmarkMotion = "stamp" | "out" | "return" | "rest";
+
+const POSTMARK_MOTION: Record<PostmarkMotion, string> = {
+  stamp: POSTMARK,
+  out: `${POSTMARK} [animation:var(--std-anim-prompt-out)]`,
+  return: `${POSTMARK} [animation:var(--std-anim-postmark-return)]`,
+  rest: POSTMARK,
+};
+
+const POSTMARK_INK = "fill-none stroke-std-postmark-ink [transform-box:fill-box] [transform-origin:center] [transform:rotate(-8deg)]";
+
+function Postmark({ motion }: { motion: PostmarkMotion }) {
+  return (
+    <div aria-hidden className={POSTMARK_MOTION[motion]}>
+      <svg viewBox="0 0 168 84" className="block w-full overflow-visible">
+        <g transform="translate(116 10) rotate(5 22 28)">
+          <rect x="0" y="0" width="44" height="56" className="fill-std-stamp-fill" />
+          <rect
+            x="0"
+            y="0"
+            width="44"
+            height="56"
+            fill="none"
+            strokeWidth="3.2"
+            strokeLinecap="round"
+            strokeDasharray="0 4.4"
+            className="stroke-std-stamp-perforation"
+          />
+          <rect x="5" y="5" width="34" height="46" fill="none" strokeWidth="0.8" className="stroke-std-stamp-perforation" />
+          <path d="M22 44 C22 38 21 34 22 30" fill="none" strokeWidth="1.2" className="stroke-std-sage-line" />
+          <ellipse cx="17.5" cy="38" rx="4" ry="1.8" transform="rotate(-30 17.5 38)" className="fill-std-sage-line" />
+          <g className="fill-std-sparkle-white">
+            <circle cx="22" cy="18.5" r="4.2" />
+            <circle cx="27.6" cy="22.6" r="4.2" />
+            <circle cx="25.5" cy="29.2" r="4.2" />
+            <circle cx="18.5" cy="29.2" r="4.2" />
+            <circle cx="16.4" cy="22.6" r="4.2" />
+          </g>
+          <circle cx="22" cy="24" r="2.4" className="fill-std-postmark-ink" opacity="0.55" />
+        </g>
+        <g
+          className={motion === "stamp" ? `${POSTMARK_INK} [animation:var(--std-anim-stamp)]` : POSTMARK_INK}
+          opacity="0.85"
+        >
+          <path d="M4 26 q 6.5 -4 13 0 t 13 0 t 13 0 t 13 0 t 13 0" strokeWidth="1.3" />
+          <path d="M4 34 q 6.5 -4 13 0 t 13 0 t 13 0 t 13 0 t 13 0" strokeWidth="1.3" />
+          <path d="M4 42 q 6.5 -4 13 0 t 13 0 t 13 0 t 13 0 t 13 0" strokeWidth="1.3" />
+          <path d="M4 50 q 6.5 -4 13 0 t 13 0 t 13 0 t 13 0 t 13 0" strokeWidth="1.3" />
+          <circle cx="108" cy="38" r="28" strokeWidth="1.6" className="fill-std-sparkle-white/40" />
+          <circle cx="108" cy="38" r="25.4" strokeWidth="0.7" />
+          <path id="std-postmark-arc" d="M90.1 39.88 A18 18 0 1 1 125.9 39.88" strokeWidth="0" />
+          <text className="fill-std-postmark-ink stroke-none font-sans text-[6.6px] font-semibold tracking-[1.2px]">
+            <textPath href="#std-postmark-arc" startOffset="50%" textAnchor="middle">
+              {POSTMARK_CITY}
+            </textPath>
+          </text>
+          <text
+            x="108"
+            y="51.5"
+            textAnchor="middle"
+            className="fill-std-postmark-ink stroke-none font-serif text-[11px] font-semibold tracking-[0.6px] lining-nums"
+          >
+            {POSTMARK_DATE}
+          </text>
+        </g>
+      </svg>
+    </div>
+  );
+}
+export function Envelope({ phase, onOpen, buttonRef, resealed = false }: EnvelopeProps) {
+  const closed = phase === "closed";
   const opening = phase === "opening";
   const open = phase === "open";
-  const showSealLayer = phase === "closed" || opening;
+  const closing = phase === "closing";
+  const showSealLayer = !open;
+  const postmark: PostmarkMotion = opening
+    ? "out"
+    : closing
+      ? "return"
+      : resealed
+        ? "rest"
+        : "stamp";
+  const box = closed ? `${LAYER_BOX} ${FLOAT}` : opening ? `${LAYER_BOX} ${FLOAT_SETTLE}` : LAYER_BOX;
 
   return (
     <>
       {/* Back of the envelope, with its patterned liner. */}
-      <div aria-hidden className={`${LAYER_BOX} z-[1]`}>
-        <div className="absolute inset-0 rounded-[2px] [background:var(--std-env-back-fill)] [box-shadow:var(--std-env-back-shadow)]" />
+      <div aria-hidden data-envelope-float className={`${box} z-[1]`}>
+        <div className="absolute inset-0 rounded-[3px] [background:var(--std-env-back-fill)] [box-shadow:var(--std-env-back-shadow)]" />
         <div className="absolute left-[3.5%] right-[3.5%] top-[4%] h-[66%] [background:var(--std-liner-pattern)] [box-shadow:inset_0_0_0_calc(1*var(--std-u))_var(--std-liner-rule)]" />
       </div>
 
       {/* The flap. Rotates back through 178deg as the envelope opens, and drops
-          behind the cards at the halfway point. */}
+          behind the cards at the halfway point; closing runs the same steps backwards. */}
       <div
         aria-hidden
         className={
           open
             ? `${LAYER_BOX} pointer-events-none z-[2] [perspective-origin:50%_0] [perspective:760px]`
             : opening
-              ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-z)] [perspective-origin:50%_0] [perspective:760px]`
-              : `${LAYER_BOX} pointer-events-none z-[6] [perspective-origin:50%_0] [perspective:760px]`
+              ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-z),var(--std-anim-float-settle)] [perspective-origin:50%_0] [perspective:760px]`
+              : closing
+                ? `${LAYER_BOX} pointer-events-none z-[6] [animation:var(--std-anim-flap-close-z)] [perspective-origin:50%_0] [perspective:760px]`
+              : `${box} pointer-events-none z-[6] [perspective-origin:50%_0] [perspective:760px]`
         }
       >
         <div
           className={
             opening
               ? "absolute inset-0 origin-top [animation:var(--std-anim-flap)] [transform-style:preserve-3d] [transform:rotateX(0deg)]"
-              : open
+              : closing
+                ? "absolute inset-0 origin-top [animation:var(--std-anim-flap-close)] [transform-style:preserve-3d] [transform:rotateX(0deg)]"
+                : open
                 ? "absolute inset-0 origin-top [transform-style:preserve-3d] [transform:rotateX(178deg)]"
                 : "absolute inset-0 origin-top [transform-style:preserve-3d] [transform:rotateX(0deg)]"
           }
         >
-          {/* Flap front. */}
+          {/* Flap front, over a copy nudged down a hair that shows as a fine white edge. */}
           <div className="absolute inset-0 [backface-visibility:hidden] [filter:var(--std-env-flap-shadow)]">
-            <div className="absolute inset-0 [background:var(--std-gold-edge)] [clip-path:polygon(0_0,100%_0,50%_80%)]" />
-            <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [clip-path:polygon(1.4%_0,98.6%_0,50%_77.6%)]" />
-            <div className="absolute left-0 right-0 top-[10%] whitespace-nowrap text-center font-std-envelope text-[calc(36*var(--std-u))] leading-none text-std-env-ink">
-              {ENVELOPE_LETTERING}
-            </div>
+            <div className="absolute inset-0 translate-y-[calc(1.2*var(--std-u))] [background:var(--std-env-flap-edge)] [mask:var(--std-flap-mask)]" />
+            <div className="absolute inset-0 [background:var(--std-env-flap-fill)] [mask:var(--std-flap-mask)]" />
           </div>
 
           {/* Flap back, revealed as the flap lies over. */}
           <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateX(180deg)]">
-            <div className="absolute inset-0 [background:var(--std-gold-edge)] [clip-path:polygon(0_100%,100%_100%,50%_20%)]" />
-            <div className="absolute inset-0 [background:var(--std-env-flap-back-fill)] [clip-path:polygon(1.4%_100%,98.6%_100%,50%_22.4%)]" />
-            <div className="absolute inset-0 [background:var(--std-liner-pattern)] [clip-path:polygon(5%_97%,95%_97%,50%_28%)]" />
+            <div className="absolute inset-0 [background:var(--std-env-flap-back-fill)] [mask:var(--std-flap-back-mask)]" />
+            <div className="absolute inset-0 [background:var(--std-liner-pattern)] [clip-path:polygon(5%_97%,95%_97%,50%_44%)]" />
           </div>
         </div>
       </div>
 
-      {/* Front pocket: three panels and the gold rim. */}
+      {/* Front pocket: three folded panels. */}
       <div
         aria-hidden
-        className={`${LAYER_BOX} pointer-events-none z-[5] group-has-[button:hover]:[filter:var(--std-env-lift-shadow)]`}
+        className={`${box} pointer-events-none z-[5] [@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:hover]:[filter:var(--std-env-lift-shadow)]`}
       >
         <div className="absolute inset-0 [filter:var(--std-env-left-shadow)]">
           <div className="absolute inset-0 [background:var(--std-env-left-fill)] [clip-path:polygon(0_0,50%_56%,0_100%)]" />
@@ -92,54 +267,49 @@ export function Envelope({ phase, onOpen }: EnvelopeProps) {
         <div className="absolute inset-0 [filter:var(--std-env-bottom-shadow)]">
           <div className="absolute inset-0 [background:var(--std-env-bottom-fill)] [clip-path:polygon(0_100%,50%_36%,100%_100%)]" />
         </div>
-        <div className="absolute inset-0 border-[calc(1.6*var(--std-u))] border-transparent [border-image:var(--std-gold-edge)_1]" />
       </div>
 
-      {/* Prompt arc, wax seal, and the single control that opens the envelope. */}
+      {/* Postmark, wax seal, and the single control that opens the envelope. */}
       {showSealLayer && (
-        <div className={`${LAYER_BOX} z-[8]`}>
-          <svg
-            aria-hidden
-            viewBox="0 0 200 60"
-            className={
-              opening
-                ? "absolute left-[33%] top-[41%] w-[34%] overflow-visible [animation:var(--std-anim-prompt-out)]"
-                : "absolute left-[33%] top-[41%] w-[34%] overflow-visible"
-            }
-          >
-            <path id="std-prompt-arc" d="M20 48 A130 130 0 0 1 180 48" fill="none" />
-            <text className="fill-std-prompt-ink font-serif text-[17px] tracking-[1.5px]">
-              <textPath href="#std-prompt-arc" startOffset="50%" textAnchor="middle">
-                {ENVELOPE_PROMPT}
-              </textPath>
-            </text>
-          </svg>
+        <div className={`${box} z-[8]`}>
+          <Postmark motion={postmark} />
 
-          <div
-            className={
-              opening
-                ? "absolute left-[39.1%] top-[58%] aspect-[777/800] w-[21.8%] [animation:var(--std-anim-seal-out)]"
-                : "absolute left-[39.1%] top-[58%] aspect-[777/800] w-[21.8%]"
-            }
-          >
-            <Image
-              src="/images/wax-seal.png"
-              alt=""
-              fill
-              loading="eager"
-              sizes="(max-width: 560px) 22vw, 123px"
-              className="object-contain"
-            />
-            <span
-              aria-hidden
-              className="absolute inset-0 flex items-center justify-center font-std-flourish text-[calc(19*var(--std-u))] leading-none text-std-seal-ink opacity-[0.82] [text-shadow:var(--std-seal-monogram-shadow)]"
+          {opening ? (
+            <div aria-hidden className={`${SEAL_BOX} ${SEAL_SETTLE}`}>
+              {SEAL_HALVES.map((half) => (
+                <div key={half} className={`absolute inset-0 ${half}`}>
+                  <SealFace />
+                </div>
+              ))}
+              {SPARKLES.map((sparkle) => (
+                <span key={sparkle} className={`${SPARKLE_BURST} ${sparkle}`} />
+              ))}
+            </div>
+          ) : closing ? (
+            <div aria-hidden className={SEAL_BOX}>
+              <div className={SEAL_PRESS}>
+                <SealFace />
+              </div>
+              {SPARKLES.map((sparkle) => (
+                <span key={sparkle} className={`${SPARKLE_RESEAL} ${sparkle}`} />
+              ))}
+            </div>
+          ) : (
+            <div
+              data-seal-rest
+              className={`${SEAL_BOX} [transition:scale_140ms_ease] motion-reduce:[transition:none] [@media(hover:hover)_and_(pointer:fine)]:group-has-[[data-envelope-button]:active]:[scale:0.94]`}
             >
-              {SEAL_MONOGRAM}
-            </span>
-          </div>
+              <div data-seal-swell className={SEAL_SWELL}>
+                <SealFace />
+                <span aria-hidden className={SEAL_SHIMMER} />
+              </div>
+            </div>
+          )}
 
-          {phase === "closed" && (
+          {closed && (
             <button
+              ref={buttonRef}
+              data-envelope-button
               type="button"
               aria-label={ENVELOPE_BUTTON_LABEL}
               onClick={onOpen}

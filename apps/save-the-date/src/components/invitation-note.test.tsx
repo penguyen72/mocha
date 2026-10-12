@@ -1,21 +1,25 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 
 import { InvitationNote } from "./invitation-note";
-import { NOTE_CTA_HREF, NOTE_CTA_LABEL, NOTE_LINE_1, NOTE_LINE_2 } from "./invitation-content";
+import { CALENDAR_LABEL, NOTE_TEXT, REPLAY_LABEL } from "./invitation-content";
 
 describe("InvitationNote", () => {
-  it("renders both lines of the note", () => {
-    render(<InvitationNote animated={false} />);
-    expect(screen.getByText(NOTE_LINE_1)).toBeInTheDocument();
-    expect(screen.getByText(NOTE_LINE_2)).toBeInTheDocument();
+  it("says a formal invitation will follow", () => {
+    render(<InvitationNote animated={false} onReplay={vi.fn()} />);
+    expect(screen.getByText(NOTE_TEXT)).toBeInTheDocument();
   });
 
-  it("links to the address page", () => {
-    render(<InvitationNote animated={false} />);
-    expect(screen.getByRole("link", { name: NOTE_CTA_LABEL })).toHaveAttribute(
-      "href",
-      NOTE_CTA_HREF,
-    );
+  it("offers to add the date to a calendar", () => {
+    render(<InvitationNote animated={false} onReplay={vi.fn()} />);
+    expect(screen.getByRole("button", { name: CALENDAR_LABEL })).toBeInTheDocument();
+  });
+
+  it("replays the invitation on request", async () => {
+    const onReplay = vi.fn();
+    render(<InvitationNote animated={false} onReplay={onReplay} />);
+    await userEvent.click(screen.getByRole("button", { name: REPLAY_LABEL }));
+    expect(onReplay).toHaveBeenCalledTimes(1);
   });
 });

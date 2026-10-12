@@ -16,7 +16,7 @@ function ExploreGrid({ activities }: { activities: ExploreActivity[] }) {
           <div>
             <div
               aria-hidden="true"
-              className="aspect-[16/10] rounded-lg bg-gradient-to-br from-bb-peach to-bb-blush"
+              className="aspect-[16/10] rounded-lg bg-gradient-to-br from-bb-pink to-bb-blush"
             />
             <h3 className="mt-4 font-serif text-xl text-foreground">{activity.name}</h3>
             <p className="mt-2 text-sm text-muted">{activity.description}</p>
@@ -33,7 +33,7 @@ export function Explore() {
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.28em] text-bb-clay">{EXPLORE_EYEBROW}</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-bb-accent">{EXPLORE_EYEBROW}</p>
             <h2 className="mt-3 font-serif text-4xl text-foreground sm:text-5xl">
               {EXPLORE_HEADING}
             </h2>
