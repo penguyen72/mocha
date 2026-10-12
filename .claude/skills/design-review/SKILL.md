@@ -72,7 +72,7 @@ For every change:
 
 ## App notes
 
-- **save-the-date**: also capture `/#open`, the opened invitation. It is a hash state on `/`; clicking the seal sets it. The opening animation must not replay when you return with BACK or refresh on `/#open`.
+- **save-the-date**: also capture `/#open`, the opened invitation. It is a hash state on `/`; clicking the seal sets it. The opening animation must not replay when you refresh on `/#open`.
 
 ## Report
 
