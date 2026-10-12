@@ -56,15 +56,44 @@ body {
   font-weight: 300;
 }
 
+.rsvp-sheet {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-width: 42rem;
+  max-height: calc(100dvh - 1rem);
+  margin: 0 auto;
+  border: 0;
+  border-radius: 1.5rem 1.5rem 0 0;
+  padding: 4rem 1.5rem calc(2.5rem + env(safe-area-inset-bottom));
+  text-align: center;
+  overflow-y: auto;
+}
+
+.rsvp-sheet::backdrop {
+  background: color-mix(in srgb, var(--site-foreground) 50%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rsvp-sheet[open] {
+    animation: rsvp-sheet-enter 250ms ease-out;
+  }
+}
+
+@keyframes rsvp-sheet-enter {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
 /* App-local treatments for the shared chrome, keeping section colors cohesive. */
-#home a[href="#rsvp"],
-nav a[href="#rsvp"].rounded-full {
+#home a.rounded-full,
+nav a.rounded-full {
   background: var(--bb-pink);
   color: var(--site-primary);
 }
 
-#home a[href="#rsvp"]:hover,
-nav a[href="#rsvp"].rounded-full:hover {
+#home a.rounded-full:hover,
+nav a.rounded-full:hover {
   background: var(--bb-rose);
   opacity: 1;
 }
