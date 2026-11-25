@@ -105,7 +105,7 @@ merge conflicts with Sessions 2, 4, and 5 working the same file around the same 
 - Section background: `--site-background` (cream) — matches Schedule/Explore/FAQ per the
   reference doc's palette table.
 - Eyebrow "Getting Here" (`clay` color, uppercase, letter-spaced), H2 "Travel & Directions"
-  (serif), body: "The Villa at Blackberry Ridge sits in the foothills of Trenton, Georgia —
+  (serif), body: "The Villa at Bellamore Ridge sits in the foothills of Trenton, Georgia —
   tucked between Chattanooga and Atlanta. It's an easy drive from either, and the countryside on
   the way is half the fun." All wrapped in `Reveal` (`trigger="viewport"`, default settings).
 - Two-column grid below (`grid-cols-1 lg:grid-cols-2`, stacks on mobile):

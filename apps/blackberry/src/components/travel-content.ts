@@ -7,7 +7,7 @@ export type TravelIconItem = {
 export const TRAVEL_EYEBROW = "Getting Here";
 export const TRAVEL_HEADING = "Travel & Directions";
 export const TRAVEL_INTRO =
-  "The Villa at Blackberry Ridge sits in the foothills of Trenton, Georgia — tucked between " +
+  "sits in the foothills of Trenton, Georgia — tucked between " +
   "Chattanooga and Atlanta. It's an easy drive from either, and the countryside on the way is " +
   "half the fun.";
 

@@ -109,7 +109,7 @@ FAQ**, then a pill-button **RSVP** CTA. Burger menu appears under 860px viewport
 - Eyebrow (Pinyon Script): "together with their families"
 - H1 (Cormorant Garamond): "Liane **&** Peyton" (ampersand on its own line, Pinyon Script)
 - Date rule: "Oct 1–3, 2027" between two horizontal rules
-- Location line: "The Villa at Blackberry Ridge · Trenton, Georgia"
+- Location line: "The Villa at Bellamore Ridge · Trenton, Georgia"
 - CTA button → `#rsvp`: "RSVP Now"
 - Scroll cue: "Scroll" + vertical line, floats, hides after scrolling
 
@@ -156,7 +156,7 @@ italic serif.
 
 ### 6. Travel & Directions — `#travel`
 
-Eyebrow "Getting Here", H2 "Travel & Directions", body: "The Villa at Blackberry Ridge sits in
+Eyebrow "Getting Here", H2 "Travel & Directions", body: "The Villa at Bellamore Ridge sits in
 the foothills of Trenton, Georgia — tucked between Chattanooga and Atlanta. It's an easy drive
 from either, and the countryside on the way is half the fun."
 
