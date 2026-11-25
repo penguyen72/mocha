@@ -1066,7 +1066,7 @@ export default function Home() {
             </>
           }
           dateLabel="Oct 1–3, 2027"
-          locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
+          locationLabel="The Villa at Bellamore Ridge · Trenton, Georgia"
           cta={{ label: "RSVP Now", href: "#rsvp" }}
           backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
         />

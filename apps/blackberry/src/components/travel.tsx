@@ -8,6 +8,7 @@ import {
   TRAVEL_ICON_ITEMS,
   TRAVEL_INTRO,
 } from "./travel-content";
+import { VENUE_NAME, VENUE_URL } from "./venue-content";
 
 export function Travel() {
   return (
@@ -22,7 +23,12 @@ export function Travel() {
           </h2>
         </Reveal>
         <Reveal delay={0.16}>
-          <p className="mt-4 max-w-2xl text-muted">{TRAVEL_INTRO}</p>
+          <p className="mt-4 max-w-2xl text-muted">
+            <a href={VENUE_URL} className="underline underline-offset-4">
+              {VENUE_NAME}
+            </a>{" "}
+            {TRAVEL_INTRO}
+          </p>
         </Reveal>
 
         <div className="mt-14 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">

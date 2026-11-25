@@ -12,6 +12,16 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+it("links both venue mentions to the Bellamore Ridge website", () => {
+  render(<Home />);
+
+  const venueLinks = screen.getAllByRole("link", { name: "The Villa at Bellamore Ridge" });
+  expect(venueLinks).toHaveLength(2);
+  for (const link of venueLinks) {
+    expect(link).toHaveAttribute("href", "https://bellamoreridge.com/");
+  }
+});
+
 describe("Blackberry RSVP entry points", () => {
   beforeEach(() => {
     // jsdom has no native dialog methods; keep the browser boundary narrow.

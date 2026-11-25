@@ -10,6 +10,7 @@ import { RsvpSheet } from "@/components/rsvp-sheet";
 import { Schedule } from "@/components/schedule";
 import { Stay } from "@/components/stay";
 import { Travel } from "@/components/travel";
+import { VENUE_NAME, VENUE_URL } from "@/components/venue-content";
 
 import heroPhoto from "@/assets/hero.jpeg";
 
@@ -48,7 +49,14 @@ export default function Home() {
             </>
           }
           dateLabel="October 16, 2027"
-          locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
+          locationLabel={
+            <>
+              <a href={VENUE_URL} className="underline underline-offset-4">
+                {VENUE_NAME}
+              </a>
+              {" · Trenton, Georgia"}
+            </>
+          }
           cta={{ label: "RSVP Now", href: RSVP_URL }}
           backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
         />

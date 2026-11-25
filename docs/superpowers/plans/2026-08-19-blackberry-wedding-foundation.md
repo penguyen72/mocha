@@ -820,7 +820,7 @@ describe("Hero", () => {
         eyebrow="together with their families"
         heading="Liane & Peyton"
         dateLabel="Oct 1–3, 2027"
-        locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
+        locationLabel="The Villa at Bellamore Ridge · Trenton, Georgia"
         cta={{ label: "RSVP Now", href: "#rsvp" }}
         backgroundImage={{
           src: { src: "/hero.jpg", height: 1200, width: 1600 },
@@ -831,7 +831,7 @@ describe("Hero", () => {
 
     expect(screen.getByRole("heading", { level: 1, name: "Liane & Peyton" })).toBeInTheDocument();
     expect(
-      screen.getByText("The Villa at Blackberry Ridge · Trenton, Georgia"),
+      screen.getByText("The Villa at Bellamore Ridge · Trenton, Georgia"),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "RSVP Now" })).toHaveAttribute("href", "#rsvp");
     expect(screen.getByAltText("Liane and Peyton")).toBeInTheDocument();
@@ -1424,7 +1424,7 @@ export default function Home() {
           </>
         }
         dateLabel="Oct 1–3, 2027"
-        locationLabel="The Villa at Blackberry Ridge · Trenton, Georgia"
+        locationLabel="The Villa at Bellamore Ridge · Trenton, Georgia"
         cta={{ label: "RSVP Now", href: "#rsvp" }}
         backgroundImage={{ src: heroPhoto, alt: "Liane and Peyton" }}
       />
